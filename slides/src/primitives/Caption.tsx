@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { palette } from "@/theme";
 import { interFamily, monoFamily } from "./fonts";
 
@@ -7,49 +7,45 @@ import { interFamily, monoFamily } from "./fonts";
 const isExpr = (s: string) => /[=<>+\-*/[\]]|\bO\(/.test(s) && s.length < 44;
 
 /**
- * The lower third: what this step does, anchored to the bottom edge of the slide.
- * A band rather than a floating chip — it gives the text weight and stops it drifting
- * in the empty space under the stage. Click to edit when authoring.
+ * The line under the slide: what this step does. Just the text — no band, no rules,
+ * no chrome. A slide with nothing to say renders nothing, so blank slides are a real
+ * pause rather than an empty container.
  */
 export const StepLabel: React.FC<{
   text?: string;
   progress: number;
-  /** 0 → 1 through the deck, drawn as a hairline along the very bottom */
-  deckProgress?: number;
-  height?: number;
+  bottom?: number;
   onEdit?: (value: string) => void;
-}> = ({ text, progress, deckProgress, height = 148, onEdit }) => {
+}> = ({ text, progress, bottom = 92, onEdit }) => {
   const ref = useRef<HTMLSpanElement>(null);
+  const [hover, setHover] = useState(false);
+
   useEffect(() => {
     if (ref.current && ref.current.innerText !== (text ?? "")) ref.current.innerText = text ?? "";
   }, [text]);
 
+  const empty = !text?.trim();
+  // nothing to say and nothing to edit: draw nothing at all
+  if (empty && !onEdit) return null;
+
   const p = Math.min(1, progress);
   const mono = isExpr(text ?? "");
-  const empty = !text?.trim();
 
   return (
-    <div style={{
-      position: "absolute", left: 0, right: 0, bottom: 0, zIndex: 50, height,
-      display: "flex", alignItems: "center", gap: 26, padding: "0 64px",
-      background: `linear-gradient(to top, ${palette.bgDeep}, ${palette.surfaceAlt})`,
-      borderTop: `3px solid ${palette.line}`,
-      // the band holds still; only the text moves, so nothing jumps between slides
-    }}>
-      {/* accent bar — a quiet anchor where a chevron used to shout */}
-      <span style={{
-        width: 8, height: 62, borderRadius: 4, flexShrink: 0,
-        background: empty ? palette.line : palette.terracotta,
-        opacity: empty ? 0.5 : 0.35 + 0.65 * p,
-        transform: `scaleY(${0.6 + 0.4 * p})`,
-      }} />
-
+    <div
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      style={{
+        position: "absolute", left: 0, right: 0, bottom, zIndex: 50,
+        display: "flex", justifyContent: "center", padding: "0 90px",
+        minHeight: 64, alignItems: "center", pointerEvents: onEdit ? "auto" : "none",
+      }}
+    >
       <span
         ref={ref}
         contentEditable={!!onEdit}
         suppressContentEditableWarning
         spellCheck={false}
-        data-placeholder={onEdit ? "click to write this step…" : undefined}
         onBlur={(e) => onEdit?.(e.currentTarget.innerText.replace(/\n/g, " ").trim())}
         onKeyDown={(e) => {
           if (e.key === "Enter") { e.preventDefault(); (e.currentTarget as HTMLElement).blur(); }
@@ -57,27 +53,25 @@ export const StepLabel: React.FC<{
           e.stopPropagation();   // never let typing drive the deck
         }}
         style={{
-          flex: 1, minWidth: 0,
           fontFamily: mono ? monoFamily : interFamily,
           fontWeight: mono ? 700 : 600,
-          fontSize: mono ? 50 : 46,
-          letterSpacing: mono ? -0.5 : -0.2,
-          lineHeight: 1.18, color: palette.ink,
-          fontVariantNumeric: "tabular-nums",
+          fontSize: mono ? 52 : 48,
+          letterSpacing: mono ? -0.5 : -0.3,
+          lineHeight: 1.2, textAlign: "center",
+          color: palette.ink, fontVariantNumeric: "tabular-nums",
           outline: "none", cursor: onEdit ? "text" : "default",
-          opacity: 0.25 + 0.75 * p,
+          minWidth: empty ? 320 : undefined,
+          opacity: empty ? 0 : 0.2 + 0.8 * p,
           transform: `translateY(${(1 - p) * 8}px)`,
-          overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
         }}
       />
-
-      {deckProgress !== undefined && (
-        <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, height: 6, background: palette.line }}>
-          <div style={{
-            height: "100%", width: `${Math.max(0, Math.min(1, deckProgress)) * 100}%`,
-            background: palette.terracotta, transition: "width .35s ease",
-          }} />
-        </div>
+      {/* only while authoring, and only on hover — never visible in a recording */}
+      {empty && onEdit && (
+        <span style={{
+          position: "absolute", fontFamily: interFamily, fontSize: 30, fontWeight: 500,
+          color: palette.muted, opacity: hover ? 0.5 : 0, transition: "opacity .15s",
+          pointerEvents: "none",
+        }}>click to add a line</span>
       )}
     </div>
   );

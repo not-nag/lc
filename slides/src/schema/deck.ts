@@ -65,8 +65,8 @@ export type DeckInput = z.input<typeof Deck>;
 export type MetaInput = z.input<typeof Deck>["meta"];
 
 export const STAGE = {
-  landscape: { w: 1920, h: 1080, padTop: 96, padBottom: 172 },
-  portrait: { w: 1080, h: 1920, padTop: 122, padBottom: 230 },
+  landscape: { w: 1920, h: 1080, padTop: 96, padBottom: 150 },
+  portrait: { w: 1080, h: 1920, padTop: 122, padBottom: 212 },
 } as const;
 
 export const parseDeck = (raw: unknown) => Deck.parse(raw);
