@@ -16,7 +16,7 @@ export const Callout: React.FC<{ text: string; variant?: string; progress: numbe
   const p = Math.min(1, progress);
   return (
     <div style={{
-      position: "absolute", left: 0, right: 0, top, display: "flex", justifyContent: "center",
+      position: "absolute", left: 0, right: 0, top, zIndex: 25, display: "flex", justifyContent: "center",
       opacity: p, transform: `scale(${0.9 + p * 0.1})`,
     }}>
       <div style={{
@@ -35,7 +35,7 @@ export const Formula: React.FC<{ text: string; progress: number; top?: number }>
   const p = Math.min(1, progress);
   return (
     <div style={{
-      position: "absolute", left: 0, right: 0, top, display: "flex", justifyContent: "center",
+      position: "absolute", left: 0, right: 0, top, zIndex: 25, display: "flex", justifyContent: "center",
       opacity: p, transform: `translateY(${(1 - p) * 20}px)`,
     }}>
       <div style={{
@@ -51,8 +51,10 @@ export const ResultBanner: React.FC<{ value: string; label?: string; progress: n
   const p = Math.min(1, progress);
   return (
     <div style={{
-      position: "absolute", inset: 0, display: "flex", flexDirection: "column",
+      position: "absolute", inset: 0, zIndex: 40, display: "flex", flexDirection: "column",
       alignItems: "center", justifyContent: "center", gap: 14, opacity: p,
+      // a scrim so the answer reads as a reveal rather than another element on the board
+      background: `rgba(242,228,213,${0.82 * p})`, backdropFilter: `blur(${2.5 * p}px)`,
     }}>
       <div style={{ fontFamily: interFamily, fontSize: 34, letterSpacing: 4, textTransform: "uppercase",
         color: palette.muted, fontWeight: 700 }}>{label ?? "Answer"}</div>
@@ -75,7 +77,7 @@ export const Aside: React.FC<{ text: string; progress: number; bottom?: number }
   const p = Math.min(1, progress);
   return (
     <div style={{
-      position: "absolute", right: 56, bottom, maxWidth: 800,
+      position: "absolute", right: 56, bottom, maxWidth: 800, zIndex: 25,
       opacity: p * 0.92, transform: `rotate(-1.6deg) translateY(${(1 - p) * 10}px)`,
       display: "flex", alignItems: "flex-start", gap: 12,
     }}>

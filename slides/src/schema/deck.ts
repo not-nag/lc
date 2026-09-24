@@ -54,6 +54,8 @@ export const Deck = z.object({
     difficulty: z.enum(["Easy", "Medium", "Hard"]).default("Easy"),
     pattern: z.string().optional(),
     tagline: z.string().default(""),
+    /** 16:9 for a desktop screen, 9:16 for a phone */
+    format: z.enum(["landscape", "portrait"]).default("landscape"),
   }),
   views: z.array(ViewDecl),
   sections: z.array(Section).min(1),
@@ -61,6 +63,11 @@ export const Deck = z.object({
 export type Deck = z.infer<typeof Deck>;
 export type DeckInput = z.input<typeof Deck>;
 export type MetaInput = z.input<typeof Deck>["meta"];
+
+export const STAGE = {
+  landscape: { w: 1920, h: 1080, padTop: 96, padBottom: 188 },
+  portrait: { w: 1080, h: 1920, padTop: 122, padBottom: 268 },
+} as const;
 
 export const parseDeck = (raw: unknown) => Deck.parse(raw);
 export const safeParseDeck = (raw: unknown) => Deck.safeParse(raw);

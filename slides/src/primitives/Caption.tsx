@@ -23,7 +23,7 @@ export const StepLabel: React.FC<{
 
   return (
     <div style={{
-      position: "absolute", left: 0, right: 0, bottom, display: "flex", justifyContent: "center",
+      position: "absolute", left: 0, right: 0, bottom, zIndex: 50, display: "flex", justifyContent: "center",
       padding: "0 60px", opacity: p, transform: `translateY(${(1 - p) * 10}px)`,
     }}>
       <div style={{

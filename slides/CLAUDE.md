@@ -31,9 +31,22 @@ presenter `note`. There is no duration anywhere.
 `t.slide("label")` commits a slide. `t.say("…")` attaches the presenter note.
 `t.hold("label")` is a slide that changes nothing — a pause to talk over.
 
+## Format
+
+`meta.format` is `"landscape"` (1920×1080, the default) or `"portrait"` (1080×1920).
+`STAGE` in `src/schema/deck.ts` holds the box and its padding. `F` toggles real fullscreen.
+
 ## Editing belongs to the author
 
-The `label` on any slide is click-to-edit in the browser; notes are edited in the side panel.
+Two tabs in the side panel:
+- **This slide** — the presenter note, and the slide list. Slide labels are click-to-edit
+  directly on the slide itself.
+- **Data** — the values each view is built from: array contents, the code source, panel
+  headings and copy, view captions.
+
+Editing values is allowed but flagged: the ops and the slide wording were derived from a real
+run over the original data, and changing values does not re-run anything. Safe for cosmetics,
+not for changing the algorithm's path.
 Edits autosave to `decks/<slug>.json` and set `edited: true`, after which **`npm run decks`
 refuses to regenerate that deck** — it would wipe the wording. Use `--force` only when the
 author explicitly asks to throw their edits away.
@@ -83,5 +96,10 @@ in any view. Don't break this.
   with its declaration, so `relink()` mutated the initial state.
 - **`t.say()` appends.** Two calls on one slide concatenate. Build one line, say it once.
 - **SVG markers scale with `strokeWidth`** — use `markerUnits="userSpaceOnUse"`.
+- **`Cell` sets `z-index: 1`** (so a swapping cell passes over its neighbour). Any overlay
+  must therefore declare its own z-index or it paints *behind* the cells even though it comes
+  later in the DOM. Overlays use 25, the result banner 40, the step label 50.
+- **Never run `npm run build` while `npm run dev` is live** — it overwrites `.next` and the dev
+  server then throws `__webpack_modules__[moduleId] is not a function` until restarted.
 - **Barrel re-exports fail under tsx** in scripts; import from the module file directly.
 - **TypeScript pinned to 5.x.** TS 7 breaks Next's config loader.

@@ -5,10 +5,7 @@ import { cachedDeckStates, fadeIn, settle } from "@/engine";
 import { VIEWS } from "@/views";
 import { StepLabel, Callout, Aside, Formula, ResultBanner, TitleCard } from "@/primitives";
 import { palette } from "@/theme";
-import { flatten } from "@/schema/deck";
-
-const PAD_TOP = 122;
-const PAD_BOTTOM = 268;
+import { flatten, STAGE } from "@/schema/deck";
 
 /** Renders one slide of a deck at animation progress `t`. */
 export const SlideView: React.FC<{
@@ -20,6 +17,7 @@ export const SlideView: React.FC<{
   const section = deck.sections[cur.section];
   const slide = section.slides[cur.slide];
 
+  const { padTop: PAD_TOP, padBottom: PAD_BOTTOM } = STAGE[deck.meta.format];
   const states = cachedDeckStates(deck);
   const prev = states[cur.index] ?? states[0];
   const next = states[cur.index + 1] ?? prev;

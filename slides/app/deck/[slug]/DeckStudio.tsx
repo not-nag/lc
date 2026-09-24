@@ -6,6 +6,8 @@ import { flatten } from "@/schema/deck";
 import { Deck } from "@/deck/Deck";
 import { useDeck } from "@/deck/useDeck";
 import type { EditPath } from "@/deck/SlideView";
+import { DataPanel } from "./DataPanel";
+import type { ViewDecl } from "@/schema";
 
 export function DeckStudio({ initial }: { initial: DeckT }) {
   const [deck, setDeck] = useState<DeckT>(initial);
@@ -13,6 +15,7 @@ export function DeckStudio({ initial }: { initial: DeckT }) {
   const cursors = flatten(deck);
   const api = useDeck(cursors.length);
   const index = api.index;
+  const [tab, setTab] = useState<"slide" | "data">("slide");
   const cur = cursors[Math.min(index, cursors.length - 1)];
   const slide = cur ? deck.sections[cur.section].slides[cur.slide] : undefined;
 
@@ -26,6 +29,18 @@ export function DeckStudio({ initial }: { initial: DeckT }) {
       const s = next.sections[c.section].slides[c.slide];
       if (path.kind === "label") s.label = value || undefined;
       if (path.kind === "note") s.note = value || undefined;
+      return next;
+    });
+    setSaved("dirty");
+  }, []);
+
+  /** Edit the data a view is built from — values, source, copy. */
+  const editView = useCallback((id: string, patch: Partial<ViewDecl>) => {
+    setDeck((d) => {
+      const next = structuredClone(d);
+      const i = next.views.findIndex((v) => v.id === id);
+      if (i < 0) return d;
+      next.views[i] = { ...next.views[i], ...patch } as ViewDecl;
       return next;
     });
     setSaved("dirty");
@@ -94,6 +109,19 @@ export function DeckStudio({ initial }: { initial: DeckT }) {
         </div>
 
         <aside className="border-l-2 p-4 overflow-auto min-h-0" style={{ borderColor: "var(--line)" }}>
+          <div className="flex gap-1 mb-4">
+            {(["slide", "data"] as const).map((k) => (
+              <button key={k} onClick={() => setTab(k)}
+                className="flex-1 text-xs font-bold uppercase tracking-wider py-1.5 rounded-lg"
+                style={{
+                  background: tab === k ? "var(--terracotta)" : "transparent",
+                  color: tab === k ? "#FFF6EC" : "var(--muted)",
+                  border: `2px solid ${tab === k ? "var(--terracotta)" : "var(--line)"}`,
+                }}>{k === "slide" ? "This slide" : "Data"}</button>
+            ))}
+          </div>
+
+          {tab === "data" ? <DataPanel deck={deck} onChange={editView} /> : <>
           <h2 className="text-xs font-bold uppercase tracking-[0.18em] mb-2" style={{ color: "var(--muted)" }}>
             Presenter note
           </h2>
@@ -131,6 +159,7 @@ export function DeckStudio({ initial }: { initial: DeckT }) {
               );
             })}
           </ol>
+          </>}
         </aside>
       </div>
     </div>

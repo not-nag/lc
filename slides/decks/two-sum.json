@@ -1,18 +1,19 @@
 {
   "schemaVersion": 1,
-  "edited": false,
+  "edited": true,
   "meta": {
     "slug": "two-sum",
     "number": 1,
     "title": "Two Sum",
     "difficulty": "Easy",
     "pattern": "hashmap-one-pass",
-    "tagline": "one pass, no regrets"
+    "tagline": "one pass, no regrets",
+    "format": "landscape"
   },
   "views": [
     {
       "id": "pn",
-      "label": "nums · target 9",
+      "label": "nums \u00b7 target 9",
       "kind": "array",
       "values": [
         3,
@@ -24,7 +25,7 @@
     },
     {
       "id": "a",
-      "label": "nums · target 9",
+      "label": "nums \u00b7 target 9",
       "kind": "array",
       "values": [
         3,
@@ -135,7 +136,7 @@
             }
           ],
           "label": "answer = [2, 3]",
-          "note": "We want their positions — index two and index three.",
+          "note": "We want their positions \u2014 index two and index three.",
           "structural": false
         }
       ]
@@ -446,12 +447,12 @@
               "type": "array.tag",
               "view": "a",
               "index": 3,
-              "text": "not yet — ahead",
+              "text": "not yet \u2014 ahead",
               "variant": "miss"
             }
           ],
           "label": "the 2 is right there",
-          "note": "But look — a two is sitting right there. One cell ahead.",
+          "note": "But look \u2014 a two is sitting right there. One cell ahead.",
           "structural": false
         },
         {
@@ -647,7 +648,7 @@
               "label": "7 + 2 = 9"
             }
           ],
-          "label": "yes — index 2",
+          "label": "yes \u2014 index 2",
           "note": "Yes. 7 went past at index 2. That's the pair.",
           "structural": false
         },
@@ -770,7 +771,7 @@
         {
           "id": "intuition-4-1",
           "ops": [],
-          "label": "O(n) time · O(n) space",
+          "label": "O(n) time \u00b7 O(n) space",
           "note": "One pass. That's Two Sum under 100 seconds.",
           "structural": false
         }

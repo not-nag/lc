@@ -1,12 +1,10 @@
 "use client";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import type { Deck as DeckT } from "@/schema";
-import { flatten } from "@/schema/deck";
+import { flatten, STAGE } from "@/schema/deck";
 import { Stage } from "@/primitives";
 import { SlideView, type EditPath } from "./SlideView";
 import type { DeckApi } from "./useDeck";
-
-const W = 1080, H = 1920;
 
 /** The deck: a fixed 9:16 stage scaled to fit, driven by clicks rather than a clock. */
 /** `api` comes from useDeck() in the parent, so the slide list and the deck stay in step. */
@@ -17,6 +15,7 @@ export const Deck: React.FC<{
   onEdit?: (path: EditPath, value: string) => void;
   controls?: (api: DeckApi & { total: number }) => React.ReactNode;
 }> = ({ deck, api, editable, onEdit, controls }) => {
+  const { w: W, h: H } = STAGE[deck.meta.format];
   const total = useMemo(() => flatten(deck).length, [deck]);
   const box = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(0.4);
@@ -34,7 +33,7 @@ export const Deck: React.FC<{
     const ro = new ResizeObserver(fit);
     if (box.current) ro.observe(box.current);
     return () => ro.disconnect();
-  }, []);
+  }, [W, H]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -46,13 +45,21 @@ export const Deck: React.FC<{
       else if (e.key === "Home") api.goto(0);
       else if (e.key === "End") api.goto(total - 1);
       else if (e.key === "a" || e.key === "A") api.setAuto((x) => ({ ...x, on: !x.on }));
+      else if (e.key === "f" || e.key === "F") {
+        const el = box.current?.closest("[data-deck-root]") as HTMLElement | null;
+        if (!document.fullscreenElement) el?.requestFullscreen?.();
+        else document.exitFullscreen?.();
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [api, total]);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 14, height: "100%", minHeight: 0 }}>
+    <div data-deck-root style={{
+      display: "flex", flexDirection: "column", gap: 14, height: "100%", minHeight: 0,
+      background: "var(--paper)",
+    }}>
       <div ref={box} style={{ flex: 1, minHeight: 0, display: "grid", placeItems: "center" }}>
         {/* transform does not shrink layout size, so the scaled stage needs a sized wrapper */}
         <div style={{
