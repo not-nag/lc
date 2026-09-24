@@ -36,6 +36,12 @@ There is no clock. A slide lasts until the presenter clicks, so the only budget 
   one click, causality is lost. Split it.
 - Make the search visible. Never just assert `no 2 behind us` — light up the cells being
   checked on their own slide, then answer on the next.
+- **Do not editorialise about what the algorithm cannot do.** A value that hasn't been
+  reached yet isn't "unusable" — it simply hasn't been stored. Saying "we can't use it" is
+  wrong the moment the walk arrives there, which it usually does. State what happens; the
+  mechanism explains itself.
+- Clear per-cell chips (`a.tagClear()`) when the cursor moves, or the previous number's tag
+  stays pinned to the old cell.
 - Linger where the idea forms (more slides), skim mechanical repeats (fewer, and stop
   narrating once the pattern is clear).
 
