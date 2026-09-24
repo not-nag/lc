@@ -16,6 +16,7 @@ export function DeckStudio({ initial }: { initial: DeckT }) {
   const api = useDeck(cursors.length);
   const index = api.index;
   const [tab, setTab] = useState<"slide" | "data">("slide");
+  const [confirmDelete, setConfirmDelete] = useState<number | null>(null);
   const cur = cursors[Math.min(index, cursors.length - 1)];
   const slide = cur ? deck.sections[cur.section].slides[cur.slide] : undefined;
 
@@ -33,6 +34,55 @@ export function DeckStudio({ initial }: { initial: DeckT }) {
     });
     setSaved("dirty");
   }, []);
+
+  const uid = () => `s${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
+
+  /**
+   * Remove a slide. If it was the last one in its section, the section goes too —
+   * the schema requires every section to have at least one slide.
+   */
+  const deleteSlide = useCallback((at: number) => {
+    setDeck((d) => {
+      const next = structuredClone(d);
+      const c = flatten(next)[at];
+      if (!c) return d;
+      if (flatten(next).length <= 1) return d;          // never empty the deck
+      const sec = next.sections[c.section];
+      sec.slides.splice(c.slide, 1);
+      if (sec.slides.length === 0) next.sections.splice(c.section, 1);
+      return next;
+    });
+    setSaved("dirty");
+    setConfirmDelete(null);
+    api.goto(Math.max(0, at - 1));
+  }, [api]);
+
+  const duplicateSlide = useCallback((at: number) => {
+    setDeck((d) => {
+      const next = structuredClone(d);
+      const c = flatten(next)[at];
+      if (!c) return d;
+      const sec = next.sections[c.section];
+      sec.slides.splice(c.slide + 1, 0, { ...structuredClone(sec.slides[c.slide]), id: uid() });
+      return next;
+    });
+    setSaved("dirty");
+    api.goto(at + 1);
+  }, [api]);
+
+  /** A blank slide holds the picture exactly as it is — a pause to talk over. */
+  const insertBlank = useCallback((at: number) => {
+    setDeck((d) => {
+      const next = structuredClone(d);
+      const c = flatten(next)[at];
+      if (!c) return d;
+      next.sections[c.section].slides.splice(c.slide + 1, 0,
+        { id: uid(), ops: [], label: "", structural: false });
+      return next;
+    });
+    setSaved("dirty");
+    api.goto(at + 1);
+  }, [api]);
 
   /** Edit the data a view is built from — values, source, copy. */
   const editView = useCallback((id: string, patch: Partial<ViewDecl>) => {
@@ -122,6 +172,32 @@ export function DeckStudio({ initial }: { initial: DeckT }) {
           </div>
 
           {tab === "data" ? <DataPanel deck={deck} onChange={editView} /> : <>
+          <div className="grid grid-cols-3 gap-1.5 mb-4">
+            <button className="btn-ghost !py-1 !px-1 text-[11px] whitespace-nowrap" onClick={() => duplicateSlide(index)}>
+              Duplicate
+            </button>
+            <button className="btn-ghost !py-1 !px-1 text-[11px] whitespace-nowrap" onClick={() => insertBlank(index)}
+              title="a slide that changes nothing — a pause to talk over">
+              + Blank
+            </button>
+            <button
+              className="btn-ghost !py-1 !px-1 text-[11px] whitespace-nowrap"
+              style={confirmDelete === index
+                ? { borderColor: "var(--clay)", color: "#FFF", background: "var(--clay)" }
+                : { borderColor: "var(--line)", color: "var(--clay)" }}
+              onClick={() => (confirmDelete === index ? deleteSlide(index) : setConfirmDelete(index))}
+              onBlur={() => setConfirmDelete(null)}
+              disabled={cursors.length <= 1}>
+              {confirmDelete === index ? "Sure?" : "Delete"}
+            </button>
+          </div>
+          {confirmDelete === index && slide?.structural && (
+            <p className="text-[11px] mb-3" style={{ color: "var(--clay)" }}>
+              This slide advances the algorithm — every slide after it depends on what it does.
+              Deleting it will make the rest of the walkthrough wrong.
+            </p>
+          )}
+
           <h2 className="text-xs font-bold uppercase tracking-[0.18em] mb-2" style={{ color: "var(--muted)" }}>
             Presenter note
           </h2>

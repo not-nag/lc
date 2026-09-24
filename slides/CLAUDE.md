@@ -60,6 +60,13 @@ author explicitly asks to throw their edits away.
 
 So: generate once, then **patch the JSON, never regenerate the trace**.
 
+## Managing slides
+
+The **This slide** panel has Duplicate / + Blank / Delete for the current slide.
+Delete is two-click (`Delete` → `Sure?`), refuses to empty the deck, and drops the section
+too if it was that section's last slide. Deleting a ⚙ structural slide warns first: the
+walkthrough after it depends on what it did.
+
 ## Inserting slides
 
 State is a pure fold, so an inserted slide inherits whatever came before it.
