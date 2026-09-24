@@ -10,8 +10,7 @@ import { flatten, STAGE } from "@/schema/deck";
 /** Renders one slide of a deck at animation progress `t`. */
 export const SlideView: React.FC<{
   deck: Deck; index: number; t: number; width: number; height: number;
-  onEdit?: (path: EditPath, value: string) => void;
-}> = ({ deck, index, t, width, height, onEdit }) => {
+}> = ({ deck, index, t, width, height }) => {
   const cursors = useMemo(() => flatten(deck), [deck]);
   const cur = cursors[Math.max(0, Math.min(index, cursors.length - 1))];
   const section = deck.sections[cur.section];
@@ -28,7 +27,7 @@ export const SlideView: React.FC<{
       <div style={{ position: "absolute", inset: 0 }}>
         <TitleCard number={deck.meta.number} title={deck.meta.title} difficulty={deck.meta.difficulty}
           kicker="LeetCode in 100s" progress={0.55 + 0.45 * fadeIn(t)} />
-        <StepLabel text={slide.label} progress={1} onEdit={onEdit ? (v: string) => onEdit({ kind: "label", index: cur.index }, v) : undefined} />
+        <StepLabel text={slide.label} progress={1} />
       </div>
     );
   }
@@ -74,13 +73,10 @@ export const SlideView: React.FC<{
       {next.overlay.aside && <Aside text={next.overlay.aside.text} progress={fadeIn(t)} bottom={PAD_BOTTOM + 58} />}
       {next.overlay.result && <ResultBanner value={next.overlay.result.value} label={next.overlay.result.label} progress={fadeIn(t)} />}
 
-      <StepLabel text={slide.label} progress={1}
-        onEdit={onEdit ? (v: string) => onEdit({ kind: "label", index: cur.index }, v) : undefined} />
+      <StepLabel text={slide.label} progress={1} />
     </div>
   );
 };
-
-export type EditPath = { kind: "label" | "note"; index: number };
 
 const labelFor = (k: string) => (({
   problem: "The problem", walkthrough: "Walkthrough", code: "Code",

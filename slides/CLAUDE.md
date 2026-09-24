@@ -45,29 +45,20 @@ placeholder; it is hover-only so it can never appear in a recording.
 `meta.format` is `"landscape"` (1920×1080, the default) or `"portrait"` (1080×1920).
 `STAGE` in `src/schema/deck.ts` holds the box and its padding. `F` toggles real fullscreen.
 
-## Editing belongs to the author
+## Editing belongs to the author — one field only
 
-Two tabs in the side panel:
-- **This slide** — the presenter note, and the slide list. Slide labels are click-to-edit
-  directly on the slide itself.
-- **Data** — the values each view is built from: array contents, the code source, panel
-  headings and copy, view captions.
+The sidebar has exactly one input: **slide text**, the line shown at the bottom of the current
+slide. Empty means nothing is drawn. Everything else — the values, the code, the ops, the
+narration — comes from the trace and is changed by asking, not by hand.
 
-Editing values is allowed but flagged: the ops and the slide wording were derived from a real
-run over the original data, and changing values does not re-run anything. Safe for cosmetics,
-not for changing the algorithm's path.
 Edits autosave to `decks/<slug>.json` and set `edited: true`, after which **`npm run decks`
-refuses to regenerate that deck** — it would wipe the wording. Use `--force` only when the
-author explicitly asks to throw their edits away.
+refuses to regenerate that deck**. Use `--force` only when the author explicitly asks to throw
+their edits away. Generate once, then **patch the JSON, never regenerate the trace**.
 
-So: generate once, then **patch the JSON, never regenerate the trace**.
+Slides can be deleted (two-click, with a warning on ⚙ structural ones). There is no undo:
+recovery is `npm run decks -- --force`, which restores the deck and discards every other edit.
 
-## Managing slides
 
-The **This slide** panel has Duplicate / + Blank / Delete for the current slide.
-Delete is two-click (`Delete` → `Sure?`), refuses to empty the deck, and drops the section
-too if it was that section's last slide. Deleting a ⚙ structural slide warns first: the
-walkthrough after it depends on what it did.
 
 ## Inserting slides
 

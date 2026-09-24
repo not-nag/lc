@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import type { Deck as DeckT } from "@/schema";
 import { flatten, STAGE } from "@/schema/deck";
 import { Stage } from "@/primitives";
-import { SlideView, type EditPath } from "./SlideView";
+import { SlideView } from "./SlideView";
 import type { DeckApi } from "./useDeck";
 
 /** The deck: a fixed 9:16 stage scaled to fit, driven by clicks rather than a clock. */
@@ -11,10 +11,8 @@ import type { DeckApi } from "./useDeck";
 export const Deck: React.FC<{
   deck: DeckT;
   api: DeckApi;
-  editable?: boolean;
-  onEdit?: (path: EditPath, value: string) => void;
   controls?: (api: DeckApi & { total: number }) => React.ReactNode;
-}> = ({ deck, api, editable, onEdit, controls }) => {
+}> = ({ deck, api, controls }) => {
   const { w: W, h: H } = STAGE[deck.meta.format];
   const total = useMemo(() => flatten(deck).length, [deck]);
   const box = useRef<HTMLDivElement>(null);
@@ -71,8 +69,7 @@ export const Deck: React.FC<{
             transform: `scale(${scale})`, transformOrigin: "top left",
           }}>
             <Stage>
-              <SlideView deck={deck} index={api.index} t={api.t} width={W} height={H}
-                onEdit={editable ? onEdit : undefined} />
+              <SlideView deck={deck} index={api.index} t={api.t} width={W} height={H} />
             </Stage>
           </div>
         </div>
