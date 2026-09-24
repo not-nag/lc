@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import type { Deck as DeckT } from "@/schema";
 import { flatten, STAGE } from "@/schema/deck";
 import { Stage } from "@/primitives";
-import { palette } from "@/theme";
+import { palette, stageBackground, grainTexture } from "@/theme";
 import { SlideView } from "./SlideView";
 import type { DeckApi } from "./useDeck";
 
@@ -64,9 +64,18 @@ export const Deck: React.FC<{
 
   return (
     <div data-deck-root style={{
+      position: "relative",
       display: "flex", flexDirection: "column", gap: fullscreen ? 0 : 14,
-      height: "100%", minHeight: 0, background: palette.bg,
+      minHeight: 0, background: fullscreen ? stageBackground : palette.bg,
+      ...(fullscreen ? { width: "100vw", height: "100vh" } : { height: "100%" }),
     }}>
+      {fullscreen && (
+        <div aria-hidden style={{
+          position: "absolute", inset: 0, pointerEvents: "none",
+          opacity: 0.045, mixBlendMode: "multiply",
+          backgroundImage: grainTexture, backgroundSize: "180px 180px",
+        }} />
+      )}
       <div ref={box} style={{
         flex: 1, minHeight: 0, display: "grid", placeItems: "center",
         padding: fullscreen ? 0 : undefined,

@@ -12,7 +12,7 @@ export const Panel: React.FC<{
   }}>
     {label && (
       <div style={{
-        fontFamily: displayFamily, fontSize: 30, fontWeight: 600, letterSpacing: 0,
+        fontFamily: displayFamily, fontSize: 40, fontWeight: 600, letterSpacing: 0,
         color: palette.muted,
       }}>{label}</div>
     )}

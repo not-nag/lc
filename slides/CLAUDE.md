@@ -113,6 +113,10 @@ in any view. Don't break this.
 - **`Cell` sets `z-index: 1`** (so a swapping cell passes over its neighbour). Any overlay
   must therefore declare its own z-index or it paints *behind* the cells even though it comes
   later in the DOM. Overlays use 25, the result banner 40, the step label 50.
+- **Fullscreen has two white surfaces of its own**: the `:fullscreen` element and `::backdrop`
+  both default to white in the UA stylesheet, which showed as bands above and below the slide.
+  Both are set to `var(--paper)` in `globals.css`, and the deck root paints `stageBackground`
+  when fullscreen so any letterboxing matches the slide exactly.
 - **Never touch `.next` while the dev server is running** — `rm -rf .next`, `npm run build`,
   anything. Next keeps `routes-manifest.json` open and every request 500s until you restart.
   Use `npm run reset` (stops the server, clears the cache) and then `npm run dev`.

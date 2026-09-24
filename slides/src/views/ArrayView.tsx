@@ -1,5 +1,5 @@
 import React from "react";
-import { Cell, GAP, Pointer, Bracket, LinkArc, Panel } from "@/primitives";
+import { Cell, GAP, Pointer, LinkArc, Panel } from "@/primitives";
 import { palette } from "@/theme";
 import { interFamily, displayFamily } from "@/primitives/fonts";
 import { enter, arc } from "@/engine/anim";
@@ -43,10 +43,20 @@ export const ArrayView: React.FC<ViewProps<ArrayState>> = ({ prev, next, t, slid
           return (
             <div key="band" style={{
               position: "absolute", left: from * pitch - 14, top: -18,
-              width: (to - from + 1) * pitch - GAP + 28, height: size + 36,
+              width: (to - from + 1) * pitch - GAP + 28,
+              // clear the index row, so the dashed edge never cuts through it
+              height: size + 44 + size * 0.26,
               background: "#5B4A7D14", border: `4px dashed #A493C4`, borderRadius: 22,
               opacity: prev.window ? 1 : t, zIndex: 0,
-            }} />
+            }}>
+              {w.label && (
+                <div style={{
+                  position: "absolute", top: "100%", left: 0, right: 0, marginTop: 14,
+                  textAlign: "center", fontFamily: displayFamily, fontWeight: 600,
+                  fontSize: 34, color: "#6E5B93", whiteSpace: "nowrap",
+                }}>{w.label}</div>
+              )}
+            </div>
           );
         })()}
 
@@ -62,15 +72,6 @@ export const ArrayView: React.FC<ViewProps<ArrayState>> = ({ prev, next, t, slid
               dx={dx} dy={dy} enter={e} zIndex={moving ? 5 : 1} />
           );
         })}
-
-        {next.window && (() => {
-          const w = next.window!;
-          const pw = prev.window ?? w;
-          const from = pw.from + (w.from - pw.from) * t;
-          const to = pw.to + (w.to - pw.to) * t;
-          return <Bracket key="win" x={from * pitch} width={(to - from + 1) * pitch - GAP}
-            label={w.label} opacity={prev.window ? 1 : t} />;
-        })()}
 
         {next.tag && (() => {
           const g = next.tag!;

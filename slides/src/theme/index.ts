@@ -59,4 +59,11 @@ export const motion = {
   transitionFrames: 5,
 } as const;
 
+/** The stage's paper. Shared so letterboxing in fullscreen matches the slide exactly. */
+export const stageBackground =
+  `radial-gradient(120% 80% at 50% 8%, ${palette.surfaceAlt} 0%, ${palette.bg} 45%, ${palette.bgDeep} 100%)`;
+
+export const grainTexture =
+  "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/></filter><rect width='180' height='180' filter='url(%23n)'/></svg>\")";
+
 export const radius = { cell: 12, panel: 20, pill: 999 } as const;
