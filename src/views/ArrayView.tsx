@@ -1,13 +1,13 @@
 import React from "react";
-import { Cell, GAP, Pointer, Bracket, LinkArc, Panel } from "@/primitives";
+import { Cell, GAP, Pointer, LinkArc, Panel } from "@/primitives";
 import { palette } from "@/theme";
-import { interFamily } from "@/primitives/fonts";
-import { enter, arc } from "@/engine/tween";
+import { interFamily, displayFamily } from "@/primitives/fonts";
+import { enter, arc } from "@/engine/anim";
 import type { ArrayState } from "@/engine/state";
 import type { ViewProps } from "./types";
 
 /** Cells keep a stable id, so a swap animates as two cells trading places. */
-export const ArrayView: React.FC<ViewProps<ArrayState>> = ({ prev, next, t, stepIndex, into, fps, width, height, label }) => {
+export const ArrayView: React.FC<ViewProps<ArrayState>> = ({ prev, next, t, slideIndex, width, height, label }) => {
   const n = Math.max(prev.cells.length, next.cells.length, 1);
   const hasLinkEarly = next.links.length > 0;
   // a second pointer renders BELOW the cells and needs its own room
@@ -43,10 +43,20 @@ export const ArrayView: React.FC<ViewProps<ArrayState>> = ({ prev, next, t, step
           return (
             <div key="band" style={{
               position: "absolute", left: from * pitch - 14, top: -18,
-              width: (to - from + 1) * pitch - GAP + 28, height: size + 36,
+              width: (to - from + 1) * pitch - GAP + 28,
+              // clear the index row, so the dashed edge never cuts through it
+              height: size + 44 + size * 0.26,
               background: "#5B4A7D14", border: `4px dashed #A493C4`, borderRadius: 22,
               opacity: prev.window ? 1 : t, zIndex: 0,
-            }} />
+            }}>
+              {w.label && (
+                <div style={{
+                  position: "absolute", top: "100%", left: 0, right: 0, marginTop: 14,
+                  textAlign: "center", fontFamily: displayFamily, fontWeight: 600,
+                  fontSize: 34, color: "#6E5B93", whiteSpace: "nowrap",
+                }}>{w.label}</div>
+              )}
+            </div>
           );
         })()}
 
@@ -55,22 +65,13 @@ export const ArrayView: React.FC<ViewProps<ArrayState>> = ({ prev, next, t, step
           const moving = was !== undefined && was !== i;
           const dx = moving ? (was! - i) * pitch * (1 - t) : 0;
           const dy = moving ? arc(t, size * 0.55) : 0;
-          const e = enter(stepIndex, c.born, into, fps);
+          const e = enter(slideIndex, c.born, t);
           return (
             <Cell key={c.id} value={String(c.value)} index={i} showIndex size={size}
               from={(prevStyle.get(c.id) ?? "idle") as any} to={c.style} t={t}
               dx={dx} dy={dy} enter={e} zIndex={moving ? 5 : 1} />
           );
         })}
-
-        {next.window && (() => {
-          const w = next.window!;
-          const pw = prev.window ?? w;
-          const from = pw.from + (w.from - pw.from) * t;
-          const to = pw.to + (w.to - pw.to) * t;
-          return <Bracket key="win" x={from * pitch} width={(to - from + 1) * pitch - GAP}
-            label={w.label} opacity={prev.window ? 1 : t} />;
-        })()}
 
         {next.tag && (() => {
           const g = next.tag!;
@@ -86,7 +87,7 @@ export const ArrayView: React.FC<ViewProps<ArrayState>> = ({ prev, next, t, step
               transform: `translateX(-50%) scale(${0.82 + p * 0.18})`, opacity: p,
             }}>
               <div style={{
-                background: c, color: "#FFF8F0", fontFamily: interFamily, fontWeight: 800,
+                background: c, color: "#FFF8F0", fontFamily: displayFamily, fontWeight: 800,
                 fontSize: 34, borderRadius: 999, padding: "8px 24px", whiteSpace: "nowrap",
                 textAlign: "center",
               }}>{g.text}</div>

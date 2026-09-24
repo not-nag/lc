@@ -2,7 +2,7 @@ import React from "react";
 import { Panel } from "@/primitives";
 import { monoFamily } from "@/primitives/fonts";
 import { palette, styleColors } from "@/theme";
-import { mixHex } from "@/engine/tween";
+import { mixHex } from "@/engine/anim";
 import { layoutGraph } from "./layout";
 import type { GraphState } from "@/engine/state";
 import type { ViewProps } from "./types";

@@ -1,5 +1,5 @@
 import React from "react";
-import { interFamily } from "./fonts";
+import { interFamily, displayFamily } from "./fonts";
 
 /** A labelled caret that slides between cells. */
 export const Pointer: React.FC<{
@@ -11,7 +11,7 @@ export const Pointer: React.FC<{
     display: "flex", flexDirection: below ? "column-reverse" : "column", alignItems: "center", gap: 2,
   }}>
     <div style={{
-      fontFamily: interFamily, fontWeight: 800, fontSize: size * 0.24, color,
+      fontFamily: displayFamily, fontWeight: 800, fontSize: size * 0.24, color,
       background: `${color}1E`, border: `3px solid ${color}`, borderRadius: 999,
       padding: `2px ${size * 0.13}px`, whiteSpace: "nowrap",
     }}>{label}</div>

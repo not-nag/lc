@@ -12,8 +12,8 @@ export const TitleCard: React.FC<{
     <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column",
       alignItems: "center", justifyContent: "center", gap: 26, padding: 80 }}>
       {kicker && (
-        <div style={{ fontFamily: interFamily, fontSize: 32, letterSpacing: 8, textTransform: "uppercase",
-          color: palette.muted, fontWeight: 700, opacity: p }}>{kicker}</div>
+        <div style={{ fontFamily: displayFamily, fontSize: 32, letterSpacing: 1,
+          color: palette.muted, fontWeight: 600, opacity: p }}>{kicker}</div>
       )}
       {number !== undefined && (
         <div style={{ fontFamily: monoFamily, fontSize: 40, fontWeight: 700, color: palette.terracotta,
@@ -25,7 +25,7 @@ export const TitleCard: React.FC<{
         opacity: p, transform: `translateY(${(1 - p) * 34}px) scale(${0.94 + p * 0.06})`,
       }}>{title}</div>
       <div style={{
-        fontFamily: interFamily, fontSize: 30, fontWeight: 800, letterSpacing: 3, textTransform: "uppercase",
+        fontFamily: displayFamily, fontSize: 30, fontWeight: 800, letterSpacing: 3, textTransform: "uppercase",
         color: "#FFF8F0", background: diffColor[difficulty], borderRadius: 999, padding: "10px 30px", opacity: p,
       }}>{difficulty}</div>
     </div>
@@ -44,7 +44,7 @@ export const BigText: React.FC<{ title?: string; body: string[]; variant: string
       )}
       {body.map((b, i) => (
         <div key={i} style={{
-          fontFamily: variant === "big" ? displayFamily : interFamily,
+          fontFamily: displayFamily,
           fontSize: variant === "big" ? 68 : 50, fontWeight: variant === "big" ? 700 : 600,
           color: palette.inkSoft, lineHeight: 1.35, display: "flex", gap: 18,
           opacity: Math.max(0, Math.min(1, p * 1.6 - i * 0.28)),

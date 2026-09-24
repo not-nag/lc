@@ -1,8 +1,8 @@
 import React from "react";
 import { Panel, Pointer } from "@/primitives";
-import { monoFamily, interFamily } from "@/primitives/fonts";
+import { monoFamily, interFamily, displayFamily } from "@/primitives/fonts";
 import { palette, styleColors, radius } from "@/theme";
-import { mixHex } from "@/engine/tween";
+import { mixHex } from "@/engine/anim";
 import type { ArrayState } from "@/engine/state";
 import type { Style } from "@/schema/ops";
 import type { ViewProps } from "./types";
@@ -67,7 +67,7 @@ export const BarsView: React.FC<ViewProps<ArrayState> & { unit?: string }> = ({
               }}>{v}</div>
               <div style={{
                 position: "absolute", top: chartH + 14, width: barW, textAlign: "center",
-                fontFamily: interFamily, fontSize: Math.min(26, barW * 0.3), fontWeight: 600, color: palette.muted,
+                fontFamily: displayFamily, fontSize: Math.min(26, barW * 0.3), fontWeight: 600, color: palette.muted,
               }}>{i + 1}</div>
             </div>
           );
@@ -79,7 +79,7 @@ export const BarsView: React.FC<ViewProps<ArrayState> & { unit?: string }> = ({
             {next.level.label && (
               <div style={{
                 position: "absolute", right: 0, top: -48, background: next.level.color, color: "#FFF8F0",
-                fontFamily: interFamily, fontWeight: 800, fontSize: 30, borderRadius: 999, padding: "6px 20px",
+                fontFamily: displayFamily, fontWeight: 800, fontSize: 30, borderRadius: 999, padding: "6px 20px",
                 whiteSpace: "nowrap",
               }}>{next.level.label}</div>
             )}

@@ -1,4 +1,4 @@
 export * from "./ops";
 export * from "./views";
-export * from "./storyboard";
+export * from "./deck";
 export * from "./lint";

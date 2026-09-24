@@ -25,8 +25,6 @@ const generic = [
     variant: z.enum(["insight", "warn", "math", "note", "aside"]).default("note") }),
   z.object({ type: z.literal("formula"), text: z.string(), emphasis: z.string().optional() }),
   z.object({ type: z.literal("result"), value: z.string(), label: z.string().optional() }),
-  z.object({ type: z.literal("camera"), view: V, indices: z.array(z.number()).optional(), zoom: z.number().optional() }),
-  z.object({ type: z.literal("custom"), component: z.string(), props: z.record(z.string(), z.any()).default({}) }),
 ];
 
 /* ─── array / string ──────────────────────────────────────── */

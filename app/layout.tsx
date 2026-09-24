@@ -6,12 +6,8 @@ const body = Inter({ subsets: ["latin"], variable: "--font-body" });
 const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
 const display = Bricolage_Grotesque({ subsets: ["latin"], variable: "--font-display" });
 
-export const metadata: Metadata = {
-  title: "LeetCode in 100 Seconds — Studio",
-  description: "Algorithm explainer videos.",
-};
-
-export const viewport = { width: "device-width", initialScale: 1, viewportFit: "cover" as const };
+export const metadata: Metadata = { title: "LeetCode Slides", description: "Self-paced algorithm decks." };
+export const viewport = { width: "device-width", initialScale: 1 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

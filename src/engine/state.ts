@@ -1,5 +1,5 @@
 import type { Style } from "@/schema/ops";
-import type { Storyboard, ViewDecl } from "@/schema";
+import type { Deck, ViewDecl } from "@/schema";
 
 export type Value = number | string | boolean | null;
 
@@ -57,16 +57,15 @@ export type Overlay = {
   aside?: { text: string; born: number };
   formula?: { text: string; emphasis?: string; born: number };
   result?: { value: string; label?: string; born: number };
-  camera?: { view: string; indices?: number[]; zoom?: number };
 };
 
 export type Frame = { views: Record<string, ViewState>; overlay: Overlay; label?: string };
 
 const cell = (id: string, value: Value): Cell => ({ id, value, style: "idle", born: 0 });
 
-export function initialFrame(sb: Storyboard): Frame {
+export function initialState(deck: Deck): Frame {
   const views: Record<string, ViewState> = {};
-  for (const v of sb.views) views[v.id] = initView(v);
+  for (const v of deck.views) views[v.id] = initView(v);
   return { views, overlay: {} };
 }
 

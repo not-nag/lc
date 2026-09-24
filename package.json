@@ -1,33 +1,20 @@
 {
-  "name": "lc100",
+  "name": "lc-slides",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "node scripts/index-storyboards.mjs && next dev -p 3000",
-    "build": "node scripts/index-storyboards.mjs && next build",
-    "start": "next start",
-    "studio": "node scripts/index-storyboards.mjs && remotion studio src/remotion/index.ts",
-    "render": "tsx scripts/render.mts",
-    "generate": "tsx scripts/generate.mts",
+    "dev": "npm run decks && next dev -p 3100",
+    "build": "npm run decks && next build",
+    "start": "next start -p 3100",
+    "decks": "tsx scripts/build-decks.mts",
     "typecheck": "tsc --noEmit",
-    "index": "node scripts/index-storyboards.mjs",
-    "traces": "tsx scripts/build-traces.mts && node scripts/index-storyboards.mjs",
-    "script": "tsx scripts/export-script.mts",
-    "frames": "tsx scripts/frames.mts"
+    "reset": "bash scripts/reset.sh"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.128.0",
-    "@remotion/bundler": "^4.0.527",
-    "@remotion/cli": "^4.0.527",
-    "@remotion/google-fonts": "^4.0.527",
-    "@remotion/player": "^4.0.527",
-    "@remotion/renderer": "^4.0.527",
-    "@remotion/transitions": "^4.0.527",
     "d3-hierarchy": "^3.1.2",
     "next": "^15.5.26",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
-    "remotion": "^4.0.527",
     "zod": "^4.5.4"
   },
   "devDependencies": {

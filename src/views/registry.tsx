@@ -20,7 +20,4 @@ export const VIEWS: Record<string, React.FC<any>> = {
   list: ListView, code: CodeView, text: TextView,
 };
 
-/** Escape hatch: `{type:'custom', component:'X'}` resolves against this. */
-export const CUSTOM: Record<string, React.FC<any>> = {};
-export const registerCustom = (name: string, c: React.FC<any>) => { CUSTOM[name] = c; };
 export type { ViewProps };

@@ -1,6 +1,6 @@
 import React from "react";
 import { palette, radius } from "@/theme";
-import { interFamily } from "./fonts";
+import { interFamily, displayFamily } from "./fonts";
 
 /** A labelled container for one view. */
 export const Panel: React.FC<{
@@ -12,8 +12,8 @@ export const Panel: React.FC<{
   }}>
     {label && (
       <div style={{
-        fontFamily: interFamily, fontSize: 29, fontWeight: 700, letterSpacing: 2,
-        textTransform: "uppercase", color: palette.muted,
+        fontFamily: displayFamily, fontSize: 40, fontWeight: 600, letterSpacing: 0,
+        color: palette.muted,
       }}>{label}</div>
     )}
     <div style={{
@@ -21,11 +21,4 @@ export const Panel: React.FC<{
       ...(flush ? {} : { padding: 8 }),
     }}>{children}</div>
   </div>
-);
-
-export const Surface: React.FC<{ children: React.ReactNode; style?: React.CSSProperties }> = ({ children, style }) => (
-  <div style={{
-    background: palette.surfaceAlt, border: `3px solid ${palette.line}`, borderRadius: radius.panel,
-    padding: 24, boxShadow: `0 10px 0 -4px ${palette.bgDeep}`, ...style,
-  }}>{children}</div>
 );

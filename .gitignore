@@ -1,13 +1,4 @@
 node_modules
 .next
-out
-.env.local
-/renders
-/.remotion
 *.tsbuildinfo
 next-env.d.ts
-.cache
-public/vo/*
-!public/vo/.gitkeep
-frames/
-renders/

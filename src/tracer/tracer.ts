@@ -1,11 +1,20 @@
 import type { Op } from "@/schema/ops";
-import type { Storyboard, Scene, Step, Pane, ViewDecl, MetaInput } from "@/schema";
+import type { Deck, Section, Slide, Pane, ViewDecl, MetaInput } from "@/schema";
 
 /** What a trace author writes — everything but `view` is optional. */
 export type PaneInput = { view: string } & Partial<Omit<Pane, "view">>;
 
 /** A row in `show`: one view id, or several to place side by side. */
 export type ShowRow = string | string[];
+
+/** Ops that advance the algorithm — slides carrying these cannot be safely reordered. */
+const STRUCTURAL = new Set([
+  "array.swap", "array.setValue", "array.push", "array.pop",
+  "map.put", "map.delete", "map.clear",
+  "stack.push", "stack.pop", "queue.enqueue", "queue.dequeue",
+  "grid.setValue", "list.relink", "list.insert", "list.remove", "list.setHead",
+  "tree.setValue", "tree.swapChildren", "var.set",
+]);
 
 /**
  * How much vertical room a view naturally wants, relative to the others in the scene.
@@ -38,13 +47,13 @@ type Style = "idle" | "compare" | "active" | "match" | "bad" | "window" | "done"
  */
 export class Tracer {
   private views: ViewDecl[] = [];
-  private scenes: Scene[] = [];
-  private cur: Scene | null = null;
+  private sections: Section[] = [];
+  private cur: Section | null = null;
   private pending: Op[] = [];
   private pendingCode?: { view: string; lines: number[] };
-  private pendingVoice?: string;
+  private pendingNote?: string;
   private codeView?: string;
-  meta: Partial<Storyboard["meta"]> = {};
+  meta: Partial<Deck["meta"]> = {};
 
   /* ── scenes & beats ────────────────────────────────────── */
   /**
@@ -53,12 +62,12 @@ export class Tracer {
    *     t.scene("walkthrough", { show: ["nums", ["seen", "v"], "code"] })
    * Reach for `layout` / `rows` / `rowSizes` only to override that.
    */
-  scene(kind: Scene["kind"], opts: {
+  section(kind: Section["kind"], opts: {
     id?: string; title?: string; show?: ShowRow[];
     layout?: PaneInput[]; rows?: number; rowSizes?: number[];
-    voice?: string; transition?: Scene["transition"];
+    note?: string;
   } = {}) {
-    this.flushScene();
+    this.flushSection();
 
     let layout = opts.layout;
     let rows = opts.rows;
@@ -69,7 +78,7 @@ export class Tracer {
       layout = rowsIn.flatMap((ids, row) =>
         ids.map((view, i) => ({
           view, row, col: Math.round((12 / ids.length) * i),
-          span: Math.round(12 / ids.length), rowSpan: 1, scale: 1,
+          span: Math.round(12 / ids.length), rowSpan: 1,
         })));
       rows = rowsIn.length;
       // a row is as tall as its most demanding view
@@ -77,51 +86,55 @@ export class Tracer {
         Math.max(...ids.map((id) => naturalWeight(this.views.find((v) => v.id === id)))));
       for (const ids of rowsIn) for (const id of ids)
         if (!this.views.some((v) => v.id === id))
-          throw new Error(`scene "${kind}" shows unknown view "${id}" — declare it before the scene`);
+          throw new Error(`section "${kind}" shows unknown view "${id}" — declare it before the scene`);
     }
 
     this.cur = {
-      id: opts.id ?? `${kind}-${this.scenes.length}`,
+      id: opts.id ?? `${kind}-${this.sections.length}`,
       kind, title: opts.title,
-      layout: (layout ?? []).map((p): Pane => ({ col: 0, span: 12, row: 0, rowSpan: 1, scale: 1, ...p })),
+      layout: (layout ?? []).map((p): Pane => ({ col: 0, span: 12, row: 0, rowSpan: 1, ...p })),
       rows: rows ?? Math.max(1, ...(layout ?? []).map((p) => (p.row ?? 0) + (p.rowSpan ?? 1))),
       rowSizes,
-      voice: opts.voice, steps: [], transition: opts.transition ?? "wipe",
+      slides: [],
     };
     return this;
   }
 
   /**
-   * Commit everything queued since the last beat as one moment in time.
-   * `label` states what this step DOES — it is not narration, so a voiceover
-   * added later never contradicts it.
+   * Commit everything queued since the last call as ONE slide — one click.
+   * `label` is the line shown on screen; it says what this step does.
+   * There is no duration: the slide lasts until the presenter moves on.
    */
-  beat(label?: string, beats = 1) {
-    if (!this.cur) this.scene("walkthrough");
-    const step: Step = { beats, ops: this.pending as any, label, voice: this.pendingVoice, code: this.pendingCode };
-    this.cur!.steps.push(step);
+  slide(label?: string, opts: { structural?: boolean } = {}) {
+    if (!this.cur) this.section("walkthrough");
+    const s: Slide = {
+      id: `${this.cur!.id}-${this.cur!.slides.length}`,
+      ops: this.pending as any, label, note: this.pendingNote,
+      code: this.pendingCode,
+      structural: opts.structural ?? this.pending.some((o: any) => STRUCTURAL.has(o.type)),
+    };
+    this.cur!.slides.push(s);
     this.pending = [];
     this.pendingCode = undefined;
-    this.pendingVoice = undefined;
+    this.pendingNote = undefined;
     return this;
   }
 
-  /** Hold the current picture for longer without changing anything. */
-  hold(beats = 1, label?: string) { return this.beat(label, beats); }
+  /** A slide that changes nothing — a pause to talk over. */
+  hold(label?: string) { return this.slide(label); }
 
   /**
-   * Narration for the beat being built. This is what gets SPOKEN — write it the way you
-   * would say it out loud, with the pointers as characters. Separate from the on-screen
-   * label, which stays terse.
+   * Presenter note for the slide being built — what you plan to say over it.
+   * Never rendered to the viewer.
    */
-  say(text: string) { this.pendingVoice = this.pendingVoice ? `${this.pendingVoice} ${text}` : text; return this; }
+  say(text: string) { this.pendingNote = this.pendingNote ? `${this.pendingNote} ${text}` : text; return this; }
 
   private push(op: Op) { this.pending.push(op); return this; }
   private addView(v: ViewDecl) {
     if (this.views.some((x) => x.id === v.id)) throw new Error(`duplicate view id "${v.id}"`);
     this.views.push(v); return v;
   }
-  private flushScene() { if (this.cur) { if (this.cur.steps.length === 0) this.beat(); this.scenes.push(this.cur); this.cur = null; } }
+  private flushSection() { if (this.cur) { if (this.cur.slides.length === 0) this.slide(); this.sections.push(this.cur); this.cur = null; } }
 
   /* ── overlays ──────────────────────────────────────────── */
   callout(text: string, variant: "insight" | "warn" | "math" | "note" | "aside" = "note", anchor?: any) {
@@ -131,7 +144,6 @@ export class Tracer {
   aside(text: string) { return this.push({ type: "callout", text, variant: "aside" } as any); }
   formula(text: string) { return this.push({ type: "formula", text } as any); }
   result(value: unknown, label?: string) { return this.push({ type: "result", value: JSON.stringify(value).replace(/"/g, ""), label } as any); }
-  zoom(view: string, z = 1.15) { return this.push({ type: "camera", view, zoom: z } as any); }
 
   /* ── code ──────────────────────────────────────────────── */
   code(id: string, source: string, lang: "python" | "javascript" | "java" | "cpp" = "python", label?: string) {
@@ -139,7 +151,7 @@ export class Tracer {
     this.addView({ kind: "code", id, source: source.replace(/^\n/, "").replace(/\s+$/, ""), lang, label } as ViewDecl);
     return id;
   }
-  /** Highlight source lines for the beat being built. */
+  /** Highlight source lines on the slide being built. */
   line(...lines: number[]) { if (this.codeView) this.pendingCode = { view: this.codeView, lines }; return this; }
 
   /* ── handles ───────────────────────────────────────────── */
@@ -206,11 +218,12 @@ export class Tracer {
 
   _op(op: Op) { return this.push(op); }
 
-  /** Finish and emit a validated-shaped storyboard. */
-  build(meta: MetaInput): Storyboard {
-    if (this.pending.length) this.beat();
-    this.flushScene();
-    return { schemaVersion: 1, meta: { ...meta, ...this.meta } as any, views: this.views, scenes: this.scenes } as Storyboard;
+  /** Finish and emit the deck. */
+  build(meta: MetaInput): Deck {
+    if (this.pending.length) this.slide();
+    this.flushSection();
+    return { schemaVersion: 1, meta: { ...meta, ...this.meta } as any,
+      views: this.views, sections: this.sections } as Deck;
   }
 }
 

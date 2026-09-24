@@ -1,41 +1,39 @@
 import React from "react";
-import { palette, radius } from "@/theme";
-import { interFamily, monoFamily } from "./fonts";
+import { palette } from "@/theme";
+import { interFamily, monoFamily, displayFamily } from "./fonts";
 
-/** Split "need = 9 − 2 = 7" so the expression renders in mono and the prose doesn't. */
-const isExpr = (s: string) => /[=<>+\-*/[\]]|\bO\(/.test(s) && s.length < 34;
+/** Expressions render in mono; prose doesn't. */
+const isExpr = (s: string) => /[=<>+\-*/[\]]|\bO\(/.test(s) && s.length < 44;
 
 /**
- * A step label: what the algorithm is DOING right now. Deliberately not a subtitle —
- * it must stay true no matter what a later voiceover says over it.
+ * The line under the slide: what this step does. Just the text — no band or chrome.
+ * A slide with nothing to say renders nothing, so a blank slide is a real pause.
  */
-export const StepLabel: React.FC<{ text?: string; progress: number; bottom?: number; index?: number }> = ({
-  text, progress, bottom = 140,
+export const StepLabel: React.FC<{ text?: string; progress: number; bottom?: number }> = ({
+  text, progress, bottom = 92,
 }) => {
-  if (!text) return null;
+  if (!text?.trim()) return null;
   const p = Math.min(1, progress);
   const mono = isExpr(text);
+
   return (
     <div style={{
-      position: "absolute", left: 0, right: 0, bottom, display: "flex", justifyContent: "center",
-      padding: "0 60px", opacity: p, transform: `translateY(${(1 - p) * 10}px)`,
+      position: "absolute", left: 0, right: 0, bottom, zIndex: 50,
+      display: "flex", justifyContent: "center", padding: "0 90px", pointerEvents: "none",
     }}>
-      <div style={{
-        background: palette.surfaceAlt, border: `4px solid ${palette.line}`,
-        color: palette.ink, borderRadius: radius.panel, padding: "18px 34px",
-        display: "flex", alignItems: "center", gap: 16, maxWidth: 940,
-        boxShadow: `0 7px 0 -2px ${palette.bgDeep}`,
-      }}>
-        <span style={{ color: palette.terracotta, fontFamily: interFamily, fontWeight: 900, fontSize: 40, lineHeight: 1 }}>›</span>
-        <span style={{
-          fontFamily: mono ? monoFamily : interFamily,
-          fontWeight: mono ? 700 : 600, fontSize: mono ? 46 : 44,
-          lineHeight: 1.22, textAlign: "left", fontVariantNumeric: "tabular-nums",
-        }}>{text}</span>
-      </div>
+      <span style={{
+        fontFamily: mono ? monoFamily : displayFamily,
+        fontWeight: mono ? 700 : 600,
+        fontSize: mono ? 52 : 48,
+        letterSpacing: mono ? -0.5 : -0.3,
+        lineHeight: 1.2, textAlign: "center", whiteSpace: "pre-line",
+        color: palette.ink, fontVariantNumeric: "tabular-nums",
+        opacity: 0.2 + 0.8 * p,
+        transform: `translateY(${(1 - p) * 8}px)`,
+      }}>{text}</span>
     </div>
   );
 };
 
-/** @deprecated kept so older imports keep compiling */
+/** @deprecated older name */
 export const Caption = StepLabel;
