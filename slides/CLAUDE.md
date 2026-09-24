@@ -99,6 +99,9 @@ in any view. Don't break this.
 - **`Cell` sets `z-index: 1`** (so a swapping cell passes over its neighbour). Any overlay
   must therefore declare its own z-index or it paints *behind* the cells even though it comes
   later in the DOM. Overlays use 25, the result banner 40, the step label 50.
+- **Never touch `.next` while the dev server is running** — `rm -rf .next`, `npm run build`,
+  anything. Next keeps `routes-manifest.json` open and every request 500s until you restart.
+  Use `npm run reset` (stops the server, clears the cache) and then `npm run dev`.
 - **Never run `npm run build` while `npm run dev` is live** — it overwrites `.next` and the dev
   server then throws `__webpack_modules__[moduleId] is not a function` until restarted.
 - **Barrel re-exports fail under tsx** in scripts; import from the module file directly.
