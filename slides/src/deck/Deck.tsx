@@ -3,6 +3,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import type { Deck as DeckT } from "@/schema";
 import { flatten, STAGE } from "@/schema/deck";
 import { Stage } from "@/primitives";
+import { palette } from "@/theme";
 import { SlideView } from "./SlideView";
 import type { DeckApi } from "./useDeck";
 
@@ -17,6 +18,14 @@ export const Deck: React.FC<{
   const total = useMemo(() => flatten(deck).length, [deck]);
   const box = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(0.4);
+  const [fullscreen, setFullscreen] = useState(false);
+
+  // in fullscreen the deck is the whole screen: slide only, no controls
+  useEffect(() => {
+    const onChange = () => setFullscreen(!!document.fullscreenElement);
+    document.addEventListener("fullscreenchange", onChange);
+    return () => document.removeEventListener("fullscreenchange", onChange);
+  }, []);
 
   useEffect(() => {
     const fit = () => {
@@ -55,14 +64,18 @@ export const Deck: React.FC<{
 
   return (
     <div data-deck-root style={{
-      display: "flex", flexDirection: "column", gap: 14, height: "100%", minHeight: 0,
-      background: "var(--paper)",
+      display: "flex", flexDirection: "column", gap: fullscreen ? 0 : 14,
+      height: "100%", minHeight: 0, background: palette.bg,
     }}>
-      <div ref={box} style={{ flex: 1, minHeight: 0, display: "grid", placeItems: "center" }}>
+      <div ref={box} style={{
+        flex: 1, minHeight: 0, display: "grid", placeItems: "center",
+        padding: fullscreen ? 0 : undefined,
+      }}>
         {/* transform does not shrink layout size, so the scaled stage needs a sized wrapper */}
         <div style={{
-          width: W * scale, height: H * scale, position: "relative",
-          borderRadius: 18, overflow: "hidden", boxShadow: "0 18px 50px -20px rgba(62,44,35,.45)",
+          width: W * scale, height: H * scale, position: "relative", overflow: "hidden",
+          borderRadius: fullscreen ? 0 : 18,
+          boxShadow: fullscreen ? "none" : "0 18px 50px -20px rgba(62,44,35,.45)",
         }}>
           <div style={{
             width: W, height: H, position: "absolute", top: 0, left: 0,
@@ -74,7 +87,7 @@ export const Deck: React.FC<{
           </div>
         </div>
       </div>
-      {controls?.({ ...api, total })}
+      {!fullscreen && controls?.({ ...api, total })}
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import React from "react";
 import { palette } from "@/theme";
-import { interFamily, monoFamily } from "./fonts";
+import { interFamily, monoFamily, displayFamily } from "./fonts";
 
 /** Expressions render in mono; prose doesn't. */
 const isExpr = (s: string) => /[=<>+\-*/[\]]|\bO\(/.test(s) && s.length < 44;
@@ -22,11 +22,11 @@ export const StepLabel: React.FC<{ text?: string; progress: number; bottom?: num
       display: "flex", justifyContent: "center", padding: "0 90px", pointerEvents: "none",
     }}>
       <span style={{
-        fontFamily: mono ? monoFamily : interFamily,
+        fontFamily: mono ? monoFamily : displayFamily,
         fontWeight: mono ? 700 : 600,
         fontSize: mono ? 52 : 48,
         letterSpacing: mono ? -0.5 : -0.3,
-        lineHeight: 1.2, textAlign: "center",
+        lineHeight: 1.2, textAlign: "center", whiteSpace: "pre-line",
         color: palette.ink, fontVariantNumeric: "tabular-nums",
         opacity: 0.2 + 0.8 * p,
         transform: `translateY(${(1 - p) * 8}px)`,

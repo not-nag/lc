@@ -1,6 +1,6 @@
 import React from "react";
 import { palette } from "@/theme";
-import { interFamily } from "./fonts";
+import { interFamily, displayFamily } from "./fonts";
 
 /** Sliding-window bracket underneath a run of cells. */
 export const Bracket: React.FC<{ x: number; width: number; label?: string; color?: string; opacity?: number }> = ({
@@ -10,7 +10,7 @@ export const Bracket: React.FC<{ x: number; width: number; label?: string; color
     <div style={{ height: 20, borderLeft: `6px solid ${color}`, borderRight: `6px solid ${color}`,
       borderBottom: `6px solid ${color}`, borderRadius: "0 0 12px 12px" }} />
     {label && (
-      <div style={{ textAlign: "center", marginTop: 8, fontFamily: interFamily, fontWeight: 700,
+      <div style={{ textAlign: "center", marginTop: 8, fontFamily: displayFamily, fontWeight: 700,
         fontSize: 34, letterSpacing: 1, color, whiteSpace: "nowrap" }}>{label}</div>
     )}
   </div>
@@ -33,7 +33,7 @@ export const LinkArc: React.FC<{ x1: number; x2: number; label?: string; color?:
         <div style={{
           position: "absolute", top: h * 0.34, left: w / 2,
           transform: `translateX(-50%) scale(${0.7 + progress * 0.3})`,
-          fontFamily: interFamily, fontWeight: 800, fontSize: 32, color: "#F4FBEF",
+          fontFamily: displayFamily, fontWeight: 800, fontSize: 32, color: "#F4FBEF",
           background: color, borderRadius: 999, padding: "6px 22px", whiteSpace: "nowrap",
           opacity: Math.max(0, (progress - 0.45) / 0.55),
         }}>{label}</div>

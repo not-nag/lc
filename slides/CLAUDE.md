@@ -31,6 +31,13 @@ presenter `note`. There is no duration anywhere.
 `t.slide("label")` commits a slide. `t.say("…")` attaches the presenter note.
 `t.hold("label")` is a slide that changes nothing — a pause to talk over.
 
+## Typography
+
+Slide prose uses the **display** face (Bricolage Grotesque) via `displayFamily`. Mono
+(`monoFamily`) is reserved for cell values, code, and expressions — anywhere tabular figures
+matter. **No ALL-CAPS labels** in the slide: header, pane captions and section names are
+sentence case. The difficulty pill is the only exception, where caps reads as a badge.
+
 ## The slide label
 
 `StepLabel` is the text and nothing else — no band, border, accent or progress rule. Centred

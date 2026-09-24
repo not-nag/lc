@@ -1,6 +1,6 @@
 import React from "react";
 import { Panel } from "@/primitives";
-import { monoFamily, interFamily } from "@/primitives/fonts";
+import { monoFamily, interFamily, displayFamily } from "@/primitives/fonts";
 import { palette, styleColors, radius } from "@/theme";
 import { mixHex, enter } from "@/engine/anim";
 import type { ListState } from "@/engine/state";
@@ -78,13 +78,13 @@ export const ListView: React.FC<ViewProps<ListState>> = ({ prev, next, t, slideI
             }}>
               {String(node.value)}
               {isHead && (
-                <span style={{ position: "absolute", top: -40, fontFamily: interFamily, fontSize: 24,
+                <span style={{ position: "absolute", top: -40, fontFamily: displayFamily, fontSize: 24,
                   fontWeight: 800, color: palette.muted, letterSpacing: 1 }}>head</span>
               )}
             </div>
           );
         })}
-        {nodes.length === 0 && <span style={{ fontFamily: interFamily, fontSize: 34, color: palette.muted }}>null</span>}
+        {nodes.length === 0 && <span style={{ fontFamily: displayFamily, fontSize: 34, color: palette.muted }}>null</span>}
       </div>
     </Panel>
   );

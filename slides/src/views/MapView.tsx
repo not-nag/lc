@@ -1,5 +1,5 @@
 import React from "react";
-import { Panel, monoFamily, interFamily } from "@/primitives";
+import { Panel, monoFamily, displayFamily } from "@/primitives";
 import { palette, styleColors, radius } from "@/theme";
 import { enter, mixHex } from "@/engine/anim";
 import type { MapState } from "@/engine/state";
@@ -16,7 +16,7 @@ export const MapView: React.FC<ViewProps<MapState>> = ({ prev, next, t, slideInd
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10, width: "100%" }}>
       <div style={{ width: Math.min(width, 900), display: "grid", gridTemplateColumns: `repeat(${cols}, 1fr)`, gap: 12 }}>
         {next.entries.length === 0 && (
-          <div style={{ fontFamily: interFamily, fontSize: 34, color: palette.muted, opacity: 0.6,
+          <div style={{ fontFamily: displayFamily, fontSize: 34, color: palette.muted, opacity: 0.6,
             textAlign: "center", padding: 28, border: `3px dashed ${palette.line}`, borderRadius: radius.panel }}>
             empty
           </div>
@@ -40,7 +40,7 @@ export const MapView: React.FC<ViewProps<MapState>> = ({ prev, next, t, slideInd
         })}
       </div>
       {next.probe && (
-        <div style={{ fontFamily: interFamily, fontWeight: 800, fontSize: 30,
+        <div style={{ fontFamily: displayFamily, fontWeight: 800, fontSize: 30,
           whiteSpace: "nowrap", color: next.probe.hit ? palette.sage : palette.clay, opacity: t }}>
           {next.probe.hit ? `✓ ${next.probe.key} is here` : `✗ ${next.probe.key} not found`}
         </div>

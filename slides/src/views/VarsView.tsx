@@ -1,6 +1,6 @@
 import React from "react";
 import { Panel } from "@/primitives";
-import { monoFamily, interFamily } from "@/primitives/fonts";
+import { monoFamily, interFamily, displayFamily } from "@/primitives/fonts";
 import { palette, styleColors, radius } from "@/theme";
 import { mixHex, enter } from "@/engine/anim";
 import type { VarsState } from "@/engine/state";
@@ -23,7 +23,7 @@ export const VarsView: React.FC<ViewProps<VarsState>> = ({ prev, next, t, slideI
               background: mixHex(a.bg, b.bg, t), border: `3px solid ${mixHex(a.border, b.border, t)}`,
               padding: "12px 26px", whiteSpace: "nowrap", transform: `scale(${(changed ? 1 + Math.sin(Math.PI * t) * 0.09 : 1) * enter(slideIndex, it.born, t)})`,
             }}>
-              <span style={{ fontFamily: interFamily, fontSize: 32, fontWeight: 700,
+              <span style={{ fontFamily: displayFamily, fontSize: 32, fontWeight: 700,
                 color: mixHex(a.fg, b.fg, t), opacity: 0.72 }}>{it.name}</span>
               <span style={{ fontFamily: monoFamily, fontSize: 42, fontWeight: 800,
                 color: mixHex(a.fg, b.fg, t), fontVariantNumeric: "tabular-nums" }}>{String(it.value)}</span>

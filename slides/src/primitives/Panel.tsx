@@ -1,6 +1,6 @@
 import React from "react";
 import { palette, radius } from "@/theme";
-import { interFamily } from "./fonts";
+import { interFamily, displayFamily } from "./fonts";
 
 /** A labelled container for one view. */
 export const Panel: React.FC<{
@@ -12,8 +12,8 @@ export const Panel: React.FC<{
   }}>
     {label && (
       <div style={{
-        fontFamily: interFamily, fontSize: 29, fontWeight: 700, letterSpacing: 2,
-        textTransform: "uppercase", color: palette.muted,
+        fontFamily: displayFamily, fontSize: 30, fontWeight: 600, letterSpacing: 0,
+        color: palette.muted,
       }}>{label}</div>
     )}
     <div style={{

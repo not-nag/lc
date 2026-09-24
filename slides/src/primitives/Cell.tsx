@@ -1,6 +1,6 @@
 import React from "react";
 import { styleColors, radius, palette } from "@/theme";
-import { monoFamily, interFamily } from "./fonts";
+import { monoFamily, interFamily, displayFamily } from "./fonts";
 import { mixHex } from "@/engine/anim";
 import type { Style } from "@/schema/ops";
 
@@ -32,7 +32,7 @@ export const Cell: React.FC<{
         boxShadow: `0 ${4 + lift}px 0 -1px ${mixHex(a.border, b.border, t)}33`,
       }}>{value}</div>
       {showIndex && (
-        <div style={{ fontFamily: interFamily, fontSize: size * 0.2, color: palette.muted, fontWeight: 600 }}>
+        <div style={{ fontFamily: displayFamily, fontSize: size * 0.2, color: palette.muted, fontWeight: 600 }}>
           {index}
         </div>
       )}

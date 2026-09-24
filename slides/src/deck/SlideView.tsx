@@ -85,10 +85,10 @@ const labelFor = (k: string) => (({
 
 const Header: React.FC<{ deck: Deck; section: string }> = ({ deck, section }) => (
   <div style={{ position: "absolute", top: 46, left: 36, right: 36, display: "flex", justifyContent: "space-between" }}>
-    <div style={{ fontSize: 25, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", color: palette.muted }}>
+    <div style={{ fontSize: 27, fontWeight: 600, letterSpacing: 0, color: palette.muted }}>
       {deck.meta.number ? `#${deck.meta.number} · ` : ""}{deck.meta.title}
     </div>
-    <div style={{ fontSize: 25, fontWeight: 800, letterSpacing: 3, textTransform: "uppercase", color: palette.terracotta }}>
+    <div style={{ fontSize: 27, fontWeight: 700, letterSpacing: 0, color: palette.terracotta }}>
       {section}
     </div>
   </div>

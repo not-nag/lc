@@ -1,7 +1,7 @@
 import React from "react";
 import { Cell, GAP, Pointer, Bracket, LinkArc, Panel } from "@/primitives";
 import { palette } from "@/theme";
-import { interFamily } from "@/primitives/fonts";
+import { interFamily, displayFamily } from "@/primitives/fonts";
 import { enter, arc } from "@/engine/anim";
 import type { ArrayState } from "@/engine/state";
 import type { ViewProps } from "./types";
@@ -86,7 +86,7 @@ export const ArrayView: React.FC<ViewProps<ArrayState>> = ({ prev, next, t, slid
               transform: `translateX(-50%) scale(${0.82 + p * 0.18})`, opacity: p,
             }}>
               <div style={{
-                background: c, color: "#FFF8F0", fontFamily: interFamily, fontWeight: 800,
+                background: c, color: "#FFF8F0", fontFamily: displayFamily, fontWeight: 800,
                 fontSize: 34, borderRadius: 999, padding: "8px 24px", whiteSpace: "nowrap",
                 textAlign: "center",
               }}>{g.text}</div>

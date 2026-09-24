@@ -1,6 +1,6 @@
 import React from "react";
 import { palette, radius } from "@/theme";
-import { interFamily, monoFamily } from "./fonts";
+import { interFamily, monoFamily, displayFamily } from "./fonts";
 
 const variants: Record<string, { bg: string; fg: string; icon: string }> = {
   insight: { bg: palette.mustard, fg: "#3E2A05", icon: "✦" },
@@ -21,7 +21,7 @@ export const Callout: React.FC<{ text: string; variant?: string; progress: numbe
     }}>
       <div style={{
         background: v.bg, color: v.fg, borderRadius: radius.panel, padding: "18px 30px",
-        fontFamily: interFamily, fontWeight: 700, fontSize: 37, display: "flex", gap: 16,
+        fontFamily: displayFamily, fontWeight: 700, fontSize: 37, display: "flex", gap: 16,
         alignItems: "center", maxWidth: 940, textAlign: "center", boxShadow: `0 8px 0 -2px #00000022`,
       }}>
         <span style={{ opacity: 0.6 }}>{v.icon}</span>{text}
@@ -56,8 +56,8 @@ export const ResultBanner: React.FC<{ value: string; label?: string; progress: n
       // a scrim so the answer reads as a reveal rather than another element on the board
       background: `rgba(242,228,213,${0.82 * p})`, backdropFilter: `blur(${2.5 * p}px)`,
     }}>
-      <div style={{ fontFamily: interFamily, fontSize: 34, letterSpacing: 4, textTransform: "uppercase",
-        color: palette.muted, fontWeight: 700 }}>{label ?? "Answer"}</div>
+      <div style={{ fontFamily: displayFamily, fontSize: 34, letterSpacing: 0,
+        color: palette.muted, fontWeight: 600 }}>{label ?? "Answer"}</div>
       <div style={{
         fontFamily: monoFamily, fontSize: 96, fontWeight: 800, color: "#F4FBEF",
         background: palette.sage, borderRadius: 24, padding: "18px 48px",
@@ -81,9 +81,9 @@ export const Aside: React.FC<{ text: string; progress: number; bottom?: number }
       opacity: p * 0.92, transform: `rotate(-1.6deg) translateY(${(1 - p) * 10}px)`,
       display: "flex", alignItems: "flex-start", gap: 12,
     }}>
-      <span style={{ fontFamily: interFamily, fontSize: 34, fontWeight: 800, color: palette.mustard, lineHeight: 1 }}>※</span>
+      <span style={{ fontFamily: displayFamily, fontSize: 34, fontWeight: 800, color: palette.mustard, lineHeight: 1 }}>※</span>
       <span style={{
-        fontFamily: interFamily, fontStyle: "italic", fontWeight: 600, fontSize: 31,
+        fontFamily: displayFamily, fontStyle: "italic", fontWeight: 600, fontSize: 31,
         color: palette.muted, lineHeight: 1.3, textAlign: "right",
         borderBottom: `3px dashed ${palette.line}`, paddingBottom: 6,
       }}>{text}</span>

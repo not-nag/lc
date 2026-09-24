@@ -1,6 +1,6 @@
 import React from "react";
 import { Panel } from "@/primitives";
-import { monoFamily, interFamily } from "@/primitives/fonts";
+import { monoFamily, interFamily, displayFamily } from "@/primitives/fonts";
 import { palette, styleColors, radius } from "@/theme";
 import { mixHex } from "@/engine/anim";
 import type { GridState } from "@/engine/state";
@@ -43,7 +43,7 @@ export const GridView: React.FC<ViewProps<GridState>> = ({ prev, next, t, width,
               boxShadow: `0 0 0 4px ${palette.terracotta}22`,
             }}>
               <span style={{ position: "absolute", top: -38, left: "50%", transform: "translateX(-50%)",
-                fontFamily: interFamily, fontWeight: 800, fontSize: 24, color: palette.terracotta }}>{name}</span>
+                fontFamily: displayFamily, fontWeight: 800, fontSize: 24, color: palette.terracotta }}>{name}</span>
             </div>
           );
         })}
