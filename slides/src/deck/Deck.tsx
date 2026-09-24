@@ -1,0 +1,76 @@
+"use client";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import type { Deck as DeckT } from "@/schema";
+import { flatten } from "@/schema/deck";
+import { Stage } from "@/primitives";
+import { SlideView, type EditPath } from "./SlideView";
+import type { DeckApi } from "./useDeck";
+
+const W = 1080, H = 1920;
+
+/** The deck: a fixed 9:16 stage scaled to fit, driven by clicks rather than a clock. */
+/** `api` comes from useDeck() in the parent, so the slide list and the deck stay in step. */
+export const Deck: React.FC<{
+  deck: DeckT;
+  api: DeckApi;
+  editable?: boolean;
+  onEdit?: (path: EditPath, value: string) => void;
+  controls?: (api: DeckApi & { total: number }) => React.ReactNode;
+}> = ({ deck, api, editable, onEdit, controls }) => {
+  const total = useMemo(() => flatten(deck).length, [deck]);
+  const box = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(0.4);
+
+  useEffect(() => {
+    const fit = () => {
+      const el = box.current;
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      // the box measures 0 before first layout — keep the last good scale until it doesn't
+      if (r.width < 2 || r.height < 2) return;
+      setScale(Math.max(0.05, Math.min(r.width / W, r.height / H)));
+    };
+    fit();
+    const ro = new ResizeObserver(fit);
+    if (box.current) ro.observe(box.current);
+    return () => ro.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const el = e.target as HTMLElement | null;
+      if (el?.isContentEditable || el?.tagName === "INPUT" || el?.tagName === "TEXTAREA") return;
+      if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") { e.preventDefault(); api.next(); }
+      else if (e.key === "ArrowLeft" || e.key === "PageUp") { e.preventDefault(); api.back(); }
+      else if (e.key === "r" || e.key === "R") api.replay();
+      else if (e.key === "Home") api.goto(0);
+      else if (e.key === "End") api.goto(total - 1);
+      else if (e.key === "a" || e.key === "A") api.setAuto((x) => ({ ...x, on: !x.on }));
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [api, total]);
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 14, height: "100%", minHeight: 0 }}>
+      <div ref={box} style={{ flex: 1, minHeight: 0, display: "grid", placeItems: "center" }}>
+        {/* transform does not shrink layout size, so the scaled stage needs a sized wrapper */}
+        <div style={{
+          width: W * scale, height: H * scale, position: "relative",
+          borderRadius: 18, overflow: "hidden", boxShadow: "0 18px 50px -20px rgba(62,44,35,.45)",
+        }}>
+          <div style={{
+            width: W, height: H, position: "absolute", top: 0, left: 0,
+            transform: `scale(${scale})`, transformOrigin: "top left",
+          }}>
+            <Stage>
+              <SlideView deck={deck} index={api.index} t={api.t} width={W} height={H}
+                onEdit={editable ? onEdit : undefined} />
+            </Stage>
+          </div>
+        </div>
+      </div>
+      {controls?.({ ...api, total })}
+    </div>
+  );
+};
