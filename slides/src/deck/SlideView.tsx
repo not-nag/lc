@@ -74,7 +74,7 @@ export const SlideView: React.FC<{
       {next.overlay.aside && <Aside text={next.overlay.aside.text} progress={fadeIn(t)} bottom={PAD_BOTTOM + 58} />}
       {next.overlay.result && <ResultBanner value={next.overlay.result.value} label={next.overlay.result.label} progress={fadeIn(t)} />}
 
-      <StepLabel text={slide.label} progress={1}
+      <StepLabel text={slide.label} progress={1} deckProgress={(cur.index + 1) / cursors.length}
         onEdit={onEdit ? (v: string) => onEdit({ kind: "label", index: cur.index }, v) : undefined} />
     </div>
   );

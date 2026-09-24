@@ -31,6 +31,13 @@ presenter `note`. There is no duration anywhere.
 `t.slide("label")` commits a slide. `t.say("…")` attaches the presenter note.
 `t.hold("label")` is a slide that changes nothing — a pause to talk over.
 
+## The lower third
+
+`StepLabel` is a band flush to the bottom edge, not a floating chip: a terracotta accent bar,
+the slide label left-aligned, and a hairline deck-progress rule along the very bottom. The band
+is always present so nothing jumps between slides; only the text animates. `STAGE[...].padBottom`
+must stay ≥ its height (148) or the stage will overlap it.
+
 ## Format
 
 `meta.format` is `"landscape"` (1920×1080, the default) or `"portrait"` (1080×1920).
