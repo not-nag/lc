@@ -1,0 +1,28 @@
+# Your script, from the LinkedIn transcript of the original video.
+# Five obvious auto-transcription slips corrected — listed at the bottom.
+# Edit any line and re-run `npm run traces`; the build fails if the trace reworded you.
+
+Let's move zeros under 100 seconds.
+Given an array, all you have to do is move all the zeros to the right and non zeros to the left, without changing the order of the non zeros.
+Let's consider an array.
+We'll use the two pointers approach.
+The red pointer loves zeros, so it always points to the first zero.
+The green pointer keeps moving ahead, searching for non zero numbers and throwing them at red.
+Initially both red and green are at index 0.
+Red is happy sitting on a 0.
+Green moves forward to find a non zero.
+When green finds one, it throws it at red and the numbers swap.
+Because red loves zero, it moves one step forward, looking for another 0, now pointing to the next zero position.
+Green keeps moving. Skips over zeros because they don't help.
+When it finds three, it throws it at red again.
+They swap and red moves ahead once more.
+Green continues, finds 12, throws it at red, numbers swap and red advances again.
+If you look at it now, all non zero elements are packed to the left, all zeros are pushed to the right.
+All done in one pass. That's LeetCode under 100 seconds.
+
+# Corrections made to the auto-transcript:
+#   "the red pointer allows zeros"  -> "loves zeros"   (you say "loves" later in the same video)
+#   "finding for another 0"         -> "looking for another 0"
+#   "Green keeps moving it. Keeps over zeros" -> "Green keeps moving. Skips over zeros"
+#   "This swap and red moves ahead" -> "They swap and red moves ahead"
+#   "All done in one. Pass that slate code and 100 seconds." -> "All done in one pass. That's LeetCode under 100 seconds."

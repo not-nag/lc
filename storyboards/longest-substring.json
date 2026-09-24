@@ -1,0 +1,1587 @@
+{
+  "schemaVersion": 1,
+  "meta": {
+    "slug": "longest-substring",
+    "number": 3,
+    "title": "Longest Substring Without Repeating Characters",
+    "difficulty": "Medium",
+    "pattern": "sliding-window",
+    "fps": 30,
+    "width": 1080,
+    "height": 1920,
+    "framesPerBeat": 10,
+    "showSteps": true,
+    "tagline": ""
+  },
+  "views": [
+    {
+      "id": "ps",
+      "label": "s",
+      "kind": "string",
+      "value": "abcabcbb",
+      "showIndices": true
+    },
+    {
+      "id": "ptext",
+      "kind": "text",
+      "body": [
+        "Longest stretch with",
+        "no repeated character."
+      ],
+      "variant": "big"
+    },
+    {
+      "id": "b",
+      "label": "s",
+      "kind": "string",
+      "value": "abcabcbb",
+      "showIndices": true
+    },
+    {
+      "id": "bv",
+      "kind": "vars",
+      "items": []
+    },
+    {
+      "id": "itext",
+      "kind": "text",
+      "title": "Never look back",
+      "body": [
+        "The window only ever grows to the right.",
+        "On a repeat, jump left past the old copy."
+      ],
+      "variant": "big"
+    },
+    {
+      "id": "s",
+      "label": "s",
+      "kind": "string",
+      "value": "abcabcbb",
+      "showIndices": true
+    },
+    {
+      "id": "last",
+      "label": "last seen index",
+      "kind": "map",
+      "entries": [],
+      "keyLabel": "key",
+      "valueLabel": "value",
+      "asSet": false
+    },
+    {
+      "id": "v",
+      "kind": "vars",
+      "items": []
+    },
+    {
+      "id": "code",
+      "kind": "code",
+      "lang": "python",
+      "source": "def lengthOfLongestSubstring(s):\n    last = {}\n    left = best = 0\n    for right, ch in enumerate(s):\n        if ch in last and last[ch] >= left:\n            left = last[ch] + 1\n        last[ch] = right\n        best = max(best, right - left + 1)\n    return best"
+    },
+    {
+      "id": "ctext",
+      "kind": "text",
+      "title": "Why it's fast",
+      "body": [
+        "Each pointer crosses the string once → O(n)",
+        "The map holds one entry per distinct character → O(k)",
+        "Cubic becomes linear."
+      ],
+      "variant": "bullets"
+    },
+    {
+      "id": "otext",
+      "kind": "text",
+      "body": [
+        "If both ends only move forward,",
+        "you have a sliding window."
+      ],
+      "variant": "big"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "hook-0",
+      "kind": "hook",
+      "layout": [],
+      "rows": 1,
+      "steps": [
+        {
+          "beats": 5,
+          "ops": [],
+          "label": "A window that never repeats itself."
+        }
+      ],
+      "transition": "cut"
+    },
+    {
+      "id": "problem-1",
+      "kind": "problem",
+      "layout": [
+        {
+          "view": "ptext",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1,
+          "scale": 1
+        },
+        {
+          "view": "ps",
+          "col": 0,
+          "span": 12,
+          "row": 1,
+          "rowSpan": 1,
+          "scale": 1
+        }
+      ],
+      "rows": 2,
+      "rowSizes": [
+        1.23,
+        1.3
+      ],
+      "steps": [
+        {
+          "beats": 5,
+          "ops": [],
+          "label": "Input: s = \"abcabcbb\""
+        },
+        {
+          "beats": 5,
+          "ops": [
+            {
+              "type": "array.window",
+              "view": "ps",
+              "from": 0,
+              "to": 2,
+              "label": "abc — length 3"
+            },
+            {
+              "type": "array.highlight",
+              "view": "ps",
+              "indices": [
+                0,
+                1,
+                2
+              ],
+              "style": "window"
+            }
+          ],
+          "label": "Longest unique run: \"abc\"  →  3"
+        }
+      ],
+      "transition": "wipe"
+    },
+    {
+      "id": "brute-2",
+      "kind": "brute",
+      "layout": [
+        {
+          "view": "b",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1,
+          "scale": 1
+        },
+        {
+          "view": "bv",
+          "col": 0,
+          "span": 12,
+          "row": 1,
+          "rowSpan": 1,
+          "scale": 1
+        }
+      ],
+      "rows": 2,
+      "rowSizes": [
+        1.3,
+        0.42
+      ],
+      "steps": [
+        {
+          "beats": 4,
+          "ops": [
+            {
+              "type": "var.set",
+              "view": "bv",
+              "name": "substrings",
+              "value": 0
+            }
+          ],
+          "label": "Brute force: every substring"
+        },
+        {
+          "beats": 1,
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "array.window",
+              "view": "b",
+              "from": 0,
+              "to": 0
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                0
+              ],
+              "style": "window"
+            },
+            {
+              "type": "var.set",
+              "view": "bv",
+              "name": "substrings",
+              "value": 1
+            }
+          ],
+          "label": ""
+        },
+        {
+          "beats": 1,
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "array.window",
+              "view": "b",
+              "from": 0,
+              "to": 1
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                0,
+                1
+              ],
+              "style": "window"
+            },
+            {
+              "type": "var.set",
+              "view": "bv",
+              "name": "substrings",
+              "value": 2
+            }
+          ],
+          "label": ""
+        },
+        {
+          "beats": 1,
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "array.window",
+              "view": "b",
+              "from": 0,
+              "to": 2
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                0,
+                1,
+                2
+              ],
+              "style": "window"
+            },
+            {
+              "type": "var.set",
+              "view": "bv",
+              "name": "substrings",
+              "value": 3
+            }
+          ],
+          "label": ""
+        },
+        {
+          "beats": 1,
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "array.window",
+              "view": "b",
+              "from": 1,
+              "to": 1
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                1
+              ],
+              "style": "window"
+            },
+            {
+              "type": "var.set",
+              "view": "bv",
+              "name": "substrings",
+              "value": 4
+            }
+          ],
+          "label": ""
+        },
+        {
+          "beats": 1,
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "array.window",
+              "view": "b",
+              "from": 1,
+              "to": 2
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                1,
+                2
+              ],
+              "style": "window"
+            },
+            {
+              "type": "var.set",
+              "view": "bv",
+              "name": "substrings",
+              "value": 5
+            }
+          ],
+          "label": ""
+        },
+        {
+          "beats": 1,
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "array.window",
+              "view": "b",
+              "from": 1,
+              "to": 3
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                1,
+                2,
+                3
+              ],
+              "style": "window"
+            },
+            {
+              "type": "var.set",
+              "view": "bv",
+              "name": "substrings",
+              "value": 6
+            }
+          ],
+          "label": ""
+        },
+        {
+          "beats": 1,
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "array.window",
+              "view": "b",
+              "from": 2,
+              "to": 2
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                2
+              ],
+              "style": "window"
+            },
+            {
+              "type": "var.set",
+              "view": "bv",
+              "name": "substrings",
+              "value": 7
+            }
+          ],
+          "label": ""
+        },
+        {
+          "beats": 1,
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "array.window",
+              "view": "b",
+              "from": 2,
+              "to": 3
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                2,
+                3
+              ],
+              "style": "window"
+            },
+            {
+              "type": "var.set",
+              "view": "bv",
+              "name": "substrings",
+              "value": 8
+            }
+          ],
+          "label": ""
+        },
+        {
+          "beats": 1,
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "array.window",
+              "view": "b",
+              "from": 2,
+              "to": 4
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                2,
+                3,
+                4
+              ],
+              "style": "window"
+            },
+            {
+              "type": "var.set",
+              "view": "bv",
+              "name": "substrings",
+              "value": 9
+            }
+          ],
+          "label": ""
+        },
+        {
+          "beats": 5,
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "array.windowClear",
+              "view": "b"
+            },
+            {
+              "type": "callout",
+              "text": "O(n²) substrings, each checked in O(n)",
+              "variant": "warn"
+            },
+            {
+              "type": "callout",
+              "text": "Cubic. Your CPU would like a word.",
+              "variant": "aside"
+            }
+          ],
+          "label": "O(n²) substrings × O(n) check  →  O(n³)"
+        }
+      ],
+      "transition": "wipe"
+    },
+    {
+      "id": "insight-3",
+      "kind": "insight",
+      "layout": [
+        {
+          "view": "itext",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1,
+          "scale": 1
+        }
+      ],
+      "rows": 1,
+      "rowSizes": [
+        1.23
+      ],
+      "steps": [
+        {
+          "beats": 4,
+          "ops": [],
+          "label": "Both pointers only move right"
+        },
+        {
+          "beats": 5,
+          "ops": [
+            {
+              "type": "formula",
+              "text": "left = last[ch] + 1"
+            }
+          ],
+          "label": "Each index visited at most twice"
+        }
+      ],
+      "transition": "wipe"
+    },
+    {
+      "id": "walkthrough-4",
+      "kind": "walkthrough",
+      "layout": [
+        {
+          "view": "s",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1,
+          "scale": 1
+        },
+        {
+          "view": "last",
+          "col": 0,
+          "span": 6,
+          "row": 1,
+          "rowSpan": 1,
+          "scale": 1
+        },
+        {
+          "view": "v",
+          "col": 6,
+          "span": 6,
+          "row": 1,
+          "rowSpan": 1,
+          "scale": 1
+        },
+        {
+          "view": "code",
+          "col": 0,
+          "span": 12,
+          "row": 2,
+          "rowSpan": 1,
+          "scale": 1
+        }
+      ],
+      "rows": 3,
+      "rowSizes": [
+        1.3,
+        1,
+        1.5699999999999998
+      ],
+      "steps": [
+        {
+          "beats": 3,
+          "ops": [
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "left",
+              "value": 0
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "best",
+              "value": 0
+            },
+            {
+              "type": "pointer.set",
+              "view": "s",
+              "name": "L",
+              "index": 0,
+              "color": "secondary"
+            },
+            {
+              "type": "pointer.set",
+              "view": "s",
+              "name": "R",
+              "index": 0,
+              "color": "primary"
+            }
+          ],
+          "label": "left = 0,  best = 0,  last = {}",
+          "code": {
+            "view": "code",
+            "lines": [
+              2,
+              3
+            ]
+          }
+        },
+        {
+          "beats": 2,
+          "ops": [
+            {
+              "type": "pointer.move",
+              "view": "s",
+              "name": "R",
+              "index": 0
+            },
+            {
+              "type": "array.clear",
+              "view": "s"
+            },
+            {
+              "type": "array.highlight",
+              "view": "s",
+              "indices": [
+                0
+              ],
+              "style": "active"
+            }
+          ],
+          "label": "right = 0,  ch = 'a'",
+          "code": {
+            "view": "code",
+            "lines": [
+              4
+            ]
+          }
+        },
+        {
+          "beats": 2,
+          "ops": [
+            {
+              "type": "map.get",
+              "view": "last",
+              "key": "a",
+              "hit": false
+            }
+          ],
+          "label": "'a' not in window",
+          "code": {
+            "view": "code",
+            "lines": [
+              5
+            ]
+          }
+        },
+        {
+          "beats": 2,
+          "ops": [
+            {
+              "type": "map.put",
+              "view": "last",
+              "key": "a",
+              "value": 0
+            },
+            {
+              "type": "array.window",
+              "view": "s",
+              "from": 0,
+              "to": 0,
+              "label": "len 1"
+            },
+            {
+              "type": "array.highlight",
+              "view": "s",
+              "indices": [
+                0
+              ],
+              "style": "window"
+            },
+            {
+              "type": "array.highlight",
+              "view": "s",
+              "indices": [
+                0
+              ],
+              "style": "active"
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "left",
+              "value": 0
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "best",
+              "value": 1
+            }
+          ],
+          "label": "window = 1,  best = 1",
+          "code": {
+            "view": "code",
+            "lines": [
+              7,
+              8
+            ]
+          }
+        },
+        {
+          "beats": 2,
+          "ops": [
+            {
+              "type": "pointer.move",
+              "view": "s",
+              "name": "R",
+              "index": 1
+            },
+            {
+              "type": "array.clear",
+              "view": "s"
+            },
+            {
+              "type": "array.highlight",
+              "view": "s",
+              "indices": [
+                1
+              ],
+              "style": "active"
+            }
+          ],
+          "label": "right = 1,  ch = 'b'",
+          "code": {
+            "view": "code",
+            "lines": [
+              4
+            ]
+          }
+        },
+        {
+          "beats": 2,
+          "ops": [
+            {
+              "type": "map.get",
+              "view": "last",
+              "key": "b",
+              "hit": false
+            }
+          ],
+          "label": "'b' not in window",
+          "code": {
+            "view": "code",
+            "lines": [
+              5
+            ]
+          }
+        },
+        {
+          "beats": 2,
+          "ops": [
+            {
+              "type": "map.put",
+              "view": "last",
+              "key": "b",
+              "value": 1
+            },
+            {
+              "type": "array.window",
+              "view": "s",
+              "from": 0,
+              "to": 1,
+              "label": "len 2"
+            },
+            {
+              "type": "array.highlight",
+              "view": "s",
+              "indices": [
+                0,
+                1
+              ],
+              "style": "window"
+            },
+            {
+              "type": "array.highlight",
+              "view": "s",
+              "indices": [
+                1
+              ],
+              "style": "active"
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "left",
+              "value": 0
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "best",
+              "value": 2
+            }
+          ],
+          "label": "window = 2,  best = 2",
+          "code": {
+            "view": "code",
+            "lines": [
+              7,
+              8
+            ]
+          }
+        },
+        {
+          "beats": 2,
+          "ops": [
+            {
+              "type": "pointer.move",
+              "view": "s",
+              "name": "R",
+              "index": 2
+            },
+            {
+              "type": "array.clear",
+              "view": "s"
+            },
+            {
+              "type": "array.highlight",
+              "view": "s",
+              "indices": [
+                2
+              ],
+              "style": "active"
+            }
+          ],
+          "label": "right = 2,  ch = 'c'",
+          "code": {
+            "view": "code",
+            "lines": [
+              4
+            ]
+          }
+        },
+        {
+          "beats": 2,
+          "ops": [
+            {
+              "type": "map.get",
+              "view": "last",
+              "key": "c",
+              "hit": false
+            }
+          ],
+          "label": "'c' not in window",
+          "code": {
+            "view": "code",
+            "lines": [
+              5
+            ]
+          }
+        },
+        {
+          "beats": 2,
+          "ops": [
+            {
+              "type": "map.put",
+              "view": "last",
+              "key": "c",
+              "value": 2
+            },
+            {
+              "type": "array.window",
+              "view": "s",
+              "from": 0,
+              "to": 2,
+              "label": "len 3"
+            },
+            {
+              "type": "array.highlight",
+              "view": "s",
+              "indices": [
+                0,
+                1,
+                2
+              ],
+              "style": "window"
+            },
+            {
+              "type": "array.highlight",
+              "view": "s",
+              "indices": [
+                2
+              ],
+              "style": "active"
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "left",
+              "value": 0
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "best",
+              "value": 3
+            }
+          ],
+          "label": "window = 3,  best = 3",
+          "code": {
+            "view": "code",
+            "lines": [
+              7,
+              8
+            ]
+          }
+        },
+        {
+          "beats": 2,
+          "ops": [
+            {
+              "type": "pointer.move",
+              "view": "s",
+              "name": "R",
+              "index": 3
+            },
+            {
+              "type": "array.clear",
+              "view": "s"
+            },
+            {
+              "type": "array.highlight",
+              "view": "s",
+              "indices": [
+                3
+              ],
+              "style": "active"
+            }
+          ],
+          "label": "right = 3,  ch = 'a'",
+          "code": {
+            "view": "code",
+            "lines": [
+              4
+            ]
+          }
+        },
+        {
+          "beats": 3,
+          "ops": [
+            {
+              "type": "map.get",
+              "view": "last",
+              "key": "a",
+              "hit": true
+            },
+            {
+              "type": "pointer.move",
+              "view": "s",
+              "name": "L",
+              "index": 1
+            }
+          ],
+          "label": "'a' seen at 0  →  left = 1",
+          "code": {
+            "view": "code",
+            "lines": [
+              6
+            ]
+          }
+        },
+        {
+          "beats": 2,
+          "ops": [
+            {
+              "type": "map.put",
+              "view": "last",
+              "key": "a",
+              "value": 3
+            },
+            {
+              "type": "array.window",
+              "view": "s",
+              "from": 1,
+              "to": 3,
+              "label": "len 3"
+            },
+            {
+              "type": "array.highlight",
+              "view": "s",
+              "indices": [
+                1,
+                2,
+                3
+              ],
+              "style": "window"
+            },
+            {
+              "type": "array.highlight",
+              "view": "s",
+              "indices": [
+                3
+              ],
+              "style": "active"
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "left",
+              "value": 1
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "best",
+              "value": 3
+            }
+          ],
+          "label": "window = 3,  best = 3",
+          "code": {
+            "view": "code",
+            "lines": [
+              7,
+              8
+            ]
+          }
+        },
+        {
+          "beats": 2,
+          "ops": [
+            {
+              "type": "pointer.move",
+              "view": "s",
+              "name": "R",
+              "index": 4
+            },
+            {
+              "type": "array.clear",
+              "view": "s"
+            },
+            {
+              "type": "array.highlight",
+              "view": "s",
+              "indices": [
+                4
+              ],
+              "style": "active"
+            }
+          ],
+          "label": "right = 4,  ch = 'b'",
+          "code": {
+            "view": "code",
+            "lines": [
+              4
+            ]
+          }
+        },
+        {
+          "beats": 3,
+          "ops": [
+            {
+              "type": "map.get",
+              "view": "last",
+              "key": "b",
+              "hit": true
+            },
+            {
+              "type": "pointer.move",
+              "view": "s",
+              "name": "L",
+              "index": 2
+            }
+          ],
+          "label": "'b' seen at 1  →  left = 2",
+          "code": {
+            "view": "code",
+            "lines": [
+              6
+            ]
+          }
+        },
+        {
+          "beats": 2,
+          "ops": [
+            {
+              "type": "map.put",
+              "view": "last",
+              "key": "b",
+              "value": 4
+            },
+            {
+              "type": "array.window",
+              "view": "s",
+              "from": 2,
+              "to": 4,
+              "label": "len 3"
+            },
+            {
+              "type": "array.highlight",
+              "view": "s",
+              "indices": [
+                2,
+                3,
+                4
+              ],
+              "style": "window"
+            },
+            {
+              "type": "array.highlight",
+              "view": "s",
+              "indices": [
+                4
+              ],
+              "style": "active"
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "left",
+              "value": 2
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "best",
+              "value": 3
+            }
+          ],
+          "label": "window = 3,  best = 3",
+          "code": {
+            "view": "code",
+            "lines": [
+              7,
+              8
+            ]
+          }
+        },
+        {
+          "beats": 2,
+          "ops": [
+            {
+              "type": "pointer.move",
+              "view": "s",
+              "name": "R",
+              "index": 5
+            },
+            {
+              "type": "array.clear",
+              "view": "s"
+            },
+            {
+              "type": "array.highlight",
+              "view": "s",
+              "indices": [
+                5
+              ],
+              "style": "active"
+            }
+          ],
+          "label": "right = 5,  ch = 'c'",
+          "code": {
+            "view": "code",
+            "lines": [
+              4
+            ]
+          }
+        },
+        {
+          "beats": 3,
+          "ops": [
+            {
+              "type": "map.get",
+              "view": "last",
+              "key": "c",
+              "hit": true
+            },
+            {
+              "type": "pointer.move",
+              "view": "s",
+              "name": "L",
+              "index": 3
+            }
+          ],
+          "label": "'c' seen at 2  →  left = 3",
+          "code": {
+            "view": "code",
+            "lines": [
+              6
+            ]
+          }
+        },
+        {
+          "beats": 2,
+          "ops": [
+            {
+              "type": "map.put",
+              "view": "last",
+              "key": "c",
+              "value": 5
+            },
+            {
+              "type": "array.window",
+              "view": "s",
+              "from": 3,
+              "to": 5,
+              "label": "len 3"
+            },
+            {
+              "type": "array.highlight",
+              "view": "s",
+              "indices": [
+                3,
+                4,
+                5
+              ],
+              "style": "window"
+            },
+            {
+              "type": "array.highlight",
+              "view": "s",
+              "indices": [
+                5
+              ],
+              "style": "active"
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "left",
+              "value": 3
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "best",
+              "value": 3
+            }
+          ],
+          "label": "window = 3,  best = 3",
+          "code": {
+            "view": "code",
+            "lines": [
+              7,
+              8
+            ]
+          }
+        },
+        {
+          "beats": 2,
+          "ops": [
+            {
+              "type": "pointer.move",
+              "view": "s",
+              "name": "R",
+              "index": 6
+            },
+            {
+              "type": "array.clear",
+              "view": "s"
+            },
+            {
+              "type": "array.highlight",
+              "view": "s",
+              "indices": [
+                6
+              ],
+              "style": "active"
+            }
+          ],
+          "label": "right = 6,  ch = 'b'",
+          "code": {
+            "view": "code",
+            "lines": [
+              4
+            ]
+          }
+        },
+        {
+          "beats": 3,
+          "ops": [
+            {
+              "type": "map.get",
+              "view": "last",
+              "key": "b",
+              "hit": true
+            },
+            {
+              "type": "pointer.move",
+              "view": "s",
+              "name": "L",
+              "index": 5
+            }
+          ],
+          "label": "'b' seen at 4  →  left = 5",
+          "code": {
+            "view": "code",
+            "lines": [
+              6
+            ]
+          }
+        },
+        {
+          "beats": 2,
+          "ops": [
+            {
+              "type": "map.put",
+              "view": "last",
+              "key": "b",
+              "value": 6
+            },
+            {
+              "type": "array.window",
+              "view": "s",
+              "from": 5,
+              "to": 6,
+              "label": "len 2"
+            },
+            {
+              "type": "array.highlight",
+              "view": "s",
+              "indices": [
+                5,
+                6
+              ],
+              "style": "window"
+            },
+            {
+              "type": "array.highlight",
+              "view": "s",
+              "indices": [
+                6
+              ],
+              "style": "active"
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "left",
+              "value": 5
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "best",
+              "value": 3
+            }
+          ],
+          "label": "window = 2,  best = 3",
+          "code": {
+            "view": "code",
+            "lines": [
+              7,
+              8
+            ]
+          }
+        },
+        {
+          "beats": 2,
+          "ops": [
+            {
+              "type": "pointer.move",
+              "view": "s",
+              "name": "R",
+              "index": 7
+            },
+            {
+              "type": "array.clear",
+              "view": "s"
+            },
+            {
+              "type": "array.highlight",
+              "view": "s",
+              "indices": [
+                7
+              ],
+              "style": "active"
+            }
+          ],
+          "label": "right = 7,  ch = 'b'",
+          "code": {
+            "view": "code",
+            "lines": [
+              4
+            ]
+          }
+        },
+        {
+          "beats": 3,
+          "ops": [
+            {
+              "type": "map.get",
+              "view": "last",
+              "key": "b",
+              "hit": true
+            },
+            {
+              "type": "pointer.move",
+              "view": "s",
+              "name": "L",
+              "index": 7
+            }
+          ],
+          "label": "'b' seen at 6  →  left = 7",
+          "code": {
+            "view": "code",
+            "lines": [
+              6
+            ]
+          }
+        },
+        {
+          "beats": 2,
+          "ops": [
+            {
+              "type": "map.put",
+              "view": "last",
+              "key": "b",
+              "value": 7
+            },
+            {
+              "type": "array.window",
+              "view": "s",
+              "from": 7,
+              "to": 7,
+              "label": "len 1"
+            },
+            {
+              "type": "array.highlight",
+              "view": "s",
+              "indices": [
+                7
+              ],
+              "style": "window"
+            },
+            {
+              "type": "array.highlight",
+              "view": "s",
+              "indices": [
+                7
+              ],
+              "style": "active"
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "left",
+              "value": 7
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "best",
+              "value": 3
+            }
+          ],
+          "label": "window = 1,  best = 3",
+          "code": {
+            "view": "code",
+            "lines": [
+              7,
+              8
+            ]
+          }
+        },
+        {
+          "beats": 4,
+          "ops": [
+            {
+              "type": "pointer.drop",
+              "view": "s",
+              "name": "L"
+            },
+            {
+              "type": "pointer.drop",
+              "view": "s",
+              "name": "R"
+            },
+            {
+              "type": "array.windowClear",
+              "view": "s"
+            },
+            {
+              "type": "result",
+              "value": "3"
+            }
+          ],
+          "label": ""
+        }
+      ],
+      "transition": "wipe"
+    },
+    {
+      "id": "complexity-5",
+      "kind": "complexity",
+      "layout": [
+        {
+          "view": "ctext",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1,
+          "scale": 1
+        }
+      ],
+      "rows": 1,
+      "rowSizes": [
+        1.57
+      ],
+      "steps": [
+        {
+          "beats": 4,
+          "ops": [],
+          "label": ""
+        },
+        {
+          "beats": 4,
+          "ops": [],
+          "label": "O(n) time  ·  O(k) space"
+        }
+      ],
+      "transition": "wipe"
+    },
+    {
+      "id": "outro-6",
+      "kind": "outro",
+      "layout": [
+        {
+          "view": "otext",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1,
+          "scale": 1
+        }
+      ],
+      "rows": 1,
+      "rowSizes": [
+        1.23
+      ],
+      "steps": [
+        {
+          "beats": 5,
+          "ops": [
+            {
+              "type": "callout",
+              "text": "No backtracking. Very healthy.",
+              "variant": "aside"
+            }
+          ],
+          "label": ""
+        }
+      ],
+      "transition": "fade"
+    }
+  ]
+}

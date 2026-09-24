@@ -1,0 +1,770 @@
+{
+  "schemaVersion": 1,
+  "meta": {
+    "slug": "two-sum",
+    "number": 1,
+    "title": "Two Sum",
+    "difficulty": "Easy",
+    "pattern": "hashmap-one-pass",
+    "fps": 30,
+    "width": 1080,
+    "height": 1920,
+    "framesPerBeat": 12,
+    "showSteps": true,
+    "tagline": "one pass, no regrets"
+  },
+  "views": [
+    {
+      "id": "pn",
+      "label": "nums · target 9",
+      "kind": "array",
+      "values": [
+        3,
+        5,
+        7,
+        2
+      ],
+      "showIndices": true
+    },
+    {
+      "id": "a",
+      "label": "nums · target 9",
+      "kind": "array",
+      "values": [
+        3,
+        5,
+        7,
+        2
+      ],
+      "showIndices": true
+    },
+    {
+      "id": "code",
+      "kind": "code",
+      "lang": "python",
+      "source": "seen = {}\n\nfor i, num in enumerate(nums):\n    need = target - num\n    if need in seen:\n        return [seen[need], i]\n    seen[num] = i"
+    },
+    {
+      "id": "ctext",
+      "kind": "text",
+      "title": "Code snippet",
+      "body": [],
+      "variant": "plain"
+    },
+    {
+      "id": "otext",
+      "kind": "text",
+      "title": "Intuition",
+      "body": [
+        "Remember everything you've seen.",
+        "Then just check whether it fits the one you're on."
+      ],
+      "variant": "big"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "hook-0",
+      "kind": "hook",
+      "layout": [],
+      "rows": 1,
+      "steps": [
+        {
+          "beats": 6,
+          "ops": [],
+          "label": "Two numbers that add to 9",
+          "voice": "Two Sum, under 100 seconds."
+        }
+      ],
+      "transition": "cut"
+    },
+    {
+      "id": "problem-1",
+      "kind": "problem",
+      "layout": [
+        {
+          "view": "pn",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1,
+          "scale": 1
+        }
+      ],
+      "rows": 1,
+      "rowSizes": [
+        1.3
+      ],
+      "steps": [
+        {
+          "beats": 7,
+          "ops": [],
+          "label": "target = 9",
+          "voice": "Four numbers, and a target of nine."
+        },
+        {
+          "beats": 7,
+          "ops": [
+            {
+              "type": "array.highlight",
+              "view": "pn",
+              "indices": [
+                2,
+                3
+              ],
+              "style": "match"
+            },
+            {
+              "type": "array.link",
+              "view": "pn",
+              "a": 2,
+              "b": 3,
+              "label": "7 + 2 = 9"
+            }
+          ],
+          "label": "7 + 2 = 9",
+          "voice": "Two of them add up to it."
+        },
+        {
+          "beats": 7,
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "pn"
+            },
+            {
+              "type": "array.linkClear",
+              "view": "pn"
+            }
+          ],
+          "label": "answer = [2, 3]",
+          "voice": "We want their positions — index two and index three."
+        }
+      ],
+      "transition": "wipe"
+    },
+    {
+      "id": "walkthrough-2",
+      "kind": "walkthrough",
+      "layout": [
+        {
+          "view": "a",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1,
+          "scale": 1
+        }
+      ],
+      "rows": 1,
+      "rowSizes": [
+        1.3
+      ],
+      "steps": [
+        {
+          "beats": 6,
+          "ops": [],
+          "label": "Walk left to right",
+          "voice": "We walk left to right, one number at a time."
+        },
+        {
+          "beats": 5,
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "a"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                0
+              ],
+              "style": "active"
+            }
+          ],
+          "label": "on 3",
+          "voice": "Start on the first number, three."
+        },
+        {
+          "beats": 6,
+          "ops": [
+            {
+              "type": "array.tag",
+              "view": "a",
+              "index": 0,
+              "text": "needs 6",
+              "variant": "want"
+            }
+          ],
+          "label": "3 + 6 = 9",
+          "voice": "Three needs six to make nine. So the question is: have we already seen a six?"
+        },
+        {
+          "beats": 5,
+          "ops": [],
+          "label": "nothing behind us",
+          "voice": "There's nothing behind us yet, so no."
+        },
+        {
+          "beats": 5,
+          "ops": [
+            {
+              "type": "array.tag",
+              "view": "a",
+              "index": 0,
+              "text": "no 6",
+              "variant": "miss"
+            }
+          ],
+          "label": "remember 3",
+          "voice": "So three joins the crowd behind us."
+        },
+        {
+          "beats": 4,
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "a"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                0
+              ],
+              "style": "visited"
+            },
+            {
+              "type": "array.window",
+              "view": "a",
+              "from": 0,
+              "to": 0,
+              "label": "remembered"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                1
+              ],
+              "style": "active"
+            }
+          ],
+          "label": "on 5",
+          "voice": "Move on to 5."
+        },
+        {
+          "beats": 4,
+          "ops": [
+            {
+              "type": "array.tag",
+              "view": "a",
+              "index": 1,
+              "text": "needs 4",
+              "variant": "want"
+            }
+          ],
+          "label": "5 + 4 = 9",
+          "voice": "5 needs 4."
+        },
+        {
+          "beats": 4,
+          "ops": [
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                0
+              ],
+              "style": "compare"
+            }
+          ],
+          "label": "is 4 behind us?",
+          "voice": "Look back at everything we've passed. Is 4 in there?"
+        },
+        {
+          "beats": 4,
+          "ops": [
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                0
+              ],
+              "style": "visited"
+            },
+            {
+              "type": "array.tag",
+              "view": "a",
+              "index": 1,
+              "text": "no 4",
+              "variant": "miss"
+            }
+          ],
+          "label": "remember 5",
+          "voice": "No 4. So 5 joins the crowd."
+        },
+        {
+          "beats": 4,
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "a"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                0
+              ],
+              "style": "visited"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                1
+              ],
+              "style": "visited"
+            },
+            {
+              "type": "array.window",
+              "view": "a",
+              "from": 0,
+              "to": 1,
+              "label": "remembered"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                2
+              ],
+              "style": "active"
+            }
+          ],
+          "label": "on 7",
+          "voice": "Move on to 7."
+        },
+        {
+          "beats": 4,
+          "ops": [
+            {
+              "type": "array.tag",
+              "view": "a",
+              "index": 2,
+              "text": "needs 2",
+              "variant": "want"
+            }
+          ],
+          "label": "7 + 2 = 9",
+          "voice": "7 needs 2."
+        },
+        {
+          "beats": 4,
+          "ops": [
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                0
+              ],
+              "style": "compare"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                1
+              ],
+              "style": "compare"
+            }
+          ],
+          "label": "is 2 behind us?",
+          "voice": "Look back at everything we've passed. Is 2 in there?"
+        },
+        {
+          "beats": 4,
+          "ops": [
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                0
+              ],
+              "style": "visited"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                1
+              ],
+              "style": "visited"
+            },
+            {
+              "type": "array.tag",
+              "view": "a",
+              "index": 2,
+              "text": "no 2",
+              "variant": "miss"
+            }
+          ],
+          "label": "remember 7",
+          "voice": "No 2. So 7 joins the crowd."
+        },
+        {
+          "beats": 7,
+          "ops": [
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                2
+              ],
+              "style": "done"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                3
+              ],
+              "style": "bad"
+            },
+            {
+              "type": "array.tag",
+              "view": "a",
+              "index": 3,
+              "text": "not yet — ahead",
+              "variant": "miss"
+            }
+          ],
+          "label": "the 2 is right there",
+          "voice": "But look — a two is sitting right there. One cell ahead."
+        },
+        {
+          "beats": 8,
+          "ops": [
+            {
+              "type": "callout",
+              "text": "Ahead doesn't count. Only behind.",
+              "variant": "insight"
+            },
+            {
+              "type": "callout",
+              "text": "We haven't met it yet.",
+              "variant": "aside"
+            }
+          ],
+          "label": "only what's behind us counts",
+          "voice": "We haven't reached it yet, so we can't use it. We only ever look behind."
+        },
+        {
+          "beats": 4,
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "a"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                0
+              ],
+              "style": "visited"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                1
+              ],
+              "style": "visited"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                2
+              ],
+              "style": "visited"
+            },
+            {
+              "type": "array.window",
+              "view": "a",
+              "from": 0,
+              "to": 2,
+              "label": "remembered"
+            }
+          ],
+          "label": "",
+          "voice": "Keep walking."
+        },
+        {
+          "beats": 5,
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "a"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                0
+              ],
+              "style": "visited"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                1
+              ],
+              "style": "visited"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                2
+              ],
+              "style": "visited"
+            },
+            {
+              "type": "array.window",
+              "view": "a",
+              "from": 0,
+              "to": 2,
+              "label": "remembered"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                3
+              ],
+              "style": "active"
+            }
+          ],
+          "label": "on 2",
+          "voice": "Move on to 2."
+        },
+        {
+          "beats": 6,
+          "ops": [
+            {
+              "type": "array.tag",
+              "view": "a",
+              "index": 3,
+              "text": "needs 7",
+              "variant": "want"
+            }
+          ],
+          "label": "2 + 7 = 9",
+          "voice": "2 needs 7."
+        },
+        {
+          "beats": 6,
+          "ops": [
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                0
+              ],
+              "style": "compare"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                1
+              ],
+              "style": "compare"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                2
+              ],
+              "style": "compare"
+            }
+          ],
+          "label": "is 7 behind us?",
+          "voice": "Look back at everything we've passed. Is 7 in there?"
+        },
+        {
+          "beats": 7,
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "a"
+            },
+            {
+              "type": "array.windowClear",
+              "view": "a"
+            },
+            {
+              "type": "array.tag",
+              "view": "a",
+              "index": 3,
+              "text": "found 7",
+              "variant": "have"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                2,
+                3
+              ],
+              "style": "match"
+            },
+            {
+              "type": "array.link",
+              "view": "a",
+              "a": 2,
+              "b": 3,
+              "label": "7 + 2 = 9"
+            }
+          ],
+          "label": "yes — index 2",
+          "voice": "Yes. 7 went past at index 2. That's the pair."
+        },
+        {
+          "beats": 6,
+          "ops": [
+            {
+              "type": "array.tagClear",
+              "view": "a"
+            },
+            {
+              "type": "result",
+              "value": "[2,3]"
+            }
+          ],
+          "label": ""
+        }
+      ],
+      "transition": "wipe"
+    },
+    {
+      "id": "complexity-3",
+      "kind": "complexity",
+      "layout": [
+        {
+          "view": "ctext",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1,
+          "scale": 1
+        },
+        {
+          "view": "code",
+          "col": 0,
+          "span": 12,
+          "row": 1,
+          "rowSpan": 1,
+          "scale": 1
+        }
+      ],
+      "rows": 2,
+      "rowSizes": [
+        0.55,
+        1.31
+      ],
+      "steps": [
+        {
+          "beats": 5,
+          "ops": [],
+          "label": "",
+          "voice": "A map of everything behind us: value to index.",
+          "code": {
+            "view": "code",
+            "lines": [
+              1
+            ]
+          }
+        },
+        {
+          "beats": 5,
+          "ops": [],
+          "label": "",
+          "voice": "For each number, work out what it needs.",
+          "code": {
+            "view": "code",
+            "lines": [
+              3,
+              4
+            ]
+          }
+        },
+        {
+          "beats": 5,
+          "ops": [],
+          "label": "",
+          "voice": "If that partner already went past, we're done.",
+          "code": {
+            "view": "code",
+            "lines": [
+              5,
+              6
+            ]
+          }
+        },
+        {
+          "beats": 5,
+          "ops": [],
+          "label": "",
+          "voice": "Otherwise remember this one, and keep walking.",
+          "code": {
+            "view": "code",
+            "lines": [
+              7
+            ]
+          }
+        }
+      ],
+      "transition": "wipe"
+    },
+    {
+      "id": "outro-4",
+      "kind": "outro",
+      "layout": [
+        {
+          "view": "otext",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1,
+          "scale": 1
+        }
+      ],
+      "rows": 1,
+      "rowSizes": [
+        1.23
+      ],
+      "steps": [
+        {
+          "beats": 9,
+          "ops": [],
+          "label": "",
+          "voice": "Remember everything you've seen. Then check whether it fits the one you're on."
+        },
+        {
+          "beats": 7,
+          "ops": [],
+          "label": "O(n) time · O(n) space",
+          "voice": "One pass. That's Two Sum under 100 seconds."
+        }
+      ],
+      "transition": "fade"
+    }
+  ]
+}

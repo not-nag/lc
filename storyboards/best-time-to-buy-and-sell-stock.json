@@ -1,0 +1,580 @@
+{
+  "schemaVersion": 1,
+  "meta": {
+    "slug": "best-time-to-buy-and-sell-stock",
+    "number": 121,
+    "title": "Best Time to Buy and Sell Stock",
+    "difficulty": "Easy",
+    "pattern": "single-pass-min",
+    "fps": 30,
+    "width": 1080,
+    "height": 1920,
+    "framesPerBeat": 12,
+    "showSteps": true,
+    "tagline": "buy low, sell high, scroll on"
+  },
+  "views": [
+    {
+      "id": "pb",
+      "label": "price by day",
+      "kind": "bars",
+      "values": [
+        7,
+        1,
+        5,
+        3,
+        6,
+        4
+      ],
+      "unit": "",
+      "showValues": true,
+      "xLabel": ""
+    },
+    {
+      "id": "b",
+      "label": "price by day",
+      "kind": "bars",
+      "values": [
+        7,
+        1,
+        5,
+        3,
+        6,
+        4
+      ],
+      "unit": "",
+      "showValues": true,
+      "xLabel": ""
+    },
+    {
+      "id": "v",
+      "kind": "vars",
+      "items": []
+    },
+    {
+      "id": "code",
+      "kind": "code",
+      "lang": "python",
+      "source": "cheapest = prices[0]\nbest     = 0\n\nfor price in prices:\n    best     = max(best, price - cheapest)\n    cheapest = min(cheapest, price)"
+    },
+    {
+      "id": "ctext",
+      "kind": "text",
+      "body": [
+        "That's the whole algorithm."
+      ],
+      "variant": "big"
+    },
+    {
+      "id": "otext",
+      "kind": "text",
+      "body": [
+        "You don't need the whole past.",
+        "Just the best bit of it."
+      ],
+      "variant": "big"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "hook-0",
+      "kind": "hook",
+      "layout": [],
+      "rows": 1,
+      "steps": [
+        {
+          "beats": 6,
+          "ops": [],
+          "label": "Buy once. Sell later. Biggest profit.",
+          "voice": "Best Time to Buy and Sell Stock, under 100 seconds."
+        }
+      ],
+      "transition": "cut"
+    },
+    {
+      "id": "problem-1",
+      "kind": "problem",
+      "layout": [
+        {
+          "view": "pb",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1,
+          "scale": 1
+        }
+      ],
+      "rows": 1,
+      "rowSizes": [
+        1.9
+      ],
+      "steps": [
+        {
+          "beats": 3,
+          "ops": [],
+          "label": "Six days of prices",
+          "voice": "A week of prices."
+        },
+        {
+          "beats": 5,
+          "ops": [
+            {
+              "type": "array.highlight",
+              "view": "pb",
+              "indices": [
+                1
+              ],
+              "style": "match"
+            },
+            {
+              "type": "array.highlight",
+              "view": "pb",
+              "indices": [
+                4
+              ],
+              "style": "active"
+            }
+          ],
+          "label": "Buy low, sell later — max profit?",
+          "voice": "Buy on one day, sell on a later one. What's the most you can make?"
+        }
+      ],
+      "transition": "wipe"
+    },
+    {
+      "id": "walkthrough-2",
+      "kind": "walkthrough",
+      "layout": [
+        {
+          "view": "b",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1,
+          "scale": 1
+        },
+        {
+          "view": "v",
+          "col": 0,
+          "span": 12,
+          "row": 1,
+          "rowSpan": 1,
+          "scale": 1
+        }
+      ],
+      "rows": 2,
+      "rowSizes": [
+        1.9,
+        0.42
+      ],
+      "steps": [
+        {
+          "beats": 5,
+          "ops": [
+            {
+              "type": "pointer.set",
+              "view": "b",
+              "name": "day",
+              "index": 0,
+              "color": "primary"
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                0
+              ],
+              "style": "active"
+            },
+            {
+              "type": "bars.level",
+              "view": "b",
+              "value": 7,
+              "label": "cheapest 7",
+              "color": "success"
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "cheapest",
+              "value": 7
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "best",
+              "value": 0
+            }
+          ],
+          "label": "Carry: cheapest, and best profit",
+          "voice": "We carry two things: the cheapest price we've seen, and the best profit so far."
+        },
+        {
+          "beats": 6,
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "pointer.move",
+              "view": "b",
+              "name": "day",
+              "index": 1
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                1
+              ],
+              "style": "active"
+            },
+            {
+              "type": "bars.gapClear",
+              "view": "b"
+            }
+          ],
+          "label": "1 − 7 = -6   →  no profit",
+          "voice": "Day 2. Selling at 1 would lose money, so there's nothing to take."
+        },
+        {
+          "beats": 5,
+          "ops": [
+            {
+              "type": "bars.level",
+              "view": "b",
+              "value": 1,
+              "label": "cheapest 1",
+              "color": "success"
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                1
+              ],
+              "style": "match"
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "cheapest",
+              "value": 1
+            }
+          ],
+          "label": "1  <  7   →  cheapest = 1",
+          "voice": "And 1 is less than 7, so let's update cheapest to 1. The line drops."
+        },
+        {
+          "beats": 6,
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "pointer.move",
+              "view": "b",
+              "name": "day",
+              "index": 2
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                2
+              ],
+              "style": "active"
+            },
+            {
+              "type": "bars.gapClear",
+              "view": "b"
+            },
+            {
+              "type": "bars.gap",
+              "view": "b",
+              "index": 2,
+              "label": "+4"
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "best",
+              "value": 4
+            }
+          ],
+          "label": "5 − 1 = 4  >  0   →  best = 4",
+          "voice": "Day 3. If we sell today, 5 minus 1 is 4. That beats 0, so let's update best to 4."
+        },
+        {
+          "beats": 6,
+          "ops": [
+            {
+              "type": "callout",
+              "text": "Two checks a day. That's the whole loop.",
+              "variant": "insight"
+            },
+            {
+              "type": "callout",
+              "text": "One number, zero regrets.",
+              "variant": "aside"
+            }
+          ],
+          "label": "Sell today? · New cheapest?",
+          "voice": "And that's the loop. Every day we ask those two questions and nothing else."
+        },
+        {
+          "beats": 5,
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "pointer.move",
+              "view": "b",
+              "name": "day",
+              "index": 3
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                3
+              ],
+              "style": "active"
+            },
+            {
+              "type": "bars.gapClear",
+              "view": "b"
+            },
+            {
+              "type": "bars.gap",
+              "view": "b",
+              "index": 3,
+              "label": "+2"
+            }
+          ],
+          "label": "3 − 1 = 2  <  4   →  keep 4",
+          "voice": "Day 4. Sell today and 3 minus 1 is only 2. That's less than 4, so best stays."
+        },
+        {
+          "beats": 5,
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "pointer.move",
+              "view": "b",
+              "name": "day",
+              "index": 4
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                4
+              ],
+              "style": "active"
+            },
+            {
+              "type": "bars.gapClear",
+              "view": "b"
+            },
+            {
+              "type": "bars.gap",
+              "view": "b",
+              "index": 4,
+              "label": "+5"
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "best",
+              "value": 5
+            }
+          ],
+          "label": "6 − 1 = 5  >  4   →  best = 5",
+          "voice": "Day 5. If we sell today, 6 minus 1 is 5. That beats 4, so let's update best to 5."
+        },
+        {
+          "beats": 5,
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "pointer.move",
+              "view": "b",
+              "name": "day",
+              "index": 5
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                5
+              ],
+              "style": "active"
+            },
+            {
+              "type": "bars.gapClear",
+              "view": "b"
+            },
+            {
+              "type": "bars.gap",
+              "view": "b",
+              "index": 5,
+              "label": "+3"
+            }
+          ],
+          "label": "4 − 1 = 3  <  5   →  keep 5",
+          "voice": "Day 6. Sell today and 4 minus 1 is only 3. That's less than 5, so best stays."
+        },
+        {
+          "beats": 6,
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "pointer.drop",
+              "view": "b",
+              "name": "day"
+            },
+            {
+              "type": "bars.gapClear",
+              "view": "b"
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                1
+              ],
+              "style": "match"
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                4
+              ],
+              "style": "match"
+            },
+            {
+              "type": "bars.gap",
+              "view": "b",
+              "index": 4,
+              "label": "+5"
+            },
+            {
+              "type": "result",
+              "value": "5",
+              "label": "Max profit"
+            }
+          ],
+          "label": "",
+          "voice": "Buy day two, sell day five. Five, in one pass."
+        }
+      ],
+      "transition": "wipe"
+    },
+    {
+      "id": "complexity-3",
+      "kind": "complexity",
+      "layout": [
+        {
+          "view": "ctext",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1,
+          "scale": 1
+        },
+        {
+          "view": "code",
+          "col": 0,
+          "span": 12,
+          "row": 1,
+          "rowSpan": 1,
+          "scale": 1
+        }
+      ],
+      "rows": 2,
+      "rowSizes": [
+        0.8900000000000001,
+        1.1800000000000002
+      ],
+      "steps": [
+        {
+          "beats": 6,
+          "ops": [],
+          "label": "Could I sell today for more?",
+          "voice": "The code is two questions a day.",
+          "code": {
+            "view": "code",
+            "lines": [
+              5
+            ]
+          }
+        },
+        {
+          "beats": 6,
+          "ops": [],
+          "label": "Is today the new cheapest?",
+          "voice": "Could I sell today for more? And is today the new cheapest?",
+          "code": {
+            "view": "code",
+            "lines": [
+              6
+            ]
+          }
+        },
+        {
+          "beats": 7,
+          "ops": [],
+          "label": "One pass · O(n) time · O(1) space",
+          "voice": "One pass. Two numbers.",
+          "code": {
+            "view": "code",
+            "lines": []
+          }
+        }
+      ],
+      "transition": "wipe"
+    },
+    {
+      "id": "outro-4",
+      "kind": "outro",
+      "layout": [
+        {
+          "view": "otext",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1,
+          "scale": 1
+        }
+      ],
+      "rows": 1,
+      "rowSizes": [
+        1.23
+      ],
+      "steps": [
+        {
+          "beats": 8,
+          "ops": [],
+          "label": "",
+          "voice": "That's it, under 100 seconds. See ya."
+        }
+      ],
+      "transition": "fade"
+    }
+  ]
+}
