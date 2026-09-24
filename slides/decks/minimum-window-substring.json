@@ -1,0 +1,556 @@
+{
+  "schemaVersion": 1,
+  "edited": false,
+  "meta": {
+    "slug": "minimum-window-substring",
+    "number": 76,
+    "title": "Minimum Window Substring",
+    "difficulty": "Hard",
+    "pattern": "sliding-window",
+    "tagline": "grow until it works, then squeeze",
+    "format": "landscape"
+  },
+  "views": [
+    {
+      "id": "ps",
+      "label": "s",
+      "kind": "string",
+      "value": "ADOBECODEBANC",
+      "showIndices": true
+    },
+    {
+      "id": "pt",
+      "label": "t",
+      "kind": "string",
+      "value": "ABC",
+      "showIndices": true
+    },
+    {
+      "id": "a",
+      "label": "s",
+      "kind": "string",
+      "value": "ADOBECODEBANC",
+      "showIndices": true
+    },
+    {
+      "id": "v",
+      "kind": "vars",
+      "items": []
+    },
+    {
+      "id": "code",
+      "kind": "code",
+      "lang": "python",
+      "source": "need = Counter(t)\nhave, missing = {}, len(need)\nleft, best = 0, None\n\nfor right, ch in enumerate(s):\n    have[ch] = have.get(ch, 0) + 1\n    if have[ch] == need.get(ch): missing -= 1\n\n    while missing == 0:\n        if best is None or right - left < len(best):\n            best = s[left : right + 1]\n        have[s[left]] -= 1\n        if have[s[left]] < need.get(s[left], 0): missing += 1\n        left += 1"
+    },
+    {
+      "id": "ctext",
+      "kind": "text",
+      "title": "Code",
+      "body": [],
+      "variant": "plain"
+    },
+    {
+      "id": "otext",
+      "kind": "text",
+      "title": "Intuition",
+      "body": [
+        "Grow the right until it works.",
+        "Squeeze the left while it still works.",
+        "Neither edge ever goes back."
+      ],
+      "variant": "big"
+    }
+  ],
+  "sections": [
+    {
+      "id": "hook-0",
+      "kind": "hook",
+      "layout": [],
+      "rows": 1,
+      "slides": [
+        {
+          "id": "hook-0-0",
+          "ops": [],
+          "label": "The shortest stretch containing them all",
+          "note": "Minimum Window Substring.",
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "problem-1",
+      "kind": "problem",
+      "layout": [
+        {
+          "view": "ps",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        },
+        {
+          "view": "pt",
+          "col": 0,
+          "span": 12,
+          "row": 1,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 2,
+      "rowSizes": [
+        1.3,
+        1.3
+      ],
+      "slides": [
+        {
+          "id": "problem-1-0",
+          "ops": [],
+          "label": "shortest window holding all of t",
+          "note": "Find the shortest piece of the first string that contains every letter of the second.",
+          "structural": false
+        },
+        {
+          "id": "problem-1-1",
+          "ops": [],
+          "label": "grow until valid, then squeeze",
+          "note": "Checking every substring is far too slow. Instead, grow a window until it works, then squeeze it.",
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "walkthrough-2",
+      "kind": "walkthrough",
+      "layout": [
+        {
+          "view": "a",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        },
+        {
+          "view": "v",
+          "col": 0,
+          "span": 12,
+          "row": 1,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 2,
+      "rowSizes": [
+        1.3,
+        0.42
+      ],
+      "slides": [
+        {
+          "id": "walkthrough-2-0",
+          "ops": [
+            {
+              "type": "callout",
+              "text": "Two moves: grow right, squeeze left",
+              "variant": "insight"
+            },
+            {
+              "type": "callout",
+              "text": "Both edges only ever move right.",
+              "variant": "aside"
+            }
+          ],
+          "label": "right grows · left squeezes",
+          "note": "The right edge grows until the window is valid. Then the left edge squeezes in while it stays valid. Neither ever goes backwards.",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-1",
+          "ops": [
+            {
+              "type": "array.window",
+              "view": "a",
+              "from": 0,
+              "to": 5,
+              "label": "ADOBEC"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                0
+              ],
+              "style": "window"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                1
+              ],
+              "style": "window"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                2
+              ],
+              "style": "window"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                3
+              ],
+              "style": "window"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                4
+              ],
+              "style": "window"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                5
+              ],
+              "style": "window"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                0
+              ],
+              "style": "match"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                3
+              ],
+              "style": "match"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                5
+              ],
+              "style": "match"
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "window",
+              "value": 6
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "best",
+              "value": "—"
+            }
+          ],
+          "label": "ADOBEC  →  valid, length 6",
+          "note": "The right edge grows until A, B and C are all inside. Six letters — the first thing that works.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-2",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "a"
+            },
+            {
+              "type": "array.window",
+              "view": "a",
+              "from": 1,
+              "to": 5,
+              "label": "DOBEC"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                1
+              ],
+              "style": "window"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                2
+              ],
+              "style": "window"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                3
+              ],
+              "style": "window"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                4
+              ],
+              "style": "window"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                5
+              ],
+              "style": "window"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                0
+              ],
+              "style": "bad"
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "window",
+              "value": 5
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "best",
+              "value": "ADOBEC"
+            }
+          ],
+          "label": "drop A  →  no longer valid",
+          "note": "Now squeeze from the left. Dropping that A breaks it, so six was the best this window could do.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-3",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "a"
+            },
+            {
+              "type": "array.window",
+              "view": "a",
+              "from": 9,
+              "to": 12,
+              "label": "BANC"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                9
+              ],
+              "style": "window"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                10
+              ],
+              "style": "window"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                11
+              ],
+              "style": "window"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                12
+              ],
+              "style": "window"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                9
+              ],
+              "style": "match"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                10
+              ],
+              "style": "match"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                12
+              ],
+              "style": "match"
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "window",
+              "value": 4
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "best",
+              "value": "BANC"
+            }
+          ],
+          "label": "BANC  →  valid, length 4",
+          "note": "Growing on gives a shorter valid window later: B, A, N, C. Four letters.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-4",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "a"
+            },
+            {
+              "type": "array.windowClear",
+              "view": "a"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                9,
+                10,
+                11,
+                12
+              ],
+              "style": "match"
+            },
+            {
+              "type": "result",
+              "value": "BANC"
+            }
+          ],
+          "note": "BANC is the shortest stretch holding all of A, B and C.",
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "code-3",
+      "kind": "code",
+      "layout": [
+        {
+          "view": "ctext",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        },
+        {
+          "view": "code",
+          "col": 0,
+          "span": 12,
+          "row": 1,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 2,
+      "rowSizes": [
+        0.55,
+        2.1
+      ],
+      "slides": [
+        {
+          "id": "code-3-0",
+          "ops": [],
+          "note": "Grow right, and count off each letter as it is satisfied.",
+          "code": {
+            "view": "code",
+            "lines": [
+              6,
+              7
+            ]
+          },
+          "structural": false
+        },
+        {
+          "id": "code-3-1",
+          "ops": [],
+          "note": "Once nothing is missing, record the window.",
+          "code": {
+            "view": "code",
+            "lines": [
+              9,
+              10,
+              11
+            ]
+          },
+          "structural": false
+        },
+        {
+          "id": "code-3-2",
+          "ops": [],
+          "note": "Then squeeze from the left until it breaks.",
+          "code": {
+            "view": "code",
+            "lines": [
+              12,
+              13,
+              14
+            ]
+          },
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "intuition-4",
+      "kind": "intuition",
+      "layout": [
+        {
+          "view": "otext",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 1,
+      "rowSizes": [
+        1.57
+      ],
+      "slides": [
+        {
+          "id": "intuition-4-0",
+          "ops": [],
+          "note": "Grow the right until it works, squeeze the left while it still works, and neither edge ever goes back.",
+          "structural": false
+        }
+      ]
+    }
+  ]
+}

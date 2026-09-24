@@ -1,0 +1,522 @@
+{
+  "schemaVersion": 1,
+  "edited": false,
+  "meta": {
+    "slug": "best-time-to-buy-and-sell-stock",
+    "number": 121,
+    "title": "Best Time to Buy and Sell Stock",
+    "difficulty": "Easy",
+    "pattern": "sliding-window",
+    "tagline": "buy low, sell high, scroll on",
+    "format": "landscape"
+  },
+  "views": [
+    {
+      "id": "pb",
+      "label": "price by day",
+      "kind": "bars",
+      "values": [
+        7,
+        1,
+        5,
+        3,
+        6,
+        4
+      ],
+      "unit": "",
+      "showValues": true,
+      "xLabel": ""
+    },
+    {
+      "id": "b",
+      "label": "price by day",
+      "kind": "bars",
+      "values": [
+        7,
+        1,
+        5,
+        3,
+        6,
+        4
+      ],
+      "unit": "",
+      "showValues": true,
+      "xLabel": ""
+    },
+    {
+      "id": "v",
+      "kind": "vars",
+      "items": []
+    },
+    {
+      "id": "code",
+      "kind": "code",
+      "lang": "python",
+      "source": "cheapest = prices[0]\nbest     = 0\n\nfor price in prices:\n    best     = max(best, price - cheapest)\n    cheapest = min(cheapest, price)"
+    },
+    {
+      "id": "ctext",
+      "kind": "text",
+      "title": "Code",
+      "body": [],
+      "variant": "plain"
+    },
+    {
+      "id": "otext",
+      "kind": "text",
+      "title": "Intuition",
+      "body": [
+        "Remember the cheapest day so far.",
+        "Then every later day",
+        "only has to ask one question."
+      ],
+      "variant": "big"
+    }
+  ],
+  "sections": [
+    {
+      "id": "hook-0",
+      "kind": "hook",
+      "layout": [],
+      "rows": 1,
+      "slides": [
+        {
+          "id": "hook-0-0",
+          "ops": [],
+          "label": "Buy once. Sell later.",
+          "note": "Best Time to Buy and Sell Stock.",
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "problem-1",
+      "kind": "problem",
+      "layout": [
+        {
+          "view": "pb",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 1,
+      "rowSizes": [
+        1.9
+      ],
+      "slides": [
+        {
+          "id": "problem-1-0",
+          "ops": [],
+          "label": "six days of prices",
+          "note": "A week of prices. Each bar is one day.",
+          "structural": false
+        },
+        {
+          "id": "problem-1-1",
+          "ops": [],
+          "label": "buy one day, sell a later one",
+          "note": "One buy, one sell, and the buy has to come first. What is the most you can make?",
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "walkthrough-2",
+      "kind": "walkthrough",
+      "layout": [
+        {
+          "view": "b",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        },
+        {
+          "view": "v",
+          "col": 0,
+          "span": 12,
+          "row": 1,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 2,
+      "rowSizes": [
+        1.9,
+        0.42
+      ],
+      "slides": [
+        {
+          "id": "walkthrough-2-0",
+          "ops": [
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                0
+              ],
+              "style": "active"
+            },
+            {
+              "type": "bars.level",
+              "view": "b",
+              "value": 7,
+              "label": "cheapest 7",
+              "color": "success"
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "cheapest",
+              "value": 7
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "best",
+              "value": 0
+            }
+          ],
+          "label": "carry: cheapest, and best",
+          "note": "We carry two things: the cheapest price seen so far, and the best profit so far.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-1",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                1
+              ],
+              "style": "active"
+            },
+            {
+              "type": "bars.gapClear",
+              "view": "b"
+            }
+          ],
+          "label": "1 − 7 = -6  →  no profit",
+          "note": "Day 2. Selling at 1 would lose money.",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-2",
+          "ops": [
+            {
+              "type": "bars.level",
+              "view": "b",
+              "value": 1,
+              "label": "cheapest 1",
+              "color": "success"
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                1
+              ],
+              "style": "match"
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "cheapest",
+              "value": 1
+            }
+          ],
+          "label": "1  <  7  →  cheapest = 1",
+          "note": "And 1 is less than 7, so the line drops to meet it.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-3",
+          "ops": [
+            {
+              "type": "callout",
+              "text": "The line only ever drops",
+              "variant": "insight"
+            },
+            {
+              "type": "callout",
+              "text": "One number, zero regrets.",
+              "variant": "aside"
+            }
+          ],
+          "label": "never look back — just track the minimum",
+          "note": "That green line never goes back up. It is the only history we keep, and it is why one pass is enough.",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-4",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                2
+              ],
+              "style": "active"
+            },
+            {
+              "type": "bars.gapClear",
+              "view": "b"
+            },
+            {
+              "type": "bars.gap",
+              "view": "b",
+              "index": 2,
+              "label": "+4"
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "best",
+              "value": 4
+            }
+          ],
+          "label": "5 − 1 = 4  >  0",
+          "note": "Day 3. Sell today and 5 minus 1 is 4, which beats 0.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-5",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                3
+              ],
+              "style": "active"
+            },
+            {
+              "type": "bars.gapClear",
+              "view": "b"
+            },
+            {
+              "type": "bars.gap",
+              "view": "b",
+              "index": 3,
+              "label": "+2"
+            }
+          ],
+          "label": "3 − 1 = 2  <  4",
+          "note": "Day 4. Only 2 today, so 4 stands.",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-6",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                4
+              ],
+              "style": "active"
+            },
+            {
+              "type": "bars.gapClear",
+              "view": "b"
+            },
+            {
+              "type": "bars.gap",
+              "view": "b",
+              "index": 4,
+              "label": "+5"
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "best",
+              "value": 5
+            }
+          ],
+          "label": "6 − 1 = 5  >  4",
+          "note": "Day 5. Sell today and 6 minus 1 is 5, which beats 4.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-7",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                5
+              ],
+              "style": "active"
+            },
+            {
+              "type": "bars.gapClear",
+              "view": "b"
+            },
+            {
+              "type": "bars.gap",
+              "view": "b",
+              "index": 5,
+              "label": "+3"
+            }
+          ],
+          "label": "4 − 1 = 3  <  5",
+          "note": "Day 6. Only 3 today, so 5 stands.",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-8",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "bars.gapClear",
+              "view": "b"
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                1
+              ],
+              "style": "match"
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                4
+              ],
+              "style": "match"
+            },
+            {
+              "type": "bars.gap",
+              "view": "b",
+              "index": 4,
+              "label": "+5"
+            },
+            {
+              "type": "result",
+              "value": "5",
+              "label": "Max profit"
+            }
+          ],
+          "note": "Buy on day two, sell on day five. Five, in one pass.",
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "code-3",
+      "kind": "code",
+      "layout": [
+        {
+          "view": "ctext",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        },
+        {
+          "view": "code",
+          "col": 0,
+          "span": 12,
+          "row": 1,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 2,
+      "rowSizes": [
+        0.55,
+        1.1800000000000002
+      ],
+      "slides": [
+        {
+          "id": "code-3-0",
+          "ops": [],
+          "note": "Two numbers to remember.",
+          "code": {
+            "view": "code",
+            "lines": [
+              1,
+              2
+            ]
+          },
+          "structural": false
+        },
+        {
+          "id": "code-3-1",
+          "ops": [],
+          "note": "Could I sell today for more?",
+          "code": {
+            "view": "code",
+            "lines": [
+              5
+            ]
+          },
+          "structural": false
+        },
+        {
+          "id": "code-3-2",
+          "ops": [],
+          "note": "Is today the new cheapest?",
+          "code": {
+            "view": "code",
+            "lines": [
+              6
+            ]
+          },
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "intuition-4",
+      "kind": "intuition",
+      "layout": [
+        {
+          "view": "otext",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 1,
+      "rowSizes": [
+        1.57
+      ],
+      "slides": [
+        {
+          "id": "intuition-4-0",
+          "ops": [],
+          "note": "Remember the cheapest day so far, and every later day only has to ask one question.",
+          "structural": false
+        }
+      ]
+    }
+  ]
+}

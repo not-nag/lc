@@ -1,0 +1,550 @@
+{
+  "schemaVersion": 1,
+  "edited": false,
+  "meta": {
+    "slug": "valid-palindrome",
+    "number": 125,
+    "title": "Valid Palindrome",
+    "difficulty": "Easy",
+    "pattern": "two-pointers",
+    "tagline": "same forwards, same backwards",
+    "format": "landscape"
+  },
+  "views": [
+    {
+      "id": "ps",
+      "label": "s",
+      "kind": "string",
+      "value": "Ra c, e car",
+      "showIndices": true
+    },
+    {
+      "id": "a",
+      "label": "s",
+      "kind": "string",
+      "value": "Ra c, e car",
+      "showIndices": true
+    },
+    {
+      "id": "code",
+      "kind": "code",
+      "lang": "python",
+      "source": "l, r = 0, len(s) - 1\n\nwhile l < r:\n    while l < r and not s[l].isalnum(): l += 1\n    while l < r and not s[r].isalnum(): r -= 1\n    if s[l].lower() != s[r].lower():\n        return False\n    l, r = l + 1, r - 1\n\nreturn True"
+    },
+    {
+      "id": "ctext",
+      "kind": "text",
+      "title": "Code",
+      "body": [],
+      "variant": "plain"
+    },
+    {
+      "id": "otext",
+      "kind": "text",
+      "title": "Intuition",
+      "body": [
+        "A palindrome mirrors around its centre.",
+        "So walk in from both ends",
+        "and check the pairs."
+      ],
+      "variant": "big"
+    }
+  ],
+  "sections": [
+    {
+      "id": "hook-0",
+      "kind": "hook",
+      "layout": [],
+      "rows": 1,
+      "slides": [
+        {
+          "id": "hook-0-0",
+          "ops": [],
+          "label": "Reads the same both ways",
+          "note": "Valid Palindrome, without building a second string.",
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "problem-1",
+      "kind": "problem",
+      "layout": [
+        {
+          "view": "ps",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 1,
+      "rowSizes": [
+        1.3
+      ],
+      "slides": [
+        {
+          "id": "problem-1-0",
+          "ops": [],
+          "label": "ignore punctuation and case",
+          "note": "Ignore spaces, punctuation and case. Does it read the same both ways?",
+          "structural": false
+        },
+        {
+          "id": "problem-1-1",
+          "ops": [],
+          "label": "no cleaned copy needed",
+          "note": "Cleaning the string first works, but that is a whole extra copy. We can just walk it.",
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "walkthrough-2",
+      "kind": "walkthrough",
+      "layout": [
+        {
+          "view": "a",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 1,
+      "rowSizes": [
+        1.3
+      ],
+      "slides": [
+        {
+          "id": "walkthrough-2-0",
+          "ops": [
+            {
+              "type": "pointer.set",
+              "view": "a",
+              "name": "l",
+              "index": 0,
+              "color": "danger"
+            },
+            {
+              "type": "pointer.set",
+              "view": "a",
+              "name": "r",
+              "index": 10,
+              "color": "success"
+            }
+          ],
+          "label": "one pointer at each end",
+          "note": "One finger at each end, walking towards the middle.",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-1",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "a"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                0
+              ],
+              "style": "compare"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                10
+              ],
+              "style": "compare"
+            }
+          ],
+          "label": "'R'  vs  'r'",
+          "note": "R against r.",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-2",
+          "ops": [
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                0,
+                10
+              ],
+              "style": "match"
+            }
+          ],
+          "label": "'R' = 'r'  →  step in",
+          "note": "The same, so both fingers step inwards.",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-3",
+          "ops": [
+            {
+              "type": "pointer.move",
+              "view": "a",
+              "name": "l",
+              "index": 1
+            },
+            {
+              "type": "pointer.move",
+              "view": "a",
+              "name": "r",
+              "index": 9
+            },
+            {
+              "type": "array.clear",
+              "view": "a"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                1
+              ],
+              "style": "compare"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                9
+              ],
+              "style": "compare"
+            }
+          ],
+          "label": "'a'  vs  'a'",
+          "note": "a against a.",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-4",
+          "ops": [
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                1,
+                9
+              ],
+              "style": "match"
+            }
+          ],
+          "label": "'a' = 'a'  →  step in",
+          "note": "The same, so both fingers step inwards.",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-5",
+          "ops": [
+            {
+              "type": "pointer.move",
+              "view": "a",
+              "name": "l",
+              "index": 2
+            },
+            {
+              "type": "pointer.move",
+              "view": "a",
+              "name": "r",
+              "index": 8
+            },
+            {
+              "type": "array.clear",
+              "view": "a"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                2
+              ],
+              "style": "dim"
+            },
+            {
+              "type": "pointer.move",
+              "view": "a",
+              "name": "l",
+              "index": 3
+            }
+          ],
+          "label": "skip '␣'",
+          "note": "Left is on a space, which does not count. Step over it.",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-6",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "a"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                3
+              ],
+              "style": "compare"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                8
+              ],
+              "style": "compare"
+            }
+          ],
+          "label": "'c'  vs  'c'",
+          "note": "c against c.",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-7",
+          "ops": [
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                3,
+                8
+              ],
+              "style": "match"
+            }
+          ],
+          "label": "'c' = 'c'  →  step in",
+          "note": "The same, so both fingers step inwards.",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-8",
+          "ops": [
+            {
+              "type": "pointer.move",
+              "view": "a",
+              "name": "l",
+              "index": 4
+            },
+            {
+              "type": "pointer.move",
+              "view": "a",
+              "name": "r",
+              "index": 7
+            },
+            {
+              "type": "array.clear",
+              "view": "a"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                4
+              ],
+              "style": "dim"
+            },
+            {
+              "type": "pointer.move",
+              "view": "a",
+              "name": "l",
+              "index": 5
+            }
+          ],
+          "label": "skip ','",
+          "note": "Left is on a comma, which does not count. Step over it.",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-9",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "a"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                5
+              ],
+              "style": "dim"
+            },
+            {
+              "type": "pointer.move",
+              "view": "a",
+              "name": "l",
+              "index": 6
+            }
+          ],
+          "label": "skip '␣'",
+          "note": "Left is on a space, which does not count. Step over it.",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-10",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "a"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                7
+              ],
+              "style": "dim"
+            },
+            {
+              "type": "pointer.move",
+              "view": "a",
+              "name": "r",
+              "index": 6
+            }
+          ],
+          "label": "skip '␣'",
+          "note": "Right is on something that does not count either.",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-11",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "a"
+            },
+            {
+              "type": "pointer.drop",
+              "view": "a",
+              "name": "l"
+            },
+            {
+              "type": "pointer.drop",
+              "view": "a",
+              "name": "r"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                0,
+                2,
+                4,
+                5,
+                7,
+                8,
+                9,
+                10
+              ],
+              "style": "match"
+            },
+            {
+              "type": "result",
+              "value": "true",
+              "label": "Palindrome"
+            }
+          ],
+          "note": "The fingers met in the middle with nothing mismatched.",
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "code-3",
+      "kind": "code",
+      "layout": [
+        {
+          "view": "ctext",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        },
+        {
+          "view": "code",
+          "col": 0,
+          "span": 12,
+          "row": 1,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 2,
+      "rowSizes": [
+        0.55,
+        1.7000000000000002
+      ],
+      "slides": [
+        {
+          "id": "code-3-0",
+          "ops": [],
+          "note": "Walk each finger past anything that does not count.",
+          "code": {
+            "view": "code",
+            "lines": [
+              4,
+              5
+            ]
+          },
+          "structural": false
+        },
+        {
+          "id": "code-3-1",
+          "ops": [],
+          "note": "Compare what is left, ignoring case.",
+          "code": {
+            "view": "code",
+            "lines": [
+              6,
+              7
+            ]
+          },
+          "structural": false
+        },
+        {
+          "id": "code-3-2",
+          "ops": [],
+          "note": "Match, so step both inwards.",
+          "code": {
+            "view": "code",
+            "lines": [
+              8
+            ]
+          },
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "intuition-4",
+      "kind": "intuition",
+      "layout": [
+        {
+          "view": "otext",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 1,
+      "rowSizes": [
+        1.57
+      ],
+      "slides": [
+        {
+          "id": "intuition-4-0",
+          "ops": [],
+          "note": "A palindrome mirrors around its centre, so walk in from both ends and check the pairs.",
+          "structural": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,574 @@
+{
+  "schemaVersion": 1,
+  "edited": false,
+  "meta": {
+    "slug": "trapping-rain-water",
+    "number": 42,
+    "title": "Trapping Rain Water",
+    "difficulty": "Hard",
+    "pattern": "two-pointers",
+    "tagline": "the shorter side decides",
+    "format": "landscape"
+  },
+  "views": [
+    {
+      "id": "pb",
+      "label": "heights",
+      "kind": "bars",
+      "values": [
+        4,
+        2,
+        0,
+        3,
+        2,
+        5
+      ],
+      "unit": "",
+      "showValues": true,
+      "xLabel": ""
+    },
+    {
+      "id": "b",
+      "label": "heights",
+      "kind": "bars",
+      "values": [
+        4,
+        2,
+        0,
+        3,
+        2,
+        5
+      ],
+      "unit": "",
+      "showValues": true,
+      "xLabel": ""
+    },
+    {
+      "id": "v",
+      "kind": "vars",
+      "items": []
+    },
+    {
+      "id": "code",
+      "kind": "code",
+      "lang": "python",
+      "source": "l, r = 0, len(h) - 1\nmaxL, maxR, total = h[l], h[r], 0\n\nwhile l < r:\n    if maxL < maxR:\n        l += 1\n        maxL = max(maxL, h[l])\n        total += maxL - h[l]\n    else:\n        r -= 1\n        maxR = max(maxR, h[r])\n        total += maxR - h[r]"
+    },
+    {
+      "id": "ctext",
+      "kind": "text",
+      "title": "Code",
+      "body": [],
+      "variant": "plain"
+    },
+    {
+      "id": "otext",
+      "kind": "text",
+      "title": "Intuition",
+      "body": [
+        "Water is capped by the shorter",
+        "of the two tallest walls.",
+        "So settle that side first."
+      ],
+      "variant": "big"
+    }
+  ],
+  "sections": [
+    {
+      "id": "hook-0",
+      "kind": "hook",
+      "layout": [],
+      "rows": 1,
+      "slides": [
+        {
+          "id": "hook-0-0",
+          "ops": [],
+          "label": "How much water sits on top?",
+          "note": "Trapping Rain Water, in one pass and no extra arrays.",
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "problem-1",
+      "kind": "problem",
+      "layout": [
+        {
+          "view": "pb",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 1,
+      "rowSizes": [
+        1.9
+      ],
+      "slides": [
+        {
+          "id": "problem-1-0",
+          "ops": [],
+          "label": "water trapped after rain",
+          "note": "Rain falls on this skyline. How much water stays trapped?",
+          "structural": false
+        },
+        {
+          "id": "problem-1-1",
+          "ops": [],
+          "label": "needs a taller wall on both sides",
+          "note": "A dip holds water only if something taller stands on both sides.",
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "walkthrough-2",
+      "kind": "walkthrough",
+      "layout": [
+        {
+          "view": "b",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        },
+        {
+          "view": "v",
+          "col": 0,
+          "span": 12,
+          "row": 1,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 2,
+      "rowSizes": [
+        1.9,
+        0.42
+      ],
+      "slides": [
+        {
+          "id": "walkthrough-2-0",
+          "ops": [
+            {
+              "type": "pointer.set",
+              "view": "b",
+              "name": "L",
+              "index": 0,
+              "color": "danger"
+            },
+            {
+              "type": "pointer.set",
+              "view": "b",
+              "name": "R",
+              "index": 5,
+              "color": "success"
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "maxL",
+              "value": 4
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "maxR",
+              "value": 5
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "water",
+              "value": 0
+            }
+          ],
+          "label": "water = min(tallest left, tallest right) − height",
+          "note": "The water above any column is the shorter of the tallest wall to its left and the tallest to its right, minus the column itself.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-1",
+          "ops": [
+            {
+              "type": "callout",
+              "text": "The shorter side is already decided",
+              "variant": "insight"
+            },
+            {
+              "type": "callout",
+              "text": "You never need to look further.",
+              "variant": "aside"
+            }
+          ],
+          "label": "the smaller max is the binding wall",
+          "note": "Here is the trick. If the tallest wall on the left is shorter than the tallest on the right, then the left one is what limits the water — whatever else lies to the right cannot lower it. So that column can be settled immediately.",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-2",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "pointer.move",
+              "view": "b",
+              "name": "L",
+              "index": 1
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                1
+              ],
+              "style": "active"
+            },
+            {
+              "type": "bars.level",
+              "view": "b",
+              "value": 4,
+              "label": "left wall 4",
+              "color": "success"
+            },
+            {
+              "type": "bars.gap",
+              "view": "b",
+              "index": 1,
+              "label": "+2"
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "maxL",
+              "value": 4
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "water",
+              "value": 2
+            }
+          ],
+          "label": "4 − 2 = 2",
+          "note": "Left max is 4 and this column is 2, so 2 units sit on top.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-3",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "pointer.move",
+              "view": "b",
+              "name": "L",
+              "index": 2
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                2
+              ],
+              "style": "active"
+            },
+            {
+              "type": "bars.level",
+              "view": "b",
+              "value": 4,
+              "label": "left wall 4",
+              "color": "success"
+            },
+            {
+              "type": "bars.gap",
+              "view": "b",
+              "index": 2,
+              "label": "+4"
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "maxL",
+              "value": 4
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "water",
+              "value": 6
+            }
+          ],
+          "label": "4 − 0 = 4",
+          "note": "Left max is 4 and this column is 0, so 4 units sit on top.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-4",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "pointer.move",
+              "view": "b",
+              "name": "L",
+              "index": 3
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                3
+              ],
+              "style": "active"
+            },
+            {
+              "type": "bars.level",
+              "view": "b",
+              "value": 4,
+              "label": "left wall 4",
+              "color": "success"
+            },
+            {
+              "type": "bars.gap",
+              "view": "b",
+              "index": 3,
+              "label": "+1"
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "maxL",
+              "value": 4
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "water",
+              "value": 7
+            }
+          ],
+          "label": "4 − 3 = 1",
+          "note": "Left max is 4 and this column is 3, so 1 units sit on top.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-5",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "pointer.move",
+              "view": "b",
+              "name": "L",
+              "index": 4
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                4
+              ],
+              "style": "active"
+            },
+            {
+              "type": "bars.level",
+              "view": "b",
+              "value": 4,
+              "label": "left wall 4",
+              "color": "success"
+            },
+            {
+              "type": "bars.gap",
+              "view": "b",
+              "index": 4,
+              "label": "+2"
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "maxL",
+              "value": 4
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "water",
+              "value": 9
+            }
+          ],
+          "label": "4 − 2 = 2",
+          "note": "Left max is 4 and this column is 2, so 2 units sit on top.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-6",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "pointer.move",
+              "view": "b",
+              "name": "L",
+              "index": 5
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                5
+              ],
+              "style": "active"
+            },
+            {
+              "type": "bars.level",
+              "view": "b",
+              "value": 5,
+              "label": "left wall 5",
+              "color": "success"
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "maxL",
+              "value": 5
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "water",
+              "value": 9
+            }
+          ],
+          "label": "no water here",
+          "note": "This column is at least as tall as the wall behind it, so nothing collects.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-7",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "pointer.drop",
+              "view": "b",
+              "name": "L"
+            },
+            {
+              "type": "pointer.drop",
+              "view": "b",
+              "name": "R"
+            },
+            {
+              "type": "bars.gapClear",
+              "view": "b"
+            },
+            {
+              "type": "bars.levelClear",
+              "view": "b"
+            },
+            {
+              "type": "result",
+              "value": "9",
+              "label": "Water"
+            }
+          ],
+          "note": "Nine units, settled one column at a time.",
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "code-3",
+      "kind": "code",
+      "layout": [
+        {
+          "view": "ctext",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        },
+        {
+          "view": "code",
+          "col": 0,
+          "span": 12,
+          "row": 1,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 2,
+      "rowSizes": [
+        0.55,
+        1.96
+      ],
+      "slides": [
+        {
+          "id": "code-3-0",
+          "ops": [],
+          "note": "Both ends, and the tallest wall seen from each side.",
+          "code": {
+            "view": "code",
+            "lines": [
+              1,
+              2
+            ]
+          },
+          "structural": false
+        },
+        {
+          "id": "code-3-1",
+          "ops": [],
+          "note": "Whichever side has the shorter wall is the one that is settled, so move it.",
+          "code": {
+            "view": "code",
+            "lines": [
+              5,
+              6,
+              7,
+              8
+            ]
+          },
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "intuition-4",
+      "kind": "intuition",
+      "layout": [
+        {
+          "view": "otext",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 1,
+      "rowSizes": [
+        1.57
+      ],
+      "slides": [
+        {
+          "id": "intuition-4-0",
+          "ops": [],
+          "note": "Water is capped by the shorter of the two tallest walls, so that side can always be settled first.",
+          "structural": false
+        }
+      ]
+    }
+  ]
+}

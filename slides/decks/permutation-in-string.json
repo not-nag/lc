@@ -1,0 +1,527 @@
+{
+  "schemaVersion": 1,
+  "edited": false,
+  "meta": {
+    "slug": "permutation-in-string",
+    "number": 567,
+    "title": "Permutation In String",
+    "difficulty": "Medium",
+    "pattern": "sliding-window",
+    "tagline": "a window that never changes size",
+    "format": "landscape"
+  },
+  "views": [
+    {
+      "id": "p1",
+      "label": "s1",
+      "kind": "string",
+      "value": "ab",
+      "showIndices": true
+    },
+    {
+      "id": "p2",
+      "label": "s2",
+      "kind": "string",
+      "value": "eidbaooo",
+      "showIndices": true
+    },
+    {
+      "id": "b",
+      "label": "s2",
+      "kind": "string",
+      "value": "eidbaooo",
+      "showIndices": true
+    },
+    {
+      "id": "w",
+      "label": "window counts",
+      "kind": "map",
+      "entries": [],
+      "keyLabel": "key",
+      "valueLabel": "value",
+      "asSet": false
+    },
+    {
+      "id": "code",
+      "kind": "code",
+      "lang": "python",
+      "source": "need = Counter(s1)\nwindow = Counter(s2[:len(s1)])\n\nif window == need: return True\nfor i in range(len(s1), len(s2)):\n    window[s2[i]] += 1\n    window[s2[i - len(s1)]] -= 1\n    if window == need: return True"
+    },
+    {
+      "id": "ctext",
+      "kind": "text",
+      "title": "Code",
+      "body": [],
+      "variant": "plain"
+    },
+    {
+      "id": "otext",
+      "kind": "text",
+      "title": "Intuition",
+      "body": [
+        "A permutation has a fixed length.",
+        "So the window never resizes —",
+        "one in, one out, and compare."
+      ],
+      "variant": "big"
+    }
+  ],
+  "sections": [
+    {
+      "id": "hook-0",
+      "kind": "hook",
+      "layout": [],
+      "rows": 1,
+      "slides": [
+        {
+          "id": "hook-0-0",
+          "ops": [],
+          "label": "Does a scramble of s1 sit inside s2?",
+          "note": "Permutation In String.",
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "problem-1",
+      "kind": "problem",
+      "layout": [
+        {
+          "view": "p1",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        },
+        {
+          "view": "p2",
+          "col": 0,
+          "span": 12,
+          "row": 1,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 2,
+      "rowSizes": [
+        1.3,
+        1.3
+      ],
+      "slides": [
+        {
+          "id": "problem-1-0",
+          "ops": [],
+          "label": "is a permutation of s1 inside s2?",
+          "note": "Does any rearrangement of the first string appear inside the second?",
+          "structural": false
+        },
+        {
+          "id": "problem-1-1",
+          "ops": [],
+          "label": "same length, same letter counts",
+          "note": "A permutation has the same length and the same letter counts. Both are fixed.",
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "walkthrough-2",
+      "kind": "walkthrough",
+      "layout": [
+        {
+          "view": "b",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        },
+        {
+          "view": "w",
+          "col": 0,
+          "span": 12,
+          "row": 1,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 2,
+      "rowSizes": [
+        1.3,
+        1
+      ],
+      "slides": [
+        {
+          "id": "walkthrough-2-0",
+          "ops": [
+            {
+              "type": "callout",
+              "text": "The window size never changes",
+              "variant": "insight"
+            },
+            {
+              "type": "callout",
+              "text": "Slide it, don't grow it.",
+              "variant": "aside"
+            }
+          ],
+          "label": "window is always 2 wide",
+          "note": "Because a permutation is exactly two letters long, the window is always exactly two wide. It slides along without ever changing size.",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-1",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                0
+              ],
+              "style": "compare"
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                1
+              ],
+              "style": "compare"
+            },
+            {
+              "type": "array.window",
+              "view": "b",
+              "from": 0,
+              "to": 1,
+              "label": "\"ei\""
+            },
+            {
+              "type": "map.clear",
+              "view": "w"
+            },
+            {
+              "type": "map.put",
+              "view": "w",
+              "key": "e",
+              "value": 1
+            },
+            {
+              "type": "map.put",
+              "view": "w",
+              "key": "i",
+              "value": 1
+            }
+          ],
+          "label": "window = \"ei\"",
+          "note": "The window holds \"ei\".",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-2",
+          "ops": [],
+          "label": "no match  →  slide right",
+          "note": "Not the right letters. Slide one step: one letter in, one letter out.",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-3",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                1
+              ],
+              "style": "compare"
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                2
+              ],
+              "style": "compare"
+            },
+            {
+              "type": "array.window",
+              "view": "b",
+              "from": 1,
+              "to": 2,
+              "label": "\"id\""
+            },
+            {
+              "type": "map.clear",
+              "view": "w"
+            },
+            {
+              "type": "map.put",
+              "view": "w",
+              "key": "i",
+              "value": 1
+            },
+            {
+              "type": "map.put",
+              "view": "w",
+              "key": "d",
+              "value": 1
+            }
+          ],
+          "label": "window = \"id\"",
+          "note": "The window holds \"id\".",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-4",
+          "ops": [],
+          "label": "no match  →  slide right",
+          "note": "Not the right letters. Slide one step: one letter in, one letter out.",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-5",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                2
+              ],
+              "style": "compare"
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                3
+              ],
+              "style": "compare"
+            },
+            {
+              "type": "array.window",
+              "view": "b",
+              "from": 2,
+              "to": 3,
+              "label": "\"db\""
+            },
+            {
+              "type": "map.clear",
+              "view": "w"
+            },
+            {
+              "type": "map.put",
+              "view": "w",
+              "key": "d",
+              "value": 1
+            },
+            {
+              "type": "map.put",
+              "view": "w",
+              "key": "b",
+              "value": 1
+            }
+          ],
+          "label": "window = \"db\"",
+          "note": "The window holds \"db\".",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-6",
+          "ops": [],
+          "label": "no match  →  slide right",
+          "note": "Not the right letters. Slide one step: one letter in, one letter out.",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-7",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                3
+              ],
+              "style": "compare"
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                4
+              ],
+              "style": "compare"
+            },
+            {
+              "type": "array.window",
+              "view": "b",
+              "from": 3,
+              "to": 4,
+              "label": "\"ba\""
+            },
+            {
+              "type": "map.clear",
+              "view": "w"
+            },
+            {
+              "type": "map.put",
+              "view": "w",
+              "key": "b",
+              "value": 1
+            },
+            {
+              "type": "map.put",
+              "view": "w",
+              "key": "a",
+              "value": 1
+            }
+          ],
+          "label": "window = \"ba\"",
+          "note": "The window holds \"ba\".",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-8",
+          "ops": [
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                3
+              ],
+              "style": "match"
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                4
+              ],
+              "style": "match"
+            }
+          ],
+          "label": "counts match  →  found",
+          "note": "Same letters, same counts. That is a permutation of \"ab\".",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-9",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "array.windowClear",
+              "view": "b"
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                3,
+                4
+              ],
+              "style": "match"
+            },
+            {
+              "type": "result",
+              "value": "true"
+            }
+          ],
+          "note": "\"ba\" is a scramble of \"ab\", so the answer is yes.",
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "code-3",
+      "kind": "code",
+      "layout": [
+        {
+          "view": "ctext",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        },
+        {
+          "view": "code",
+          "col": 0,
+          "span": 12,
+          "row": 1,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 2,
+      "rowSizes": [
+        0.55,
+        1.44
+      ],
+      "slides": [
+        {
+          "id": "code-3-0",
+          "ops": [],
+          "note": "The counts we need, and the counts in the first window.",
+          "code": {
+            "view": "code",
+            "lines": [
+              1,
+              2
+            ]
+          },
+          "structural": false
+        },
+        {
+          "id": "code-3-1",
+          "ops": [],
+          "note": "Sliding is one letter in and one letter out — constant work per step.",
+          "code": {
+            "view": "code",
+            "lines": [
+              6,
+              7
+            ]
+          },
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "intuition-4",
+      "kind": "intuition",
+      "layout": [
+        {
+          "view": "otext",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 1,
+      "rowSizes": [
+        1.57
+      ],
+      "slides": [
+        {
+          "id": "intuition-4-0",
+          "ops": [],
+          "note": "A permutation has a fixed length, so the window never resizes. One letter in, one out, and compare.",
+          "structural": false
+        }
+      ]
+    }
+  ]
+}

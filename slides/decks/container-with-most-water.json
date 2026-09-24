@@ -1,0 +1,723 @@
+{
+  "schemaVersion": 1,
+  "edited": false,
+  "meta": {
+    "slug": "container-with-most-water",
+    "number": 11,
+    "title": "Container With Most Water",
+    "difficulty": "Medium",
+    "pattern": "two-pointers",
+    "tagline": "your weakest wall decides",
+    "format": "landscape"
+  },
+  "views": [
+    {
+      "id": "pb",
+      "label": "wall heights",
+      "kind": "bars",
+      "values": [
+        1,
+        8,
+        6,
+        2,
+        5,
+        4,
+        8,
+        3,
+        7
+      ],
+      "unit": "",
+      "showValues": true,
+      "xLabel": ""
+    },
+    {
+      "id": "b",
+      "label": "wall heights",
+      "kind": "bars",
+      "values": [
+        1,
+        8,
+        6,
+        2,
+        5,
+        4,
+        8,
+        3,
+        7
+      ],
+      "unit": "",
+      "showValues": true,
+      "xLabel": ""
+    },
+    {
+      "id": "v",
+      "kind": "vars",
+      "items": []
+    },
+    {
+      "id": "code",
+      "kind": "code",
+      "lang": "python",
+      "source": "left, right = 0, n - 1\nbest = 0\n\nwhile left < right:\n    depth = min(height[left], height[right])\n    water = depth * (right - left)\n    best  = max(best, water)\n\n    if height[left] < height[right]: left += 1\n    else: right -= 1"
+    },
+    {
+      "id": "ctext",
+      "kind": "text",
+      "title": "Code",
+      "body": [],
+      "variant": "plain"
+    },
+    {
+      "id": "otext",
+      "kind": "text",
+      "title": "Intuition",
+      "body": [
+        "The width only ever shrinks.",
+        "So the only way to win",
+        "is a taller short wall."
+      ],
+      "variant": "big"
+    }
+  ],
+  "sections": [
+    {
+      "id": "hook-0",
+      "kind": "hook",
+      "layout": [],
+      "rows": 1,
+      "slides": [
+        {
+          "id": "hook-0-0",
+          "ops": [],
+          "label": "Two walls. Most water.",
+          "note": "Container With Most Water.",
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "problem-1",
+      "kind": "problem",
+      "layout": [
+        {
+          "view": "pb",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 1,
+      "rowSizes": [
+        1.9
+      ],
+      "slides": [
+        {
+          "id": "problem-1-0",
+          "ops": [],
+          "label": "each bar is a wall",
+          "note": "Each bar is a wall. Pick two, and they hold water between them.",
+          "structural": false
+        },
+        {
+          "id": "problem-1-1",
+          "ops": [],
+          "label": "depth = shorter wall  ·  width = gap",
+          "note": "Depth is the shorter wall, width is the gap between them. Find the biggest.",
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "walkthrough-2",
+      "kind": "walkthrough",
+      "layout": [
+        {
+          "view": "b",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        },
+        {
+          "view": "v",
+          "col": 0,
+          "span": 12,
+          "row": 1,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 2,
+      "rowSizes": [
+        1.9,
+        0.42
+      ],
+      "slides": [
+        {
+          "id": "walkthrough-2-0",
+          "ops": [
+            {
+              "type": "pointer.set",
+              "view": "b",
+              "name": "L",
+              "index": 0,
+              "color": "danger"
+            },
+            {
+              "type": "pointer.set",
+              "view": "b",
+              "name": "R",
+              "index": 8,
+              "color": "success"
+            },
+            {
+              "type": "bars.area",
+              "view": "b",
+              "from": 0,
+              "to": 8,
+              "height": 1,
+              "label": "1 × 8 = 8",
+              "style": "fill"
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "best",
+              "value": 8
+            }
+          ],
+          "label": "1 × 8 = 8",
+          "note": "Start as wide as possible. Depth one, width eight — eight units.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-1",
+          "ops": [
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                0
+              ],
+              "style": "bad"
+            }
+          ],
+          "label": "the short wall caps the water",
+          "note": "1 is the shorter wall, so it is what caps the water.",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-2",
+          "ops": [
+            {
+              "type": "callout",
+              "text": "Move the shorter wall — always",
+              "variant": "insight"
+            },
+            {
+              "type": "callout",
+              "text": "The tall wall is not the problem.",
+              "variant": "aside"
+            }
+          ],
+          "label": "moving the tall wall can only lose",
+          "note": "Move the tall one and the cap stays the same while the width shrinks, so it can only lose. The short one is the only move that can help.",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-3",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "pointer.move",
+              "view": "b",
+              "name": "L",
+              "index": 1
+            },
+            {
+              "type": "pointer.move",
+              "view": "b",
+              "name": "R",
+              "index": 8
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                1
+              ],
+              "style": "bad"
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                8
+              ],
+              "style": "match"
+            },
+            {
+              "type": "bars.area",
+              "view": "b",
+              "from": 1,
+              "to": 8,
+              "height": 7,
+              "label": "7 × 7 = 49",
+              "style": "fill"
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "best",
+              "value": 49
+            }
+          ],
+          "label": "7 × 7 = 49  >  8",
+          "note": "7 deep, 7 wide — that is 49, beating 8.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-4",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "pointer.move",
+              "view": "b",
+              "name": "L",
+              "index": 1
+            },
+            {
+              "type": "pointer.move",
+              "view": "b",
+              "name": "R",
+              "index": 7
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                1
+              ],
+              "style": "bad"
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                7
+              ],
+              "style": "match"
+            },
+            {
+              "type": "bars.area",
+              "view": "b",
+              "from": 1,
+              "to": 7,
+              "height": 3,
+              "label": "3 × 6 = 18",
+              "style": "fill"
+            }
+          ],
+          "label": "3 × 6 = 18  ≤  49",
+          "note": "3 deep, 6 wide — only 18. Best stays 49.",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-5",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "pointer.move",
+              "view": "b",
+              "name": "L",
+              "index": 1
+            },
+            {
+              "type": "pointer.move",
+              "view": "b",
+              "name": "R",
+              "index": 6
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                1
+              ],
+              "style": "bad"
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                6
+              ],
+              "style": "match"
+            },
+            {
+              "type": "bars.area",
+              "view": "b",
+              "from": 1,
+              "to": 6,
+              "height": 8,
+              "label": "8 × 5 = 40",
+              "style": "fill"
+            }
+          ],
+          "label": "8 × 5 = 40  ≤  49",
+          "note": "8 deep, 5 wide — only 40. Best stays 49.",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-6",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "pointer.move",
+              "view": "b",
+              "name": "L",
+              "index": 1
+            },
+            {
+              "type": "pointer.move",
+              "view": "b",
+              "name": "R",
+              "index": 5
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                1
+              ],
+              "style": "bad"
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                5
+              ],
+              "style": "match"
+            },
+            {
+              "type": "bars.area",
+              "view": "b",
+              "from": 1,
+              "to": 5,
+              "height": 4,
+              "label": "4 × 4 = 16",
+              "style": "fill"
+            }
+          ],
+          "label": "4 × 4 = 16  ≤  49",
+          "note": "From here the gap keeps shrinking, so nothing catches up.",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-7",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "pointer.move",
+              "view": "b",
+              "name": "L",
+              "index": 1
+            },
+            {
+              "type": "pointer.move",
+              "view": "b",
+              "name": "R",
+              "index": 4
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                1
+              ],
+              "style": "bad"
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                4
+              ],
+              "style": "match"
+            },
+            {
+              "type": "bars.area",
+              "view": "b",
+              "from": 1,
+              "to": 4,
+              "height": 5,
+              "label": "5 × 3 = 15",
+              "style": "fill"
+            }
+          ],
+          "label": "5 × 3 = 15  ≤  49",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-8",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "pointer.move",
+              "view": "b",
+              "name": "L",
+              "index": 1
+            },
+            {
+              "type": "pointer.move",
+              "view": "b",
+              "name": "R",
+              "index": 3
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                1
+              ],
+              "style": "bad"
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                3
+              ],
+              "style": "match"
+            },
+            {
+              "type": "bars.area",
+              "view": "b",
+              "from": 1,
+              "to": 3,
+              "height": 2,
+              "label": "2 × 2 = 4",
+              "style": "fill"
+            }
+          ],
+          "label": "2 × 2 = 4  ≤  49",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-9",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "pointer.move",
+              "view": "b",
+              "name": "L",
+              "index": 1
+            },
+            {
+              "type": "pointer.move",
+              "view": "b",
+              "name": "R",
+              "index": 2
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                1
+              ],
+              "style": "bad"
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                2
+              ],
+              "style": "match"
+            },
+            {
+              "type": "bars.area",
+              "view": "b",
+              "from": 1,
+              "to": 2,
+              "height": 6,
+              "label": "6 × 1 = 6",
+              "style": "fill"
+            }
+          ],
+          "label": "6 × 1 = 6  ≤  49",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-10",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "pointer.drop",
+              "view": "b",
+              "name": "L"
+            },
+            {
+              "type": "pointer.drop",
+              "view": "b",
+              "name": "R"
+            },
+            {
+              "type": "bars.areaClear",
+              "view": "b"
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                1
+              ],
+              "style": "match"
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                8
+              ],
+              "style": "match"
+            },
+            {
+              "type": "bars.area",
+              "view": "b",
+              "from": 1,
+              "to": 8,
+              "height": 7,
+              "label": "49",
+              "style": "fill"
+            },
+            {
+              "type": "result",
+              "value": "49",
+              "label": "Max water"
+            }
+          ],
+          "note": "The pointers meet, and forty-nine is the most we could hold.",
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "code-3",
+      "kind": "code",
+      "layout": [
+        {
+          "view": "ctext",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        },
+        {
+          "view": "code",
+          "col": 0,
+          "span": 12,
+          "row": 1,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 2,
+      "rowSizes": [
+        0.55,
+        1.7000000000000002
+      ],
+      "slides": [
+        {
+          "id": "code-3-0",
+          "ops": [],
+          "note": "Start at both ends.",
+          "code": {
+            "view": "code",
+            "lines": [
+              1,
+              2
+            ]
+          },
+          "structural": false
+        },
+        {
+          "id": "code-3-1",
+          "ops": [],
+          "note": "Measure this pair.",
+          "code": {
+            "view": "code",
+            "lines": [
+              4,
+              5,
+              6
+            ]
+          },
+          "structural": false
+        },
+        {
+          "id": "code-3-2",
+          "ops": [],
+          "note": "Then step the shorter wall inward.",
+          "code": {
+            "view": "code",
+            "lines": [
+              8,
+              9
+            ]
+          },
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "intuition-4",
+      "kind": "intuition",
+      "layout": [
+        {
+          "view": "otext",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 1,
+      "rowSizes": [
+        1.57
+      ],
+      "slides": [
+        {
+          "id": "intuition-4-0",
+          "ops": [],
+          "note": "The width only ever shrinks, so the only way to win is a taller short wall.",
+          "structural": false
+        }
+      ]
+    }
+  ]
+}
