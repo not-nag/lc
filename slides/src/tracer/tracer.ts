@@ -120,6 +120,9 @@ export class Tracer {
     return this;
   }
 
+  /** A slide that changes nothing — a pause to talk over. */
+  hold(label?: string) { return this.slide(label); }
+
   /**
    * Presenter note for the slide being built — what you plan to say over it.
    * Never rendered to the viewer.
