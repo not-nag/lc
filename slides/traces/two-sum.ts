@@ -32,15 +32,13 @@ export function trace(t: Tracer) {
   /* ── the ask ────────────────────────────────────────── */
   const pn = t.array("pn", NUMS, { label: "nums · target 9" });
   t.section("problem", { show: ["pn"] });
+  // State the task without showing which pair — the walkthrough is the payoff.
   t.say("Four numbers, and a target of nine.");
   t.slide("target = 9");
-  pn.highlight([2, 3], "match");
-  pn.link(2, 3, "7 + 2 = 9");
-  t.say("Two of them add up to it.");
-  t.slide("7 + 2 = 9");
-  pn.clear(); pn.linkClear();
-  t.say("We want their positions — index two and index three.");
-  t.slide("answer = [2, 3]");
+  t.say("Exactly two of them add up to it. We have to find which two.");
+  t.slide("two of these add up to 9");
+  t.say("And we return where they sit, not what they are.");
+  t.slide("return their two indices");
 
   /* ── the walkthrough: one change per slide ──────────── */
   const a = t.array("a", NUMS, { label: "nums · target 9" });

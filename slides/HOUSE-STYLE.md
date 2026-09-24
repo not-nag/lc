@@ -15,6 +15,9 @@ One optimal solution, its intuition, and a dry run. Nothing else.
 
 1. **hook** — `t.section("hook")` with no `show`. One slide, one punchy line.
 2. **problem** — two or three slides. The input on screen and what is being asked. That is all.
+   **Never show the answer here.** Do not highlight the winning pair, draw the connecting arc,
+   or state the result. The walkthrough is the payoff; spoiling it removes any reason to watch.
+   Pose the question — "two of these add up to 9", "return their two indices" — and stop.
 3. **walkthrough** — most of the deck. A dry run on a small input, one decision per slide.
    The intuition lives *here*, as one `t.callout(...)` at the moment it becomes obvious —
    not in a lecture beforehand.
