@@ -1,0 +1,473 @@
+{
+  "schemaVersion": 1,
+  "edited": false,
+  "meta": {
+    "slug": "valid-anagram",
+    "number": 242,
+    "title": "Valid Anagram",
+    "difficulty": "Easy",
+    "pattern": "hash-count",
+    "tagline": "same letters, different order",
+    "format": "landscape"
+  },
+  "views": [
+    {
+      "id": "ps",
+      "label": "s",
+      "kind": "string",
+      "value": "cat",
+      "showIndices": true
+    },
+    {
+      "id": "pt",
+      "label": "t",
+      "kind": "string",
+      "value": "act",
+      "showIndices": true
+    },
+    {
+      "id": "a",
+      "label": "s",
+      "kind": "string",
+      "value": "cat",
+      "showIndices": true
+    },
+    {
+      "id": "b",
+      "label": "t",
+      "kind": "string",
+      "value": "act",
+      "showIndices": true
+    },
+    {
+      "id": "c",
+      "label": "letter counts",
+      "kind": "map",
+      "entries": [],
+      "keyLabel": "key",
+      "valueLabel": "value",
+      "asSet": false
+    },
+    {
+      "id": "code",
+      "kind": "code",
+      "lang": "python",
+      "source": "count = {}\n\nfor ch in s:\n    count[ch] = count.get(ch, 0) + 1\nfor ch in t:\n    count[ch] = count.get(ch, 0) - 1\n\nreturn all(v == 0 for v in count.values())"
+    },
+    {
+      "id": "ctext",
+      "kind": "text",
+      "title": "Code",
+      "body": [],
+      "variant": "plain"
+    },
+    {
+      "id": "otext",
+      "kind": "text",
+      "title": "Intuition",
+      "body": [
+        "Count the letters going in.",
+        "Take the same letters out.",
+        "Anything left over means they differ."
+      ],
+      "variant": "big"
+    }
+  ],
+  "sections": [
+    {
+      "id": "hook-0",
+      "kind": "hook",
+      "layout": [],
+      "rows": 1,
+      "slides": [
+        {
+          "id": "hook-0-0",
+          "ops": [],
+          "label": "Same letters, different order",
+          "note": "Valid Anagram, in one pass each way.",
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "problem-1",
+      "kind": "problem",
+      "layout": [
+        {
+          "view": "ps",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        },
+        {
+          "view": "pt",
+          "col": 0,
+          "span": 12,
+          "row": 1,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 2,
+      "rowSizes": [
+        1.3,
+        1.3
+      ],
+      "slides": [
+        {
+          "id": "problem-1-0",
+          "ops": [],
+          "label": "are these anagrams?",
+          "note": "Two words. Are they made of exactly the same letters?",
+          "structural": false
+        },
+        {
+          "id": "problem-1-1",
+          "ops": [],
+          "label": "sorting works — but costs n log n",
+          "note": "Sorting both would work, but that costs n log n. We can do better.",
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "walkthrough-2",
+      "kind": "walkthrough",
+      "layout": [
+        {
+          "view": "a",
+          "col": 0,
+          "span": 6,
+          "row": 0,
+          "rowSpan": 1
+        },
+        {
+          "view": "b",
+          "col": 6,
+          "span": 6,
+          "row": 0,
+          "rowSpan": 1
+        },
+        {
+          "view": "c",
+          "col": 0,
+          "span": 12,
+          "row": 1,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 2,
+      "rowSizes": [
+        1.3,
+        1
+      ],
+      "slides": [
+        {
+          "id": "walkthrough-2-0",
+          "ops": [],
+          "label": "count = {}",
+          "note": "Keep one tally. Every letter in the first word pushes its count up.",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-1",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "a"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                0
+              ],
+              "style": "active"
+            },
+            {
+              "type": "map.put",
+              "view": "c",
+              "key": "c",
+              "value": 1
+            }
+          ],
+          "label": "c  →  1",
+          "note": "c in the first word, so its count goes up.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-2",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "a"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                1
+              ],
+              "style": "active"
+            },
+            {
+              "type": "map.put",
+              "view": "c",
+              "key": "a",
+              "value": 1
+            }
+          ],
+          "label": "a  →  1",
+          "note": "a in the first word, so its count goes up.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-3",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "a"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                2
+              ],
+              "style": "active"
+            },
+            {
+              "type": "map.put",
+              "view": "c",
+              "key": "t",
+              "value": 1
+            }
+          ],
+          "label": "t  →  1",
+          "note": "t in the first word, so its count goes up.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-4",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "a"
+            }
+          ],
+          "label": "now subtract the second word",
+          "note": "Now the second word pulls every count back down.",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-5",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                0
+              ],
+              "style": "active"
+            },
+            {
+              "type": "map.put",
+              "view": "c",
+              "key": "a",
+              "value": 0
+            }
+          ],
+          "label": "a  →  0",
+          "note": "a in the second word, so its count comes back down.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-6",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                1
+              ],
+              "style": "active"
+            },
+            {
+              "type": "map.put",
+              "view": "c",
+              "key": "c",
+              "value": 0
+            }
+          ],
+          "label": "c  →  0",
+          "note": "c in the second word, so its count comes back down.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-7",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "array.highlight",
+              "view": "b",
+              "indices": [
+                2
+              ],
+              "style": "active"
+            },
+            {
+              "type": "map.put",
+              "view": "c",
+              "key": "t",
+              "value": 0
+            }
+          ],
+          "label": "t  →  0",
+          "note": "t in the second word, so its count comes back down.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-8",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "b"
+            },
+            {
+              "type": "callout",
+              "text": "Every count back to zero means the same letters",
+              "variant": "insight"
+            }
+          ],
+          "label": "all zero  →  anagram",
+          "note": "Every tally is back to zero. The words used exactly the same letters.",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-9",
+          "ops": [
+            {
+              "type": "result",
+              "value": "true",
+              "label": "Anagram"
+            }
+          ],
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "code-3",
+      "kind": "code",
+      "layout": [
+        {
+          "view": "ctext",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        },
+        {
+          "view": "code",
+          "col": 0,
+          "span": 12,
+          "row": 1,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 2,
+      "rowSizes": [
+        0.55,
+        1.44
+      ],
+      "slides": [
+        {
+          "id": "code-3-0",
+          "ops": [],
+          "note": "One tally for every letter.",
+          "code": {
+            "view": "code",
+            "lines": [
+              1
+            ]
+          },
+          "structural": false
+        },
+        {
+          "id": "code-3-1",
+          "ops": [],
+          "note": "The first word counts up.",
+          "code": {
+            "view": "code",
+            "lines": [
+              3,
+              4
+            ]
+          },
+          "structural": false
+        },
+        {
+          "id": "code-3-2",
+          "ops": [],
+          "note": "The second counts down.",
+          "code": {
+            "view": "code",
+            "lines": [
+              5,
+              6
+            ]
+          },
+          "structural": false
+        },
+        {
+          "id": "code-3-3",
+          "ops": [],
+          "note": "If nothing is left over, they match.",
+          "code": {
+            "view": "code",
+            "lines": [
+              8
+            ]
+          },
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "intuition-4",
+      "kind": "intuition",
+      "layout": [
+        {
+          "view": "otext",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 1,
+      "rowSizes": [
+        1.57
+      ],
+      "slides": [
+        {
+          "id": "intuition-4-0",
+          "ops": [],
+          "note": "Count them in, take them out, and see if anything is left.",
+          "structural": false
+        }
+      ]
+    }
+  ]
+}

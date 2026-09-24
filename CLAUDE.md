@@ -112,5 +112,10 @@ reducer cases in `engine/reduce.ts` + `engine/state.ts`, renderer in `views/`, h
 - **TypeScript pinned to 5.x.** TS 7 breaks Next's config loader.
 - **Never touch `.next` while the dev server runs** — `rm -rf .next`, `npm run build`, anything.
   Use `npm run reset`, then `npm run dev`.
+- **Landscape is short on height, not width.** A tall view (a 9×9 grid, a long code pane)
+  should sit *beside* its companion, not above it: `show: [["g", "s"]]`.
+- **Panes clip their content** (`overflow: hidden`), so a view that outgrows its pane is cut
+  rather than bleeding into the slide label. If something looks cropped, the section is
+  showing one thing too many.
 - **Prefer anchored string edits over line ranges** when patching files; a line-range splice
   once deleted a whole render block that sat between two blocks being merged.

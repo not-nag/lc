@@ -1,0 +1,787 @@
+{
+  "schemaVersion": 1,
+  "edited": false,
+  "meta": {
+    "slug": "product-of-array-except-self",
+    "number": 238,
+    "title": "Product of Array Except Self",
+    "difficulty": "Medium",
+    "pattern": "prefix-suffix",
+    "tagline": "no division, no problem",
+    "format": "landscape"
+  },
+  "views": [
+    {
+      "id": "pn",
+      "label": "nums",
+      "kind": "array",
+      "values": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "showIndices": true
+    },
+    {
+      "id": "a",
+      "label": "nums",
+      "kind": "array",
+      "values": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "showIndices": true
+    },
+    {
+      "id": "out",
+      "label": "out",
+      "kind": "array",
+      "values": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "showIndices": true
+    },
+    {
+      "id": "v",
+      "kind": "vars",
+      "items": []
+    },
+    {
+      "id": "code",
+      "kind": "code",
+      "lang": "python",
+      "source": "out = [1] * n\n\nrunning = 1\nfor i in range(n):\n    out[i] = running\n    running *= nums[i]\n\nrunning = 1\nfor i in range(n - 1, -1, -1):\n    out[i] *= running\n    running *= nums[i]"
+    },
+    {
+      "id": "ctext",
+      "kind": "text",
+      "title": "Code",
+      "body": [],
+      "variant": "plain"
+    },
+    {
+      "id": "otext",
+      "kind": "text",
+      "title": "Intuition",
+      "body": [
+        "Everything except me",
+        "is everything on my left",
+        "times everything on my right."
+      ],
+      "variant": "big"
+    }
+  ],
+  "sections": [
+    {
+      "id": "hook-0",
+      "kind": "hook",
+      "layout": [],
+      "rows": 1,
+      "slides": [
+        {
+          "id": "hook-0-0",
+          "ops": [],
+          "label": "Every product except your own",
+          "note": "Product of Array Except Self, without dividing.",
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "problem-1",
+      "kind": "problem",
+      "layout": [
+        {
+          "view": "pn",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 1,
+      "rowSizes": [
+        1.3
+      ],
+      "slides": [
+        {
+          "id": "problem-1-0",
+          "ops": [],
+          "label": "out[i] = product of everything but nums[i]",
+          "note": "For each position, multiply everything except the number sitting there.",
+          "structural": false
+        },
+        {
+          "id": "problem-1-1",
+          "ops": [],
+          "label": "no division allowed",
+          "note": "Dividing the total product would be easy — but a single zero breaks it, and the problem forbids it anyway.",
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "walkthrough-2",
+      "kind": "walkthrough",
+      "layout": [
+        {
+          "view": "a",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        },
+        {
+          "view": "out",
+          "col": 0,
+          "span": 12,
+          "row": 1,
+          "rowSpan": 1
+        },
+        {
+          "view": "v",
+          "col": 0,
+          "span": 12,
+          "row": 2,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 3,
+      "rowSizes": [
+        1.3,
+        1.3,
+        0.42
+      ],
+      "slides": [
+        {
+          "id": "walkthrough-2-0",
+          "ops": [],
+          "label": "left of me  ×  right of me",
+          "note": "Everything except me is everything on my left, times everything on my right.",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-1",
+          "ops": [
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "running",
+              "value": 1
+            }
+          ],
+          "label": "sweep 1 — from the left",
+          "note": "First sweep runs left to right, carrying the product of everything behind us.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-2",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "a"
+            },
+            {
+              "type": "array.clear",
+              "view": "out"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                0
+              ],
+              "style": "active"
+            },
+            {
+              "type": "array.setValue",
+              "view": "out",
+              "index": 0,
+              "value": 1
+            },
+            {
+              "type": "array.highlight",
+              "view": "out",
+              "indices": [
+                0
+              ],
+              "style": "match"
+            }
+          ],
+          "label": "out[0] = 1",
+          "note": "Everything to the left of 1 multiplies to 1.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-3",
+          "ops": [
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "running",
+              "value": 1
+            }
+          ],
+          "label": "running × 1 = 1",
+          "note": "Fold 1 in and carry on.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-4",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "a"
+            },
+            {
+              "type": "array.clear",
+              "view": "out"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                1
+              ],
+              "style": "active"
+            },
+            {
+              "type": "array.window",
+              "view": "a",
+              "from": 0,
+              "to": 0,
+              "label": "behind us"
+            },
+            {
+              "type": "array.setValue",
+              "view": "out",
+              "index": 1,
+              "value": 1
+            },
+            {
+              "type": "array.highlight",
+              "view": "out",
+              "indices": [
+                1
+              ],
+              "style": "match"
+            }
+          ],
+          "label": "out[1] = 1",
+          "note": "Everything to the left of 2 multiplies to 1.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-5",
+          "ops": [
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "running",
+              "value": 2
+            }
+          ],
+          "label": "running × 2 = 2",
+          "note": "Fold 2 in and carry on.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-6",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "a"
+            },
+            {
+              "type": "array.clear",
+              "view": "out"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                2
+              ],
+              "style": "active"
+            },
+            {
+              "type": "array.window",
+              "view": "a",
+              "from": 0,
+              "to": 1,
+              "label": "behind us"
+            },
+            {
+              "type": "array.setValue",
+              "view": "out",
+              "index": 2,
+              "value": 2
+            },
+            {
+              "type": "array.highlight",
+              "view": "out",
+              "indices": [
+                2
+              ],
+              "style": "match"
+            }
+          ],
+          "label": "out[2] = 2",
+          "note": "Everything to the left of 3 multiplies to 2.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-7",
+          "ops": [
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "running",
+              "value": 6
+            }
+          ],
+          "label": "running × 3 = 6",
+          "note": "Fold 3 in and carry on.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-8",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "a"
+            },
+            {
+              "type": "array.clear",
+              "view": "out"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                3
+              ],
+              "style": "active"
+            },
+            {
+              "type": "array.window",
+              "view": "a",
+              "from": 0,
+              "to": 2,
+              "label": "behind us"
+            },
+            {
+              "type": "array.setValue",
+              "view": "out",
+              "index": 3,
+              "value": 6
+            },
+            {
+              "type": "array.highlight",
+              "view": "out",
+              "indices": [
+                3
+              ],
+              "style": "match"
+            }
+          ],
+          "label": "out[3] = 6",
+          "note": "Everything to the left of 4 multiplies to 6.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-9",
+          "ops": [
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "running",
+              "value": 24
+            }
+          ],
+          "label": "running × 4 = 24",
+          "note": "Fold 4 in and carry on.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-10",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "a"
+            },
+            {
+              "type": "array.clear",
+              "view": "out"
+            },
+            {
+              "type": "array.windowClear",
+              "view": "a"
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "running",
+              "value": 1
+            },
+            {
+              "type": "callout",
+              "text": "The same trick, walked backwards",
+              "variant": "insight"
+            }
+          ],
+          "label": "sweep 2 — from the right",
+          "note": "Now the same sweep in reverse, multiplying in everything ahead.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-11",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "a"
+            },
+            {
+              "type": "array.clear",
+              "view": "out"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                3
+              ],
+              "style": "active"
+            },
+            {
+              "type": "array.setValue",
+              "view": "out",
+              "index": 3,
+              "value": 6
+            },
+            {
+              "type": "array.highlight",
+              "view": "out",
+              "indices": [
+                3
+              ],
+              "style": "match"
+            }
+          ],
+          "label": "6 × 1 = 6",
+          "note": "Everything to the right multiplies to 1, so out[3] becomes 6.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-12",
+          "ops": [
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "running",
+              "value": 4
+            }
+          ],
+          "label": "running × 4 = 4",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-13",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "a"
+            },
+            {
+              "type": "array.clear",
+              "view": "out"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                2
+              ],
+              "style": "active"
+            },
+            {
+              "type": "array.window",
+              "view": "a",
+              "from": 3,
+              "to": 3,
+              "label": "ahead of us"
+            },
+            {
+              "type": "array.setValue",
+              "view": "out",
+              "index": 2,
+              "value": 8
+            },
+            {
+              "type": "array.highlight",
+              "view": "out",
+              "indices": [
+                2
+              ],
+              "style": "match"
+            }
+          ],
+          "label": "2 × 4 = 8",
+          "note": "Everything to the right multiplies to 4, so out[2] becomes 8.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-14",
+          "ops": [
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "running",
+              "value": 12
+            }
+          ],
+          "label": "running × 3 = 12",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-15",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "a"
+            },
+            {
+              "type": "array.clear",
+              "view": "out"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                1
+              ],
+              "style": "active"
+            },
+            {
+              "type": "array.window",
+              "view": "a",
+              "from": 2,
+              "to": 3,
+              "label": "ahead of us"
+            },
+            {
+              "type": "array.setValue",
+              "view": "out",
+              "index": 1,
+              "value": 12
+            },
+            {
+              "type": "array.highlight",
+              "view": "out",
+              "indices": [
+                1
+              ],
+              "style": "match"
+            }
+          ],
+          "label": "1 × 12 = 12",
+          "note": "Everything to the right multiplies to 12, so out[1] becomes 12.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-16",
+          "ops": [
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "running",
+              "value": 24
+            }
+          ],
+          "label": "running × 2 = 24",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-17",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "a"
+            },
+            {
+              "type": "array.clear",
+              "view": "out"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                0
+              ],
+              "style": "active"
+            },
+            {
+              "type": "array.window",
+              "view": "a",
+              "from": 1,
+              "to": 3,
+              "label": "ahead of us"
+            },
+            {
+              "type": "array.setValue",
+              "view": "out",
+              "index": 0,
+              "value": 24
+            },
+            {
+              "type": "array.highlight",
+              "view": "out",
+              "indices": [
+                0
+              ],
+              "style": "match"
+            }
+          ],
+          "label": "1 × 24 = 24",
+          "note": "Everything to the right multiplies to 24, so out[0] becomes 24.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-18",
+          "ops": [
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "running",
+              "value": 24
+            }
+          ],
+          "label": "running × 1 = 24",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-19",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "a"
+            },
+            {
+              "type": "array.windowClear",
+              "view": "a"
+            },
+            {
+              "type": "array.clear",
+              "view": "out"
+            },
+            {
+              "type": "array.highlight",
+              "view": "out",
+              "indices": [
+                0,
+                1,
+                2,
+                3
+              ],
+              "style": "match"
+            },
+            {
+              "type": "result",
+              "value": "[24,12,8,6]"
+            }
+          ],
+          "note": "Two sweeps, no division, and every position holds the product of all the others.",
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "code-3",
+      "kind": "code",
+      "layout": [
+        {
+          "view": "ctext",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        },
+        {
+          "view": "code",
+          "col": 0,
+          "span": 12,
+          "row": 1,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 2,
+      "rowSizes": [
+        0.55,
+        1.83
+      ],
+      "slides": [
+        {
+          "id": "code-3-0",
+          "ops": [],
+          "note": "Left to right, writing the product of everything behind.",
+          "code": {
+            "view": "code",
+            "lines": [
+              3,
+              4,
+              5,
+              6
+            ]
+          },
+          "structural": false
+        },
+        {
+          "id": "code-3-1",
+          "ops": [],
+          "note": "Right to left, multiplying in everything ahead.",
+          "code": {
+            "view": "code",
+            "lines": [
+              8,
+              9,
+              10,
+              11
+            ]
+          },
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "intuition-4",
+      "kind": "intuition",
+      "layout": [
+        {
+          "view": "otext",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 1,
+      "rowSizes": [
+        1.57
+      ],
+      "slides": [
+        {
+          "id": "intuition-4-0",
+          "ops": [],
+          "note": "Everything except me is everything on my left times everything on my right.",
+          "structural": false
+        }
+      ]
+    }
+  ]
+}

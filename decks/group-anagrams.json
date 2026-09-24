@@ -1,0 +1,503 @@
+{
+  "schemaVersion": 1,
+  "edited": false,
+  "meta": {
+    "slug": "group-anagrams",
+    "number": 49,
+    "title": "Group Anagrams",
+    "difficulty": "Medium",
+    "pattern": "hash-key",
+    "tagline": "same letters, same shelf",
+    "format": "landscape"
+  },
+  "views": [
+    {
+      "id": "pw",
+      "label": "strs",
+      "kind": "array",
+      "values": [
+        "eat",
+        "tea",
+        "tan",
+        "ate",
+        "bat"
+      ],
+      "showIndices": true
+    },
+    {
+      "id": "a",
+      "label": "strs",
+      "kind": "array",
+      "values": [
+        "eat",
+        "tea",
+        "tan",
+        "ate",
+        "bat"
+      ],
+      "showIndices": true
+    },
+    {
+      "id": "g",
+      "label": "sorted letters  →  group",
+      "kind": "map",
+      "entries": [],
+      "keyLabel": "key",
+      "valueLabel": "value",
+      "asSet": false
+    },
+    {
+      "id": "code",
+      "kind": "code",
+      "lang": "python",
+      "source": "groups = defaultdict(list)\n\nfor word in strs:\n    key = \"\".join(sorted(word))\n    groups[key].append(word)\n\nreturn list(groups.values())"
+    },
+    {
+      "id": "ctext",
+      "kind": "text",
+      "title": "Code",
+      "body": [],
+      "variant": "plain"
+    },
+    {
+      "id": "otext",
+      "kind": "text",
+      "title": "Intuition",
+      "body": [
+        "Anagrams are the same word",
+        "once you sort the letters.",
+        "So sort it, and use that as the name."
+      ],
+      "variant": "big"
+    }
+  ],
+  "sections": [
+    {
+      "id": "hook-0",
+      "kind": "hook",
+      "layout": [],
+      "rows": 1,
+      "slides": [
+        {
+          "id": "hook-0-0",
+          "ops": [],
+          "label": "Put the anagrams together",
+          "note": "Group Anagrams, in one pass.",
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "problem-1",
+      "kind": "problem",
+      "layout": [
+        {
+          "view": "pw",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 1,
+      "rowSizes": [
+        1.3
+      ],
+      "slides": [
+        {
+          "id": "problem-1-0",
+          "ops": [],
+          "label": "group words with the same letters",
+          "note": "Group the words that are made of the same letters.",
+          "structural": false
+        },
+        {
+          "id": "problem-1-1",
+          "ops": [],
+          "label": "comparing every pair is O(n²)",
+          "note": "Comparing every word against every other would be quadratic. We want one pass.",
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "walkthrough-2",
+      "kind": "walkthrough",
+      "layout": [
+        {
+          "view": "a",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        },
+        {
+          "view": "g",
+          "col": 0,
+          "span": 12,
+          "row": 1,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 2,
+      "rowSizes": [
+        1.3,
+        1
+      ],
+      "slides": [
+        {
+          "id": "walkthrough-2-0",
+          "ops": [],
+          "label": "sort the letters  →  a shared key",
+          "note": "Anagrams look different, but sorting their letters makes them identical. That sorted form is the shelf they belong on.",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-1",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "a"
+            },
+            {
+              "type": "array.tagClear",
+              "view": "a"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                0
+              ],
+              "style": "active"
+            },
+            {
+              "type": "array.tag",
+              "view": "a",
+              "index": 0,
+              "text": "sorts to \"aet\"",
+              "variant": "want"
+            }
+          ],
+          "label": "\"eat\"  →  \"aet\"",
+          "note": "\"eat\" sorted is \"aet\".",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-2",
+          "ops": [
+            {
+              "type": "map.put",
+              "view": "g",
+              "key": "aet",
+              "value": "eat"
+            }
+          ],
+          "label": "new shelf \"aet\"",
+          "note": "No shelf for \"aet\" yet, so start one.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-3",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "a"
+            },
+            {
+              "type": "array.tagClear",
+              "view": "a"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                1
+              ],
+              "style": "active"
+            },
+            {
+              "type": "array.tag",
+              "view": "a",
+              "index": 1,
+              "text": "sorts to \"aet\"",
+              "variant": "want"
+            }
+          ],
+          "label": "\"tea\"  →  \"aet\"",
+          "note": "\"tea\" sorted is \"aet\".",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-4",
+          "ops": [
+            {
+              "type": "map.put",
+              "view": "g",
+              "key": "aet",
+              "value": "eat, tea"
+            },
+            {
+              "type": "map.highlight",
+              "view": "g",
+              "key": "aet",
+              "style": "match"
+            }
+          ],
+          "label": "\"aet\" exists  →  add \"tea\"",
+          "note": "That shelf already exists, so \"tea\" joins it.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-5",
+          "ops": [
+            {
+              "type": "callout",
+              "text": "The sorted word is the group's name",
+              "variant": "insight"
+            }
+          ],
+          "label": "anagrams share one sorted form",
+          "note": "That is the whole trick. Two words are anagrams exactly when their sorted letters match, so the sorted form can name the group.",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-6",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "a"
+            },
+            {
+              "type": "array.tagClear",
+              "view": "a"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                2
+              ],
+              "style": "active"
+            },
+            {
+              "type": "array.tag",
+              "view": "a",
+              "index": 2,
+              "text": "sorts to \"ant\"",
+              "variant": "want"
+            }
+          ],
+          "label": "\"tan\"  →  \"ant\"",
+          "note": "\"tan\" sorted is \"ant\".",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-7",
+          "ops": [
+            {
+              "type": "map.put",
+              "view": "g",
+              "key": "ant",
+              "value": "tan"
+            }
+          ],
+          "label": "new shelf \"ant\"",
+          "note": "No shelf for \"ant\" yet, so start one.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-8",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "a"
+            },
+            {
+              "type": "array.tagClear",
+              "view": "a"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                3
+              ],
+              "style": "active"
+            },
+            {
+              "type": "array.tag",
+              "view": "a",
+              "index": 3,
+              "text": "sorts to \"aet\"",
+              "variant": "want"
+            }
+          ],
+          "label": "\"ate\"  →  \"aet\"",
+          "note": "\"ate\" sorted is \"aet\".",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-9",
+          "ops": [
+            {
+              "type": "map.put",
+              "view": "g",
+              "key": "aet",
+              "value": "eat, tea, ate"
+            },
+            {
+              "type": "map.highlight",
+              "view": "g",
+              "key": "aet",
+              "style": "match"
+            }
+          ],
+          "label": "\"aet\" exists  →  add \"ate\"",
+          "note": "That shelf already exists, so \"ate\" joins it.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-10",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "a"
+            },
+            {
+              "type": "array.tagClear",
+              "view": "a"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                4
+              ],
+              "style": "active"
+            },
+            {
+              "type": "array.tag",
+              "view": "a",
+              "index": 4,
+              "text": "sorts to \"abt\"",
+              "variant": "want"
+            }
+          ],
+          "label": "\"bat\"  →  \"abt\"",
+          "note": "\"bat\" sorted is \"abt\".",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-11",
+          "ops": [
+            {
+              "type": "map.put",
+              "view": "g",
+              "key": "abt",
+              "value": "bat"
+            }
+          ],
+          "label": "new shelf \"abt\"",
+          "note": "No shelf for \"abt\" yet, so start one.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-12",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "a"
+            },
+            {
+              "type": "array.tagClear",
+              "view": "a"
+            },
+            {
+              "type": "result",
+              "value": "[eat/tea/ate,tan,bat]"
+            }
+          ],
+          "note": "Three shelves, and every word is on the right one.",
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "code-3",
+      "kind": "code",
+      "layout": [
+        {
+          "view": "ctext",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        },
+        {
+          "view": "code",
+          "col": 0,
+          "span": 12,
+          "row": 1,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 2,
+      "rowSizes": [
+        0.55,
+        1.31
+      ],
+      "slides": [
+        {
+          "id": "code-3-0",
+          "ops": [],
+          "note": "Sort the letters to get the key.",
+          "code": {
+            "view": "code",
+            "lines": [
+              4
+            ]
+          },
+          "structural": false
+        },
+        {
+          "id": "code-3-1",
+          "ops": [],
+          "note": "Drop the word on that shelf.",
+          "code": {
+            "view": "code",
+            "lines": [
+              5
+            ]
+          },
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "intuition-4",
+      "kind": "intuition",
+      "layout": [
+        {
+          "view": "otext",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 1,
+      "rowSizes": [
+        1.57
+      ],
+      "slides": [
+        {
+          "id": "intuition-4-0",
+          "ops": [],
+          "note": "Anagrams are the same word once you sort the letters, so sort it and use that as the name.",
+          "structural": false
+        }
+      ]
+    }
+  ]
+}

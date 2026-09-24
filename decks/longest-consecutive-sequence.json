@@ -1,0 +1,719 @@
+{
+  "schemaVersion": 1,
+  "edited": false,
+  "meta": {
+    "slug": "longest-consecutive-sequence",
+    "number": 128,
+    "title": "Longest Consecutive Sequence",
+    "difficulty": "Medium",
+    "pattern": "hash-set",
+    "tagline": "only start where a run starts",
+    "format": "landscape"
+  },
+  "views": [
+    {
+      "id": "pn",
+      "label": "nums",
+      "kind": "array",
+      "values": [
+        100,
+        4,
+        200,
+        1,
+        3,
+        2
+      ],
+      "showIndices": true
+    },
+    {
+      "id": "a",
+      "label": "nums",
+      "kind": "array",
+      "values": [
+        100,
+        4,
+        200,
+        1,
+        3,
+        2
+      ],
+      "showIndices": true
+    },
+    {
+      "id": "s",
+      "label": "seen",
+      "kind": "map",
+      "entries": [],
+      "keyLabel": "key",
+      "valueLabel": "value",
+      "asSet": true
+    },
+    {
+      "id": "v",
+      "kind": "vars",
+      "items": []
+    },
+    {
+      "id": "code",
+      "kind": "code",
+      "lang": "python",
+      "source": "seen = set(nums)\nbest = 0\n\nfor n in seen:\n    if n - 1 in seen:\n        continue\n\n    length = 1\n    while n + length in seen:\n        length += 1\n    best = max(best, length)"
+    },
+    {
+      "id": "ctext",
+      "kind": "text",
+      "title": "Code",
+      "body": [],
+      "variant": "plain"
+    },
+    {
+      "id": "otext",
+      "kind": "text",
+      "title": "Intuition",
+      "body": [
+        "Only walk from a number",
+        "that has nothing below it.",
+        "Then every run is walked once."
+      ],
+      "variant": "big"
+    }
+  ],
+  "sections": [
+    {
+      "id": "hook-0",
+      "kind": "hook",
+      "layout": [],
+      "rows": 1,
+      "slides": [
+        {
+          "id": "hook-0-0",
+          "ops": [],
+          "label": "The longest run of consecutive numbers",
+          "note": "Longest Consecutive Sequence, in linear time.",
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "problem-1",
+      "kind": "problem",
+      "layout": [
+        {
+          "view": "pn",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 1,
+      "rowSizes": [
+        1.3
+      ],
+      "slides": [
+        {
+          "id": "problem-1-0",
+          "ops": [],
+          "label": "longest consecutive run",
+          "note": "Find the longest run of consecutive numbers hiding in here.",
+          "structural": false
+        },
+        {
+          "id": "problem-1-1",
+          "ops": [],
+          "label": "sorting costs n log n — we want O(n)",
+          "note": "Sorting would find it, but that costs n log n. We want linear.",
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "walkthrough-2",
+      "kind": "walkthrough",
+      "layout": [
+        {
+          "view": "a",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        },
+        {
+          "view": "s",
+          "col": 0,
+          "span": 6,
+          "row": 1,
+          "rowSpan": 1
+        },
+        {
+          "view": "v",
+          "col": 6,
+          "span": 6,
+          "row": 1,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 2,
+      "rowSizes": [
+        1.3,
+        1
+      ],
+      "slides": [
+        {
+          "id": "walkthrough-2-0",
+          "ops": [
+            {
+              "type": "map.put",
+              "view": "s",
+              "key": "100",
+              "value": null
+            },
+            {
+              "type": "map.put",
+              "view": "s",
+              "key": "4",
+              "value": null
+            },
+            {
+              "type": "map.put",
+              "view": "s",
+              "key": "200",
+              "value": null
+            },
+            {
+              "type": "map.put",
+              "view": "s",
+              "key": "1",
+              "value": null
+            },
+            {
+              "type": "map.put",
+              "view": "s",
+              "key": "3",
+              "value": null
+            },
+            {
+              "type": "map.put",
+              "view": "s",
+              "key": "2",
+              "value": null
+            }
+          ],
+          "label": "seen = set(nums)",
+          "note": "Drop everything into a set, so asking whether a number exists is instant.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-1",
+          "ops": [
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "best",
+              "value": 0
+            },
+            {
+              "type": "array.clear",
+              "view": "a"
+            },
+            {
+              "type": "array.tagClear",
+              "view": "a"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                0
+              ],
+              "style": "active"
+            }
+          ],
+          "label": "on 100",
+          "note": "Look at 100.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-2",
+          "ops": [
+            {
+              "type": "map.get",
+              "view": "s",
+              "key": "99",
+              "hit": false
+            },
+            {
+              "type": "array.tag",
+              "view": "a",
+              "index": 0,
+              "text": "is 99 here?",
+              "variant": "miss"
+            }
+          ],
+          "label": "100 − 1 = 99 in the set?",
+          "note": "Ask whether 99 is in the set — that would mean 100 sits in the middle of a run.",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-3",
+          "ops": [
+            {
+              "type": "array.tag",
+              "view": "a",
+              "index": 0,
+              "text": "a run starts here",
+              "variant": "have"
+            }
+          ],
+          "label": "no  →  100 starts a run",
+          "note": "It isn't, so 100 begins a run. Now walk upwards.",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-4",
+          "ops": [
+            {
+              "type": "map.get",
+              "view": "s",
+              "key": "101",
+              "hit": false
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "best",
+              "value": 1
+            }
+          ],
+          "label": "run 1  >  best  →  best = 1",
+          "note": "That is the longest run so far.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-5",
+          "ops": [
+            {
+              "type": "callout",
+              "text": "Only walk from a number with no left neighbour",
+              "variant": "insight"
+            },
+            {
+              "type": "callout",
+              "text": "Each run gets counted once, never twice.",
+              "variant": "aside"
+            }
+          ],
+          "label": "start only where a run starts",
+          "note": "This is the whole trick. Only numbers with nothing below them start a walk, so every run is counted exactly once and the total work stays linear.",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-6",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "a"
+            },
+            {
+              "type": "array.tagClear",
+              "view": "a"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                1
+              ],
+              "style": "active"
+            }
+          ],
+          "label": "on 4",
+          "note": "Look at 4.",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-7",
+          "ops": [
+            {
+              "type": "map.get",
+              "view": "s",
+              "key": "3",
+              "hit": true
+            },
+            {
+              "type": "array.tag",
+              "view": "a",
+              "index": 1,
+              "text": "is 3 here?",
+              "variant": "have"
+            }
+          ],
+          "label": "4 − 1 = 3 in the set?",
+          "note": "Ask whether 3 is in the set — that would mean 4 sits in the middle of a run.",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-8",
+          "ops": [
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                1
+              ],
+              "style": "dim"
+            }
+          ],
+          "label": "yes  →  4 isn't a start, skip",
+          "note": "It is, so 4 is not the start of anything. Skip it.",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-9",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "a"
+            },
+            {
+              "type": "array.tagClear",
+              "view": "a"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                3
+              ],
+              "style": "active"
+            }
+          ],
+          "label": "on 1",
+          "note": "Look at 1.",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-10",
+          "ops": [
+            {
+              "type": "map.get",
+              "view": "s",
+              "key": "0",
+              "hit": false
+            },
+            {
+              "type": "array.tag",
+              "view": "a",
+              "index": 3,
+              "text": "is 0 here?",
+              "variant": "miss"
+            }
+          ],
+          "label": "1 − 1 = 0 in the set?",
+          "note": "Ask whether 0 is in the set — that would mean 1 sits in the middle of a run.",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-11",
+          "ops": [
+            {
+              "type": "array.tag",
+              "view": "a",
+              "index": 3,
+              "text": "a run starts here",
+              "variant": "have"
+            }
+          ],
+          "label": "no  →  1 starts a run",
+          "note": "It isn't, so 1 begins a run. Now walk upwards.",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-2-12",
+          "ops": [
+            {
+              "type": "map.get",
+              "view": "s",
+              "key": "2",
+              "hit": true
+            },
+            {
+              "type": "array.clear",
+              "view": "a"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                3
+              ],
+              "style": "match"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                5
+              ],
+              "style": "match"
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "run",
+              "value": 2
+            }
+          ],
+          "label": "2 found  ·  run = 2",
+          "note": "2 is there too, so the run is now 2 long.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-13",
+          "ops": [
+            {
+              "type": "map.get",
+              "view": "s",
+              "key": "3",
+              "hit": true
+            },
+            {
+              "type": "array.clear",
+              "view": "a"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                3
+              ],
+              "style": "match"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                5
+              ],
+              "style": "match"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                4
+              ],
+              "style": "match"
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "run",
+              "value": 3
+            }
+          ],
+          "label": "3 found  ·  run = 3",
+          "note": "3 is there too, so the run is now 3 long.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-14",
+          "ops": [
+            {
+              "type": "map.get",
+              "view": "s",
+              "key": "4",
+              "hit": true
+            },
+            {
+              "type": "array.clear",
+              "view": "a"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                3
+              ],
+              "style": "match"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                5
+              ],
+              "style": "match"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                4
+              ],
+              "style": "match"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                1
+              ],
+              "style": "match"
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "run",
+              "value": 4
+            }
+          ],
+          "label": "4 found  ·  run = 4",
+          "note": "4 is there too, so the run is now 4 long.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-15",
+          "ops": [
+            {
+              "type": "map.get",
+              "view": "s",
+              "key": "5",
+              "hit": false
+            },
+            {
+              "type": "var.set",
+              "view": "v",
+              "name": "best",
+              "value": 4
+            }
+          ],
+          "label": "run 4  >  best  →  best = 4",
+          "note": "That is the longest run so far.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-2-16",
+          "ops": [
+            {
+              "type": "array.clear",
+              "view": "a"
+            },
+            {
+              "type": "array.tagClear",
+              "view": "a"
+            },
+            {
+              "type": "array.highlight",
+              "view": "a",
+              "indices": [
+                1,
+                3,
+                4,
+                5
+              ],
+              "style": "match"
+            },
+            {
+              "type": "result",
+              "value": "4"
+            }
+          ],
+          "note": "One, two, three, four — four in a row is the longest.",
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "code-3",
+      "kind": "code",
+      "layout": [
+        {
+          "view": "ctext",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        },
+        {
+          "view": "code",
+          "col": 0,
+          "span": 12,
+          "row": 1,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 2,
+      "rowSizes": [
+        0.55,
+        1.83
+      ],
+      "slides": [
+        {
+          "id": "code-3-0",
+          "ops": [],
+          "note": "A set, so membership is instant.",
+          "code": {
+            "view": "code",
+            "lines": [
+              1
+            ]
+          },
+          "structural": false
+        },
+        {
+          "id": "code-3-1",
+          "ops": [],
+          "note": "Skip anything with a left neighbour — it is not a start.",
+          "code": {
+            "view": "code",
+            "lines": [
+              5,
+              6
+            ]
+          },
+          "structural": false
+        },
+        {
+          "id": "code-3-2",
+          "ops": [],
+          "note": "From a real start, walk up while the next number exists.",
+          "code": {
+            "view": "code",
+            "lines": [
+              8,
+              9,
+              10
+            ]
+          },
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "intuition-4",
+      "kind": "intuition",
+      "layout": [
+        {
+          "view": "otext",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 1,
+      "rowSizes": [
+        1.57
+      ],
+      "slides": [
+        {
+          "id": "intuition-4-0",
+          "ops": [],
+          "note": "Only walk from a number with nothing below it, and every run gets walked exactly once.",
+          "structural": false
+        }
+      ]
+    }
+  ]
+}

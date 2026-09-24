@@ -58,7 +58,8 @@ export const SlideView: React.FC<{
             <div key={pane.view} style={{
               gridColumn: `${pane.col + 1} / span ${pane.span}`,
               gridRow: `${pane.row + 1} / span ${pane.rowSpan}`,
-              display: "flex", alignItems: "center", justifyContent: "center", minWidth: 0,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              minWidth: 0, minHeight: 0, overflow: "hidden",
             }}>
               <Comp prev={prev.views[pane.view]} next={next.views[pane.view]} t={p}
                 slideIndex={cur.index} width={((width - 64) * pane.span) / 12 - 16}
