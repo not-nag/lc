@@ -14,6 +14,23 @@ npm run decks    # traces/*.ts → decks/*.json
 npm run dev      # localhost:3100
 ```
 
+## → `system-design/` — system design slide decks
+
+Same engine, different subject: turns a system design topic into a deck that starts naive and
+adds one box per bottleneck. Copied from `slides/`; engine, deck, studio and theme are shared
+in shape, views and tracer are its own.
+**`system-design/CLAUDE.md` is the instruction file — read that.**
+
+```bash
+cd system-design
+npm install      # first time only
+npm run decks    # traces/*.ts → decks/*.json
+npm run dev      # localhost:3200 — runs alongside slides on 3100
+```
+
+`.claude/launch.json` here holds both dev servers for the preview tool (`slides`,
+`system-design`); it's tool config, not a project.
+
 ## History
 
 An earlier Remotion **video** generator lived here and was removed once slides replaced it.

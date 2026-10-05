@@ -1,0 +1,39 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "slides",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev",
+        "--prefix",
+        "slides"
+      ],
+      "port": 3100
+    },
+    {
+      "name": "system-design",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev",
+        "--prefix",
+        "system-design"
+      ],
+      "port": 3200
+    },
+    {
+      "name": "house-preview",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "3300",
+        "--directory",
+        "/private/tmp/claude-502/-Users-nagarajathamankar-Binary-personal-LC/0a7a0ecf-7803-443f-b0b3-ead43250fbeb/scratchpad"
+      ],
+      "port": 3300
+    }
+  ]
+}

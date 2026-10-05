@@ -1,0 +1,1309 @@
+{
+  "schemaVersion": 1,
+  "edited": false,
+  "meta": {
+    "slug": "url-shortener",
+    "title": "Design a URL shortener",
+    "difficulty": "Medium",
+    "pattern": "read-heavy",
+    "tagline": "long links, short attention spans",
+    "format": "landscape"
+  },
+  "views": [
+    {
+      "id": "api",
+      "label": "the API",
+      "kind": "code",
+      "lang": "http",
+      "source": "POST /urls   {\"long_url\": \"https://…\"}\n  → 201  {\"code\": \"x7Kp2Qa\"}\n\nGET  /x7Kp2Qa\n  → 302  Location: https://…"
+    },
+    {
+      "id": "reqs",
+      "kind": "text",
+      "title": "Three requirements drive everything",
+      "body": [
+        "Redirects are fast — someone is waiting on a click",
+        "A code never collides and never changes",
+        "Links live for 5 years"
+      ],
+      "variant": "bullets"
+    },
+    {
+      "id": "schema",
+      "label": "one table",
+      "kind": "code",
+      "lang": "sql",
+      "source": "CREATE TABLE urls (\n  code        CHAR(7) PRIMARY KEY,\n  long_url    TEXT NOT NULL,\n  created_at  TIMESTAMP\n);"
+    },
+    {
+      "id": "est",
+      "kind": "numbers"
+    },
+    {
+      "id": "arch",
+      "kind": "architecture",
+      "tiers": [
+        "client",
+        "edge",
+        "service",
+        "data"
+      ]
+    },
+    {
+      "id": "load",
+      "kind": "numbers"
+    },
+    {
+      "id": "codes",
+      "label": "where codes come from",
+      "kind": "compare",
+      "options": [
+        {
+          "id": "hash",
+          "title": "Hash the URL",
+          "sub": "md5(url)[:7]"
+        },
+        {
+          "id": "counter",
+          "title": "One counter",
+          "sub": "base62(id)"
+        },
+        {
+          "id": "ranges",
+          "title": "Key ranges",
+          "sub": "1,000 at a time"
+        }
+      ]
+    },
+    {
+      "id": "redirect",
+      "label": "which redirect",
+      "kind": "compare",
+      "options": [
+        {
+          "id": "perm",
+          "title": "301",
+          "sub": "Moved Permanently"
+        },
+        {
+          "id": "temp",
+          "title": "302",
+          "sub": "Found"
+        }
+      ]
+    },
+    {
+      "id": "otext",
+      "kind": "text",
+      "title": "Intuition",
+      "body": [
+        "It's one lookup, read 100× per write.",
+        "Cache the lookup, shard the table, and never let two servers mint the same code."
+      ],
+      "variant": "big"
+    }
+  ],
+  "sections": [
+    {
+      "id": "hook-0",
+      "kind": "hook",
+      "layout": [],
+      "rows": 1,
+      "slides": [
+        {
+          "id": "hook-0-0",
+          "ops": [],
+          "label": "7 characters. Any link. For years.",
+          "note": "Paste a long link, get seven characters back — and those seven characters have to work for years.",
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "problem-1",
+      "kind": "problem",
+      "layout": [
+        {
+          "view": "api",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 1,
+      "rowSizes": [
+        1.05
+      ],
+      "slides": [
+        {
+          "id": "problem-1-0",
+          "ops": [],
+          "label": "long link in, 7-char code out",
+          "note": "Two endpoints. You hand us a long link, we hand you back a seven-character code.",
+          "code": {
+            "view": "api",
+            "lines": [
+              1,
+              2
+            ]
+          },
+          "structural": false
+        },
+        {
+          "id": "problem-1-1",
+          "ops": [],
+          "label": "code in, redirect out",
+          "note": "Anyone who visits the code gets bounced to the long link. That's the whole product.",
+          "code": {
+            "view": "api",
+            "lines": [
+              4,
+              5
+            ]
+          },
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "problem-2",
+      "kind": "problem",
+      "layout": [
+        {
+          "view": "reqs",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 1,
+      "rowSizes": [
+        1.57
+      ],
+      "slides": [
+        {
+          "id": "problem-2-0",
+          "ops": [],
+          "note": "Three requirements drive every decision from here. Redirects are fast, because a person is waiting. A code never collides or changes. And links live for five years.",
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "estimate-3",
+      "kind": "estimate",
+      "layout": [
+        {
+          "view": "schema",
+          "col": 0,
+          "span": 6,
+          "row": 0,
+          "rowSpan": 1
+        },
+        {
+          "view": "est",
+          "col": 6,
+          "span": 6,
+          "row": 0,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 1,
+      "rowSizes": [
+        1.05
+      ],
+      "slides": [
+        {
+          "id": "estimate-3-0",
+          "ops": [
+            {
+              "type": "number.set",
+              "view": "est",
+              "key": "new links / day",
+              "value": "100M",
+              "note": "the one assumption"
+            }
+          ],
+          "label": "assume 100M new links a day",
+          "note": "Assume a hundred million new links a day. Everything else falls out of that one guess.",
+          "structural": true
+        },
+        {
+          "id": "estimate-3-1",
+          "ops": [
+            {
+              "type": "number.set",
+              "view": "est",
+              "key": "writes / s",
+              "value": "1.2k/s",
+              "note": "100M ÷ 86,400 s"
+            }
+          ],
+          "label": "100M ÷ 86,400 ≈ 1.2k/s",
+          "note": "A day is eighty-six thousand four hundred seconds, so that's about twelve hundred writes a second. Not much.",
+          "structural": true
+        },
+        {
+          "id": "estimate-3-2",
+          "ops": [
+            {
+              "type": "number.set",
+              "view": "est",
+              "key": "reads : writes",
+              "value": "100 : 1",
+              "note": "made once, clicked often"
+            }
+          ],
+          "label": "each link is clicked ~100×",
+          "note": "But a link is made once and clicked over and over. Call it a hundred clicks per link.",
+          "structural": true
+        },
+        {
+          "id": "estimate-3-3",
+          "ops": [
+            {
+              "type": "number.set",
+              "view": "est",
+              "key": "reads / s",
+              "value": "116k/s",
+              "note": "1.2k/s × 100"
+            }
+          ],
+          "label": "1.2k × 100 ≈ 116k/s",
+          "note": "So redirects run at about a hundred and sixteen thousand a second. That's the number that shapes this design.",
+          "structural": true
+        },
+        {
+          "id": "estimate-3-4",
+          "ops": [
+            {
+              "type": "number.set",
+              "view": "est",
+              "key": "row size",
+              "value": "~500 B",
+              "note": "7 + ~400 + 8 + index"
+            }
+          ],
+          "label": "one row ≈ 500 bytes",
+          "note": "Each row is a code, a long URL, and a timestamp. Around five hundred bytes with the index.",
+          "code": {
+            "view": "schema",
+            "lines": [
+              2,
+              3,
+              4
+            ]
+          },
+          "structural": true
+        },
+        {
+          "id": "estimate-3-5",
+          "ops": [
+            {
+              "type": "number.set",
+              "view": "est",
+              "key": "storage, 5 yrs",
+              "value": "91.3 TB",
+              "note": "183B links × 500 B"
+            }
+          ],
+          "label": "183B links × 500 B ≈ 91.3 TB",
+          "note": "Five years of links is a hundred and eighty billion rows. Ninety-one terabytes.",
+          "structural": true
+        },
+        {
+          "id": "estimate-3-6",
+          "ops": [
+            {
+              "type": "number.set",
+              "view": "est",
+              "key": "7-char codes",
+              "value": "3.5T",
+              "note": "62⁷ ≫ 183B links"
+            }
+          ],
+          "label": "62⁷ = 3.5T codes — plenty",
+          "note": "And is seven characters enough? Sixty-two symbols, seven places: three and a half trillion codes. Plenty.",
+          "code": {
+            "view": "schema",
+            "lines": [
+              2
+            ]
+          },
+          "structural": true
+        },
+        {
+          "id": "estimate-3-7",
+          "ops": [
+            {
+              "type": "callout",
+              "text": "Reads outnumber writes 100 to 1 — design for the read",
+              "variant": "insight"
+            }
+          ],
+          "note": "If you remember one number from this slide: a hundred reads for every write. Design for the read.",
+          "structural": false
+        }
+      ]
+    },
+    {
+      "id": "walkthrough-4",
+      "kind": "walkthrough",
+      "layout": [
+        {
+          "view": "arch",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        },
+        {
+          "view": "load",
+          "col": 0,
+          "span": 12,
+          "row": 1,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 2,
+      "rowSizes": [
+        3.4,
+        0.78
+      ],
+      "slides": [
+        {
+          "id": "walkthrough-4-0",
+          "ops": [
+            {
+              "type": "arch.node",
+              "view": "arch",
+              "id": "client",
+              "label": "Client",
+              "sub": "browser",
+              "kind": "client",
+              "tier": 0
+            }
+          ],
+          "label": "a browser",
+          "note": "Start with the simplest thing that could possibly work. A browser…",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-4-1",
+          "ops": [
+            {
+              "type": "arch.node",
+              "view": "arch",
+              "id": "app",
+              "label": "App server",
+              "kind": "service",
+              "tier": 2
+            },
+            {
+              "type": "arch.edge",
+              "view": "arch",
+              "from": "client",
+              "to": "app",
+              "async": false
+            }
+          ],
+          "label": "one app server",
+          "note": "…one app server…",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-4-2",
+          "ops": [
+            {
+              "type": "arch.node",
+              "view": "arch",
+              "id": "db",
+              "label": "Database",
+              "sub": "Postgres",
+              "kind": "store",
+              "tier": 3
+            },
+            {
+              "type": "arch.edge",
+              "view": "arch",
+              "from": "app",
+              "to": "db",
+              "async": false
+            }
+          ],
+          "label": "one database",
+          "note": "…and one database with that single table.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-4-3",
+          "ops": [
+            {
+              "type": "arch.token",
+              "view": "arch",
+              "name": "r0",
+              "path": [
+                "client",
+                "app",
+                "db",
+                "app",
+                "client"
+              ],
+              "label": "GET /x7Kp2Qa"
+            }
+          ],
+          "label": "one click: GET /x7Kp2Qa",
+          "note": "Follow one click through it.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-4-4",
+          "ops": [
+            {
+              "type": "arch.tokenMove",
+              "view": "arch",
+              "name": "r0",
+              "at": 1
+            }
+          ],
+          "label": "the app server gets the code",
+          "note": "The app server gets the code…",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-4-5",
+          "ops": [
+            {
+              "type": "arch.tokenMove",
+              "view": "arch",
+              "name": "r0",
+              "at": 2
+            }
+          ],
+          "label": "look up x7Kp2Qa by primary key",
+          "note": "…and looks it up by primary key. One row.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-4-6",
+          "ops": [
+            {
+              "type": "arch.tokenMove",
+              "view": "arch",
+              "name": "r0",
+              "at": 4,
+              "label": "302"
+            }
+          ],
+          "label": "302 → the long URL",
+          "note": "The long URL comes back, and the browser is redirected.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-4-7",
+          "ops": [
+            {
+              "type": "arch.tokenDrop",
+              "view": "arch",
+              "name": "r0"
+            },
+            {
+              "type": "callout",
+              "text": "Ships Friday. Fine until Monday.",
+              "variant": "aside"
+            }
+          ],
+          "note": "Three boxes, and it works. For about one user.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-4-8",
+          "ops": [
+            {
+              "type": "arch.label",
+              "view": "arch",
+              "from": "client",
+              "to": "app",
+              "text": "116k/s"
+            }
+          ],
+          "label": "116k/s arrive at one box",
+          "note": "Now bring in the estimate: a hundred and sixteen thousand redirects a second, all landing on this one box.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-4-9",
+          "ops": [
+            {
+              "type": "number.set",
+              "view": "load",
+              "key": "one app server",
+              "value": "~20k/s",
+              "note": "benchmarked"
+            }
+          ],
+          "label": "one server handles ~20k/s",
+          "note": "A decent app server does maybe twenty thousand of these a second.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-4-10",
+          "ops": [
+            {
+              "type": "arch.bottleneck",
+              "view": "arch",
+              "id": "app",
+              "text": "116k vs 20k/s"
+            }
+          ],
+          "label": "116k ÷ 20k ≈ 6× over",
+          "note": "So it's six times over. CPU pins at a hundred percent and requests start queueing. First bottleneck.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-4-11",
+          "ops": [
+            {
+              "type": "arch.replicas",
+              "view": "arch",
+              "id": "app",
+              "count": 6
+            }
+          ],
+          "label": "run 6 app servers",
+          "note": "The app server holds no state of its own — every answer comes from the database — so just run six of them.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-4-12",
+          "ops": [
+            {
+              "type": "arch.resolve",
+              "view": "arch",
+              "text": "19.3k/s each"
+            }
+          ],
+          "label": "116k ÷ 6 ≈ 19.3k each ✓",
+          "note": "Six servers, about nineteen thousand each. Under the limit.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-4-13",
+          "ops": [
+            {
+              "type": "arch.bottleneck",
+              "view": "arch",
+              "id": "client",
+              "text": "6 servers · 1 address"
+            }
+          ],
+          "label": "which of the 6?",
+          "note": "But the browser only knows one hostname. Which of the six does it call? And when one dies, who stops sending it traffic?",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-4-14",
+          "ops": [
+            {
+              "type": "arch.insert",
+              "view": "arch",
+              "id": "lb",
+              "label": "Load balancer",
+              "kind": "edge",
+              "tier": 1,
+              "from": "client",
+              "to": "app",
+              "labelOut": "÷ 6"
+            }
+          ],
+          "label": "a load balancer spreads the load",
+          "note": "A load balancer owns the one address and spreads requests across all six, skipping any that fail a health check.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-4-15",
+          "ops": [
+            {
+              "type": "arch.resolve",
+              "view": "arch",
+              "text": "1 address · 6 servers"
+            }
+          ],
+          "label": "one address, 6 servers ✓",
+          "note": "One address outside, six servers inside.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-4-16",
+          "ops": [
+            {
+              "type": "arch.label",
+              "view": "arch",
+              "from": "app",
+              "to": "db",
+              "text": "116k/s"
+            }
+          ],
+          "label": "every redirect reads the database",
+          "note": "But every one of those redirects still does a lookup in the one database.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-4-17",
+          "ops": [
+            {
+              "type": "number.set",
+              "view": "load",
+              "key": "one database",
+              "value": "~20k/s",
+              "note": "point reads"
+            }
+          ],
+          "label": "one database: ~20k reads/s",
+          "note": "And one database manages about twenty thousand point reads a second.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-4-18",
+          "ops": [
+            {
+              "type": "arch.bottleneck",
+              "view": "arch",
+              "id": "db",
+              "text": "116k vs 20k/s"
+            }
+          ],
+          "label": "116k vs 20k — 6× over again",
+          "note": "Same problem, one tier down. We could copy the database six times — but that's six full copies of everything, to serve clicks that are mostly for the same few links.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-4-19",
+          "ops": [
+            {
+              "type": "callout",
+              "text": "A few links get most of the clicks",
+              "variant": "insight"
+            }
+          ],
+          "label": "the same codes, over and over",
+          "note": "Because that's the thing about links. A small number of them get almost all the clicks — the same codes, looked up over and over.",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-4-20",
+          "ops": [
+            {
+              "type": "arch.node",
+              "view": "arch",
+              "id": "cache",
+              "label": "Cache",
+              "sub": "Redis · memory",
+              "kind": "cache",
+              "tier": 3,
+              "row": 0
+            },
+            {
+              "type": "arch.edge",
+              "view": "arch",
+              "from": "app",
+              "to": "cache",
+              "label": "116k/s",
+              "async": false
+            }
+          ],
+          "label": "check a cache first",
+          "note": "So keep the hot ones in memory. The app checks the cache first and only goes to the database on a miss.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-4-21",
+          "ops": [
+            {
+              "type": "number.set",
+              "view": "load",
+              "key": "cache hit rate",
+              "value": "90%",
+              "note": "hot links stay in memory"
+            }
+          ],
+          "label": "9 in 10 lookups hit the cache",
+          "note": "With clicks that skewed, nine lookups in ten find the code already in the cache.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-4-22",
+          "ops": [
+            {
+              "type": "arch.label",
+              "view": "arch",
+              "from": "app",
+              "to": "db",
+              "text": "11.6k/s"
+            }
+          ],
+          "label": "116k × 10% = 11.6k/s",
+          "note": "Only the misses reach the database. Ten percent of a hundred and sixteen thousand.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-4-23",
+          "ops": [
+            {
+              "type": "arch.resolve",
+              "view": "arch",
+              "text": "11.6k < 20k/s"
+            }
+          ],
+          "label": "11.6k < 20k ✓",
+          "note": "Eleven and a half thousand. Comfortably under twenty.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-4-24",
+          "ops": [
+            {
+              "type": "number.set",
+              "view": "load",
+              "key": "storage, 5 yrs",
+              "value": "91.3 TB",
+              "note": "from the estimate"
+            }
+          ],
+          "label": "5 years of links: 91.3 TB",
+          "note": "Now the other number from the estimate. Five years of links is ninety-one terabytes, and all of it lives in that one database.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-4-25",
+          "ops": [
+            {
+              "type": "number.set",
+              "view": "load",
+              "key": "one node holds",
+              "value": "~10 TB",
+              "note": "comfortably"
+            }
+          ],
+          "label": "one node holds ~10 TB",
+          "note": "One database node comfortably holds maybe ten.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-4-26",
+          "ops": [
+            {
+              "type": "arch.bottleneck",
+              "view": "arch",
+              "id": "db",
+              "text": "91.3 TB vs 10 TB"
+            }
+          ],
+          "label": "91.3 TB won't fit on one node",
+          "note": "Nine times over. It doesn't fit.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-4-27",
+          "ops": [
+            {
+              "type": "arch.replicas",
+              "view": "arch",
+              "id": "db",
+              "count": 10,
+              "noun": "shards"
+            }
+          ],
+          "label": "shard by code: hash(code) % 10",
+          "note": "So split it. Shard by code: hash the code to pick one of ten databases. A lookup still touches exactly one of them.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-4-28",
+          "ops": [
+            {
+              "type": "arch.resolve",
+              "view": "arch",
+              "text": "9.1 TB each"
+            }
+          ],
+          "label": "91.3 TB ÷ 10 ≈ 9.1 TB each ✓",
+          "note": "About nine terabytes each. It fits.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-4-29",
+          "ops": [],
+          "label": "code = base62(next id)",
+          "note": "One thing we skipped: where do codes come from? So far, the database's auto-increment id, written in base sixty-two.",
+          "structural": false
+        },
+        {
+          "id": "walkthrough-4-30",
+          "ops": [
+            {
+              "type": "arch.bottleneck",
+              "view": "arch",
+              "id": "db",
+              "text": "10 shards · 10 counters"
+            }
+          ],
+          "label": "10 counters → duplicate codes",
+          "note": "With ten shards there are ten counters. Shard three and shard seven both hand out id one thousand — the same code for two different links.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-4-31",
+          "ops": [
+            {
+              "type": "arch.node",
+              "view": "arch",
+              "id": "keys",
+              "label": "Key service",
+              "sub": "hands out ranges",
+              "kind": "service",
+              "tier": 2,
+              "row": 1
+            },
+            {
+              "type": "arch.edge",
+              "view": "arch",
+              "from": "app",
+              "to": "keys",
+              "label": "1.2 calls/s",
+              "async": false
+            }
+          ],
+          "label": "reserve ids 1,000 at a time",
+          "note": "One small service owns the counter. Each app server reserves a block of a thousand ids at a time and hands them out locally.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-4-32",
+          "ops": [
+            {
+              "type": "arch.resolve",
+              "view": "arch",
+              "text": "ranges never overlap"
+            }
+          ],
+          "label": "1.2k/s ÷ 1,000 ≈ 1 call/s ✓",
+          "note": "Blocks never overlap, so codes never collide. And at twelve hundred writes a second that's about one call a second — this box will never be the bottleneck.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-4-33",
+          "ops": [
+            {
+              "type": "arch.token",
+              "view": "arch",
+              "name": "r1",
+              "path": [
+                "client",
+                "lb",
+                "app",
+                "cache",
+                "app",
+                "lb",
+                "client"
+              ],
+              "label": "GET /x7Kp2Qa"
+            }
+          ],
+          "label": "the same click, again",
+          "note": "Now follow the same click through what we built.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-4-34",
+          "ops": [
+            {
+              "type": "arch.tokenMove",
+              "view": "arch",
+              "name": "r1",
+              "at": 1
+            }
+          ],
+          "label": "load balancer picks 1 of 6",
+          "note": "The load balancer picks one of the six app servers…",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-4-35",
+          "ops": [
+            {
+              "type": "arch.tokenMove",
+              "view": "arch",
+              "name": "r1",
+              "at": 2
+            }
+          ],
+          "label": "app asks the cache",
+          "note": "…which asks the cache for x7Kp2Qa…",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-4-36",
+          "ops": [
+            {
+              "type": "arch.tokenMove",
+              "view": "arch",
+              "name": "r1",
+              "at": 3
+            }
+          ],
+          "label": "cache hit — 9 in 10",
+          "note": "…and nine times out of ten, it's there.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-4-37",
+          "ops": [
+            {
+              "type": "arch.tokenMove",
+              "view": "arch",
+              "name": "r1",
+              "at": 6,
+              "label": "302"
+            }
+          ],
+          "label": "302 — the database never knew",
+          "note": "Straight back to the browser. The database never heard about it.",
+          "structural": true
+        },
+        {
+          "id": "walkthrough-4-38",
+          "ops": [
+            {
+              "type": "arch.tokenDrop",
+              "view": "arch",
+              "name": "r1"
+            }
+          ],
+          "label": "every box answered a number",
+          "note": "Six boxes. Every one of them is there because a number said so.",
+          "structural": true
+        }
+      ]
+    },
+    {
+      "id": "tradeoffs-5",
+      "kind": "tradeoffs",
+      "layout": [
+        {
+          "view": "codes",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 1,
+      "rowSizes": [
+        2.2
+      ],
+      "slides": [
+        {
+          "id": "tradeoffs-5-0",
+          "ops": [
+            {
+              "type": "compare.row",
+              "view": "codes",
+              "axis": "Collisions",
+              "cells": [
+                {
+                  "text": "possible — retry",
+                  "tone": "bad"
+                },
+                {
+                  "text": "never",
+                  "tone": "good"
+                },
+                {
+                  "text": "never",
+                  "tone": "good"
+                }
+              ]
+            }
+          ],
+          "label": "7 chars of a hash can collide",
+          "note": "Three ways to mint a code. Hashing the URL can collide — seven characters of a hash isn't unique — so every write has to check and retry.",
+          "structural": true
+        },
+        {
+          "id": "tradeoffs-5-1",
+          "ops": [
+            {
+              "type": "compare.row",
+              "view": "codes",
+              "axis": "Coordination",
+              "cells": [
+                {
+                  "text": "none",
+                  "tone": "good"
+                },
+                {
+                  "text": "every write",
+                  "tone": "bad"
+                },
+                {
+                  "text": "1 call / 1,000",
+                  "tone": "good"
+                }
+              ]
+            }
+          ],
+          "label": "one counter: every write, one row",
+          "note": "A single counter never collides, but every write in the system waits on the same row.",
+          "structural": true
+        },
+        {
+          "id": "tradeoffs-5-2",
+          "ops": [
+            {
+              "type": "compare.row",
+              "view": "codes",
+              "axis": "Same URL → same code",
+              "cells": [
+                {
+                  "text": "free",
+                  "tone": "good"
+                },
+                {
+                  "text": "no",
+                  "tone": "meh"
+                },
+                {
+                  "text": "no",
+                  "tone": "meh"
+                }
+              ]
+            }
+          ],
+          "label": "a hash dedupes for free",
+          "note": "Hashing does give you something for free: shorten the same URL twice and you get the same code.",
+          "structural": true
+        },
+        {
+          "id": "tradeoffs-5-3",
+          "ops": [
+            {
+              "type": "compare.row",
+              "view": "codes",
+              "axis": "Guessable",
+              "cells": [
+                {
+                  "text": "no",
+                  "tone": "good"
+                },
+                {
+                  "text": "sequential",
+                  "tone": "bad"
+                },
+                {
+                  "text": "within a block",
+                  "tone": "meh"
+                }
+              ]
+            }
+          ],
+          "label": "counters can be walked in order",
+          "note": "And counters are guessable. Anyone can walk the codes in order and scrape every link.",
+          "structural": true
+        },
+        {
+          "id": "tradeoffs-5-4",
+          "ops": [
+            {
+              "type": "compare.pick",
+              "view": "codes",
+              "option": "ranges",
+              "text": "our pick"
+            }
+          ],
+          "label": "ranges: no collisions, ~no coordination",
+          "note": "At our numbers — ten shards, twelve hundred writes a second — ranges win. No collisions, almost no coordination.",
+          "structural": true
+        },
+        {
+          "id": "tradeoffs-5-5",
+          "ops": [
+            {
+              "type": "compare.pick",
+              "view": "codes",
+              "option": "hash",
+              "text": "if duplicates cost you"
+            }
+          ],
+          "label": "dedupe matters more? hash instead",
+          "note": "But if the same few URLs get shortened millions of times — a marketing platform, say — hashing's free dedupe is worth the collision checks.",
+          "structural": true
+        }
+      ]
+    },
+    {
+      "id": "tradeoffs-6",
+      "kind": "tradeoffs",
+      "layout": [
+        {
+          "view": "redirect",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 1,
+      "rowSizes": [
+        2.2
+      ],
+      "slides": [
+        {
+          "id": "tradeoffs-6-0",
+          "ops": [
+            {
+              "type": "compare.row",
+              "view": "redirect",
+              "axis": "Browser caches it",
+              "cells": [
+                {
+                  "text": "yes, forever",
+                  "tone": "good"
+                },
+                {
+                  "text": "no",
+                  "tone": "bad"
+                }
+              ]
+            }
+          ],
+          "label": "a 301 is cached by the browser",
+          "note": "The last choice is the redirect itself. A 301 gets cached by the browser; a 302 doesn't.",
+          "structural": true
+        },
+        {
+          "id": "tradeoffs-6-1",
+          "ops": [
+            {
+              "type": "compare.row",
+              "view": "redirect",
+              "axis": "Load on us",
+              "cells": [
+                {
+                  "text": "first click only",
+                  "tone": "good"
+                },
+                {
+                  "text": "every click",
+                  "tone": "bad"
+                }
+              ]
+            }
+          ],
+          "label": "302: every click comes back to us",
+          "note": "So with a 302, every click comes back to us. That's the hundred and sixteen thousand a second.",
+          "structural": true
+        },
+        {
+          "id": "tradeoffs-6-2",
+          "ops": [
+            {
+              "type": "compare.row",
+              "view": "redirect",
+              "axis": "Click analytics",
+              "cells": [
+                {
+                  "text": "lost",
+                  "tone": "bad"
+                },
+                {
+                  "text": "every click",
+                  "tone": "good"
+                }
+              ]
+            }
+          ],
+          "label": "…which is how you count clicks",
+          "note": "Which is exactly how you count clicks.",
+          "structural": true
+        },
+        {
+          "id": "tradeoffs-6-3",
+          "ops": [
+            {
+              "type": "compare.row",
+              "view": "redirect",
+              "axis": "Change the target",
+              "cells": [
+                {
+                  "text": "too late",
+                  "tone": "bad"
+                },
+                {
+                  "text": "any time",
+                  "tone": "good"
+                }
+              ]
+            },
+            {
+              "type": "callout",
+              "text": "301: a promise browsers take literally.",
+              "variant": "aside"
+            }
+          ],
+          "label": "a 301 can't be taken back",
+          "note": "And a 301 can't be taken back. Point it somewhere wrong and browsers remember.",
+          "structural": true
+        },
+        {
+          "id": "tradeoffs-6-4",
+          "ops": [
+            {
+              "type": "compare.pick",
+              "view": "redirect",
+              "option": "temp",
+              "text": "clicks are the product"
+            }
+          ],
+          "label": "counting clicks? 302",
+          "note": "If clicks are the product, it's a 302 — and that's why we built for every click.",
+          "structural": true
+        }
+      ]
+    },
+    {
+      "id": "intuition-7",
+      "kind": "intuition",
+      "layout": [
+        {
+          "view": "otext",
+          "col": 0,
+          "span": 12,
+          "row": 0,
+          "rowSpan": 1
+        }
+      ],
+      "rows": 1,
+      "rowSizes": [
+        1.23
+      ],
+      "slides": [
+        {
+          "id": "intuition-7-0",
+          "ops": [],
+          "note": "It's one lookup, read a hundred times for every write. Cache the lookup, shard the table, and never let two servers mint the same code.",
+          "structural": false
+        },
+        {
+          "id": "intuition-7-1",
+          "ops": [],
+          "label": "cache · shard · hand out ranges",
+          "note": "That's a URL shortener.",
+          "structural": false
+        }
+      ]
+    }
+  ]
+}

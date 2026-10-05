@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+:root{
+  --paper:      #F2E4D5;
+  --paper-deep: #E8D5C0;
+  --surface:    #F7EFE5;
+  --ink:        #3E2C23;
+  --ink-soft:   #5A4336;
+  --muted:      #8A6F5C;
+  --line:       #D2BBA3;
+  --terracotta: #C1663F;
+  --olive:      #6B7A4B;
+  --mustard:    #D9A441;
+  --clay:       #A2452F;
+  --sage:       #5C8A4A;
+  --indigo:     #4A5D7E;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-deep: var(--paper-deep);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-terracotta: var(--terracotta);
+  --color-olive: var(--olive);
+  --color-mustard: var(--mustard);
+  --color-clay: var(--clay);
+  --color-sage: var(--sage);
+}
+
+html, body { background: var(--paper); color: var(--ink); }
+body {
+  font-family: var(--font-body), system-ui, sans-serif;
+  background-image: radial-gradient(120% 70% at 50% -10%, var(--surface) 0%, var(--paper) 45%, var(--paper-deep) 100%);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+}
+::selection { background: var(--mustard); color: var(--ink); }
+
+.card {
+  background: var(--surface);
+  border: 2px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 8px 0 -3px var(--paper-deep);
+}
+.btn {
+  background: var(--terracotta); color: #FFF6EC; font-weight: 700;
+  border-radius: 999px; padding: 0.7rem 1.6rem; border: 2px solid #9E4E2E;
+  box-shadow: 0 5px 0 -1px #9E4E2E; transition: transform .1s ease, box-shadow .1s ease;
+}
+.btn:hover { transform: translateY(1px); box-shadow: 0 4px 0 -1px #9E4E2E; }
+.btn:disabled { opacity: .5; box-shadow: none; transform: none; cursor: not-allowed; }
+.btn-ghost {
+  background: transparent; color: var(--ink-soft); border: 2px solid var(--line);
+  border-radius: 999px; padding: 0.7rem 1.6rem; font-weight: 700;
+}
+.btn-ghost:hover { border-color: var(--terracotta); color: var(--terracotta); }
+input, textarea, select {
+  background: #FDF8F1; border: 2px solid var(--line); border-radius: 12px;
+  padding: 0.7rem 1rem; color: var(--ink); width: 100%;
+}
+input:focus, textarea:focus { outline: none; border-color: var(--terracotta); }
+code, pre, .mono { font-family: var(--font-mono), ui-monospace, monospace; }
+
+/* Fullscreen presentation: the UA paints both of these white by default,
+   which showed as a band under the slide. */
+:fullscreen, :-webkit-full-screen { background: var(--paper); }
+::backdrop { background: var(--paper); }
