@@ -68,7 +68,8 @@
       "body": [
         "Remember the cheapest day so far.",
         "Then every later day",
-        "only has to ask one question."
+        "only has to ask one question:",
+        "Could I sell today for more?"
       ],
       "variant": "big"
     }
@@ -507,13 +508,13 @@
       ],
       "rows": 1,
       "rowSizes": [
-        1.57
+        1.7
       ],
       "slides": [
         {
           "id": "intuition-4-0",
           "ops": [],
-          "note": "Remember the cheapest day so far, and every later day only has to ask one question.",
+          "note": "Remember the cheapest day so far. Every later day only has to ask: could I sell today for more?",
           "structural": false
         }
       ]

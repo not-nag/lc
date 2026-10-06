@@ -104,9 +104,10 @@ export function trace(t: Tracer) {
   t.text("otext", "Intuition", [
     "Remember the cheapest day so far.",
     "Then every later day",
-    "only has to ask one question.",
+    "only has to ask one question:",
+    "Could I sell today for more?",
   ], "big");
   t.section("intuition", { show: ["otext"] });
-  t.say("Remember the cheapest day so far, and every later day only has to ask one question.");
+  t.say("Remember the cheapest day so far. Every later day only has to ask: could I sell today for more?");
   t.slide();
 }

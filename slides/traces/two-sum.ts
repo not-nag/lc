@@ -122,7 +122,7 @@ export function trace(t: Tracer) {
   /* ── intuition ──────────────────────────────────────── */
   t.text("otext", "Intuition", [
     "Remember everything you've seen.",
-    "Then just check whether it fits the one you're on.",
+    "If current requirement is already in seen, then consider that",
   ], "big");
   t.section("intuition", { show: ["otext"] });
   t.say("Remember everything you've seen. Then check whether it fits the one you're on.");

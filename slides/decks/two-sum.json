@@ -13,7 +13,7 @@
   "views": [
     {
       "id": "pn",
-      "label": "nums \u00b7 target 9",
+      "label": "nums · target 9",
       "kind": "array",
       "values": [
         3,
@@ -25,7 +25,7 @@
     },
     {
       "id": "a",
-      "label": "nums \u00b7 target 9",
+      "label": "nums · target 9",
       "kind": "array",
       "values": [
         3,
@@ -54,7 +54,7 @@
       "title": "Intuition",
       "body": [
         "Remember everything you've seen.",
-        "Then just check whether it fits the one you're on."
+        "If current requirement is already in seen, then consider that"
       ],
       "variant": "big"
     }
@@ -69,9 +69,9 @@
         {
           "id": "hook-0-0",
           "ops": [],
+          "label": "Given an array, find two numbers that add up to target",
           "note": "Two Sum, under 100 seconds.",
-          "structural": false,
-          "label": "Two numbers that add to 9"
+          "structural": false
         }
       ]
     },
@@ -181,7 +181,7 @@
         {
           "id": "walkthrough-2-3",
           "ops": [],
-          "label": "nothing behind us",
+          "label": "Have we seen 6 before ? No",
           "note": "There's nothing behind us yet, so no.",
           "structural": false
         },
@@ -547,7 +547,7 @@
               "label": "7 + 2 = 9"
             }
           ],
-          "label": "yes \u2014 index 2",
+          "label": "yes — index 2",
           "note": "Yes. 7 went past at index 2. That's the pair.",
           "structural": false
         },
@@ -670,7 +670,7 @@
         {
           "id": "intuition-4-1",
           "ops": [],
-          "label": "O(n) time \u00b7 O(n) space",
+          "label": "O(n) time · O(n) space",
           "note": "One pass. That's Two Sum under 100 seconds.",
           "structural": false
         }
